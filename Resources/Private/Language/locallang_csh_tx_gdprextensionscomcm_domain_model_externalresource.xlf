@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="EXT:gdpr_extensions_com_cm/Resources/Private/Language/locallang_csh_tx_gdprextensionscomcm_domain_model_externalresource.xlf" date="2023-09-06T06:19:04Z" product-name="gdpr_extensions_com_cm">
+		<header/>
+		<body>
+			<trans-unit id="url.description" resname="url.description">
+				<source>url</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

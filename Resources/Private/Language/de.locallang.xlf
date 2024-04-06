@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<xliff version="1.0">
+    <file source-language="en" datatype="plaintext" original="messages" product-name="cookie-consent"
+          date="2017-04-13T11:43:15+00:00" target-language="de">
+        <header/>
+        <body>
+            <trans-unit id="others" resname="others">
+                <source>others</source>
+                <target>andere</target>
+            </trans-unit>
+            <trans-unit id="Marketing" resname="Marketing">
+                <source>Marketing</source>
+                <target>Marketing</target>
+            </trans-unit>
+            <trans-unit id="Functional" resname="Functional">
+                <source>Functional</source>
+                <target>Funktionell</target>
+            </trans-unit>
+            <trans-unit id="Non_Functional" resname="Non_Functional">
+                <source>Non-Functional</source>
+                <target>Nicht-funktional</target>
+            </trans-unit>
+            <trans-unit id="Analytics" resname="Analytics">
+                <source>Analytics</source>
+                <target>Analytik</target>
+            </trans-unit>
+            <trans-unit id="GDPR_2_CLICK_COOKIES" resname="GDPR_2_CLICK_COOKIES">
+                <source>GDPR 2-CLICK COOKIES</source>
+                <target>GDPR 2-KLICK-COOKIES</target>
+            </trans-unit>
+            <trans-unit id="see_more" resname="see_more">
+                <source>see more</source>
+                <target>mehr sehen</target>
+            </trans-unit>
+            <trans-unit id="Confirm_all_cookies" resname="Confirm_all_cookies">
+                <source>Confirm all cookies</source>
+                <target>Bestätigen Sie alle Cookies</target>
+            </trans-unit>
+            <trans-unit id="Deny_all_cookies" resname="Deny_all_cookies">
+                <source>Deny all cookies</source>
+                <target>Alle Cookies ablehnen</target>
+            </trans-unit>
+            <trans-unit id="Manage_Consent_Preferences" resname="Manage_Consent_Preferences">
+                <source>Manage Consent Preferences</source>
+                <target>Präferenzen für die Zustimmung verwalten</target>
+            </trans-unit>
+              <trans-unit id="2_CLICK_DES" resname="2_CLICK_DES">
+				<source>Third-party advertising services are used. If you agree here, personal data will betransferred to these providers.</source>
+                <target>Es werden Werbedienste von Dritten genutzt. Wenn Sie hier zustimmen, werden personenbezogene Daten an diese Anbieter übermittelt.</target>
+		   </trans-unit>
+        </body>
+    </file>
+</xliff>

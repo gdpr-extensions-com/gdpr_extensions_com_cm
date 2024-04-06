@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="EXT:gdpr_extensions_com_cm/Resources/Private/Language/locallang_csh_tx_gdprextensionscomcm_domain_model_cookie.xlf" date="2023-09-06T06:19:04Z" product-name="gdpr_extensions_com_cm">
+		<header/>
+		<body>
+			<trans-unit id="category.description" resname="category.description">
+				<source>category</source>
+			</trans-unit>
+			<trans-unit id="domain.description" resname="domain.description">
+				<source>domain</source>
+			</trans-unit>
+			<trans-unit id="platform.description" resname="platform.description">
+				<source>platform</source>
+			</trans-unit>
+			<trans-unit id="name.description" resname="name.description">
+				<source>name</source>
+			</trans-unit>
+			<trans-unit id="description.description" resname="description.description">
+				<source>description</source>
+			</trans-unit>
+			<trans-unit id="sequence.description" resname="sequence.description">
+				<source>sequence</source>
+			</trans-unit>
+			<trans-unit id="type.description" resname="type.description">
+				<source>type</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>
