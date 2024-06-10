@@ -1,8 +1,7 @@
 {
     "name": "gdpr-extensions-com/gdpr-extensions-com-cm",
     "type": "typo3-cms-extension",
-    "description": "",
-    "version": "1.0.0",
+    "description": "Ensure GDPR compliance effortlessly. Our advanced scanner meticulously checks your website for cookies, external resources, and security issues. Generate detailed reports for validation and peace of mind.",
     "authors": [],
     "license": "GPL-2.0-or-later",
     "require": {
