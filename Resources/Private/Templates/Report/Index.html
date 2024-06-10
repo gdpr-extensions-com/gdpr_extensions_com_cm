@@ -1,0 +1,512 @@
+<div class="dsgvo-report-listing">
+
+    <div class="wrapper">
+        <div class="buttonWrapper">
+          <button class="tab-button active" style="border-top-left-radius: 10px;" data-id="Cookies">Cookies</button>
+          <button class="tab-button" data-id="extResource">External Sources</button>
+        </div>
+        <div class="contentWrapper">
+          <div class="content active" id="Cookies">
+            <div class="info">
+                <div class="info-content">
+                    <div class="green"></div>
+                    <p>User can manage this cookie</p>
+                </div>
+                <div class="info-content">
+                    <div class="red"></div>
+                    <p>Loaded without the user’s consent</p>
+                </div>
+            </div>
+            <f:for each="{groupedCookies}" as="category" key="categoryName">
+                <div class="category-container">
+                    <div class="category-header-report cursor-pointer">
+                        <span class="arrow"></span>
+                        {categoryName}
+                        ({f:count(subject: category)})
+                    </div>
+                    <div class="table-border table-anim">
+                        <table class="category-table">
+                            <thead>
+                            <tr class="row-head">
+                                <th class="id-head">
+                                    <f:translate key="Cookie_Name" />
+                                </th>
+                                <th>
+                                    <f:translate key="Domain" />
+                                </th>
+                                <th>
+                                    <f:translate key="description" />
+                                </th>
+                                <th>
+                                    <f:translate key="expire" />
+                                </th>
+                                <th>
+                                    <f:translate key="type" />
+                                </th>
+                                <th>
+                                    <f:translate key="Session" />
+                                </th>
+                                <th class="">
+                                    <f:translate key="Found_in" />
+                                </th>
+                                <th class="title-head">
+                                    <f:translate key="status" />
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody class="row-data">
+                            <f:for each="{category}" as="cookie">
+                                <tr>
+                                    <td>
+                                        <f:if condition="{cookie.name}">
+                                            <f:then>
+                                                {cookie.name}
+                                            </f:then>
+                                            <f:else>-</f:else>
+                                        </f:if>
+                                    </td>
+                                    <td class="title">
+                                        <f:if condition="{cookie.domain}">
+                                            <f:then>
+                                                {cookie.domain}
+                                            </f:then>
+                                            <f:else>-</f:else>
+                                        </f:if>
+                                    </td>
+                                    <td class="w-500px">
+                                        <f:if condition="{cookie.description}">
+                                            <f:then>
+                                                {cookie.description}
+                                            </f:then>
+                                            <f:else>-</f:else>
+                                        </f:if>
+                                    </td>
+                                    <td >
+                                        <f:if condition="{cookie.expires}">
+                                            <f:then>
+                                                {cookie.expires} Days
+                                            </f:then>
+                                            <f:else>-</f:else>
+                                        </f:if>
+                                    </td>
+                                    <td>
+                                        <f:if condition="{cookie.type}">
+                                            <f:then>
+                                                {cookie.type}
+                                            </f:then>
+                                            <f:else>-</f:else>
+                                        </f:if>
+                                    </td>
+                                    <td>
+                                        <f:if
+                                                condition="{cookie.session} == 1"
+                                            >
+                                                <f:then>
+                                                     True
+                                                </f:then>
+                                                <f:else>
+                                                   False
+                                                </f:else>
+                                            </f:if>
+                                    </td>
+                                    <td>
+                                        <div class="cookie-subpages-main">
+                                            <f:for
+                                            each="{cookie.subPagesArray}"
+                                            as="subPages"
+                                        >
+                                            <a href="{subPages}" target="_blank"><p class="cookie-subpages">{subPages -> f:format.crop(maxCharacters: 20,append:..)}</p></a>
+                                        </f:for>
+                                        
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <f:if
+                                                condition="{cookie.status} == 1"
+                                            >
+                                                <f:then>
+                                                    <div class="green"></div>
+                                                </f:then>
+                                                <f:else>
+                                                    <div class="red"></div>
+                                                </f:else>
+                                            </f:if>
+                                    </td>
+                                </tr>
+                            </f:for>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </f:for>
+          </div>
+          <div class="content" id="extResource">
+                <f:for each="{externalResources}" as="resource" key="categoryName">
+                    <div class="category-container">
+                        <div class="category-header-report cursor-pointer">
+                            <span class="arrow"></span>
+                            {resource.url} ({resource.externalResourceArrayCount})
+                        </div>
+                        <f:if condition="{resource.externalResourceArray -> f:count()} > 0">
+                            <f:then>
+                                <div class="table-border table-anim">
+                                    <table class="category-table">
+                                        <thead>
+                                            <tr class="row-head">
+                                                <th class="id-head">SourceUrl</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="row-data">
+                                            <f:for each="{resource.externalResourceArray}" as="urls" iteration="i">
+                                                <tr>
+                                                    <td>
+                                                        <a href="{urls}" target="_blank">{urls}</a>
+                                                    </td>
+                                                </tr>
+                                            </f:for>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </f:then>
+                            <f:else>
+                                <div class="table-border table-anim empty">
+                                    This page has no external sources.
+                                </div>
+                            </f:else>
+                        </f:if>
+                    </div>
+                </f:for>
+          </div>
+        </div>
+    </div>
+</div>
+  
+  
+<style>
+    @font-face {
+        font-family: 'Poppins';
+        font-style: normal;
+        font-weight: 400;
+        src: local('Poppins Regular'), local('Poppins-Regular'),
+        url('/typo3conf/ext/gdpr_extensions_com_cm/Resources/Public/Fonts/Poppins-Regular.otf') format('opentype');
+    }
+
+    @font-face {
+        font-family: 'Poppins';
+        font-style: normal;
+        font-weight: 500;
+        src: local('Poppins Medium'), local('Poppins-Medium'),
+        url('/typo3conf/ext/gdpr_extensions_com_cm/Resources/Public/Fonts/Poppins-Medium.otf') format('opentype');
+    }
+
+    @font-face {
+        font-family: 'Poppins';
+        font-style: normal;
+        font-weight: 700;
+        src: local('Poppins Bold'), local('Poppins-Bold'),
+        url('/typo3conf/ext/gdpr_extensions_com_cm/Resources/Public/Fonts/Poppins-Bold.otf') format('opentype');
+    }
+
+    .bg-color {
+        background-color: transparent;
+    }
+
+    .w-500px {
+        width: 500px;
+    }
+
+
+    .dsgvo-report-listing .category-container {
+        font-family: 'Poppins', sans-serif;
+        background-color: transparent !important;
+        border: 0 !important;
+    }
+
+    .dsgvo-report-listing #extResource .category-container {
+        margin-top: 25px;
+    }
+
+    .dsgvo-report-listing .category-header-report {
+        margin-bottom: 24px;
+        font-weight: 600;
+        font-size: 20px;
+    }
+
+    .dsgvo-report-listing .category-header {
+        color: #343434;
+        height: 62px;
+        background-color: #F3F2F2;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        padding: 0 20px;
+        border-top-left-radius: 7px;
+        border-top-right-radius: 7px;
+        font-size: 20px;
+        font-weight: 500;
+    }
+
+    .dsgvo-report-listing .arrow {
+        margin-right: 10px;
+        transition: 0.3s;
+        background-image: url('data:image/svg+xml,<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15.2002 10.4899L13.2302 8.51993L10.0202 5.30993C9.34018 4.63993 8.18018 5.11993 8.18018 6.07993V12.3099V17.9199C8.18018 18.8799 9.34018 19.3599 10.0202 18.6799L15.2002 13.4999C16.0302 12.6799 16.0302 11.3199 15.2002 10.4899Z" fill="%23343434"/></svg>');
+        width: 25px;
+        height: 25px;
+        display: inline-block;
+        vertical-align: middle;
+        transform: rotate(0deg); 
+        transition: transform 0.3s ease-in-out;
+        background-repeat: no-repeat;
+    }
+
+    .dsgvo-report-listing .arrow.down {
+        transform: rotate(90deg); 
+    }
+
+    .dsgvo-report-listing .category-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .dsgvo-report-listing .category-table thead tr {
+        background-color: #E7E6E6;
+        height: 56px;
+        color: #343434;
+        font-weight: 700;
+    }
+
+    .dsgvo-report-listing .category-table tr {
+        border-bottom: 1px solid #E7E6E6;
+    }
+
+    .dsgvo-report-listing .category-table th, .category-table td {
+        padding: 10px 20px;
+        text-align: left;
+        font-size: 16px;
+        color: #343434;
+        font-weight: 400;
+    }
+
+    .dsgvo-report-listing .category-container.gdpr-cookies {
+        border-bottom-left-radius: 7px;
+        border-bottom-right-radius: 7px;
+    }
+
+    .dsgvo-report-listing {
+        padding: 20px;
+    }
+
+    .dsgvo-report-listing .wrapper {
+        max-width: 1680px;
+        margin: 0 auto;
+        border-radius: 10px;
+        padding: 0 20px;
+    }
+
+    .dsgvo-report-listing .buttonWrapper {
+        display: flex;
+        margin-bottom: 8px;
+        border-bottom: 1px solid #F3F2F2;
+    }
+
+    .dsgvo-report-listing  button {
+        border: none;
+        padding: 10px;
+        background-color: #E7E6E6;
+        color: #343434;
+        font-size: 18px;
+        cursor: pointer;
+        transition: 0.5s;
+        margin-right: 8px;
+        border-radius: 0;
+        border-top-left-radius: 6px !important;
+        border-top-right-radius: 6px !important;
+    }
+
+    .dsgvo-report-listing button.active {
+        background-color: #EE7202;
+        color: white;
+    }
+
+    .dsgvo-report-listing p {
+        text-align: left;
+        padding: 10px;
+        font-size: 16px !important;
+    }
+
+    .dsgvo-report-listing .content {
+        display: none;
+        padding: 0;
+    }
+
+    .dsgvo-report-listing .info{
+        display: flex;
+    }
+
+    .dsgvo-report-listing  .info-content{
+        display: flex;
+        align-items: center;
+        margin-right: 30px;
+    }
+
+    .dsgvo-report-listing .green{
+        background-image: url('data:image/svg+xml,<svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="8.5" r="8" fill="%2311AA3C"/></svg>');
+        display: inline-block;
+        vertical-align: middle;
+        width: 18px;
+        height: 18px;
+        background-repeat: no-repeat;
+    }
+
+    .dsgvo-report-listing .red{
+        background-image: url('data:image/svg+xml,<svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="8" cy="8.5" r="8" fill="%23E90B0B"/></svg>');
+        display: inline-block;
+        vertical-align: middle;
+        width: 18px;
+        height: 18px;
+        background-repeat: no-repeat;
+    }
+
+    .dsgvo-report-listing .content.active {
+        display: block;
+    }
+
+    .dsgvo-report-listing .table-border {
+        border: 1px solid #e7e6e6;
+        border-radius: 10px;
+        overflow-x: visible;
+        width: 100%;
+    }
+
+    .dsgvo-report-listing .table-border.empty {
+        border: 0;
+        color: #626262;
+    }
+
+    .dsgvo-report-listing .table-anim {
+        /* display: none; */
+        opacity: 0;
+        visibility: hidden;
+        height: 0;
+        transition: opacity 0.5s ease;
+    }
+
+    .dsgvo-report-listing .table-anim.active {
+        display: table;
+        height: auto;
+        visibility: visible;
+        opacity: 1;
+    }
+
+    .dsgvo-report-listing table {
+        width: 100%;
+        border-collapse: collapse;
+        border-spacing: 0;
+    }
+
+    .dsgvo-report-listing table tr {
+        border-bottom: 1px solid #dddddd;
+    }
+
+    .dsgvo-report-listing table tr:last-of-type {
+        border: none;
+    }
+
+    .dsgvo-report-listing .row-head {
+        background: #cccccc; 
+        text-align: left;
+    }
+
+    .dsgvo-report-listing .id-head {
+        border-radius: 8px 0 0 0;
+    }
+
+    .dsgvo-report-listing .title-head {
+        border-radius: 0 8px 0 0;
+    }
+
+    .dsgvo-report-listing .row-head th {
+        padding: 16px;
+        line-height: 24px;
+        font-weight: 700;
+        font-size: 16px;
+        color: #000000;
+    }
+
+    .dsgvo-report-listing .row-data td {
+        padding: 16px;
+        line-height: 24px;
+        font-weight: 400;
+        font-size: 16px;
+        color: #000000;
+        word-break: break-word;
+        white-space: unset;
+        vertical-align: unset;
+    }
+
+    .dsgvo-report-listing .row-data td.title {
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .dsgvo-report-listing .row-data td.title a {
+        color: #0000ee;
+    }
+
+    .cursor-pointer {
+        cursor: pointer;
+    }
+    .cookie-subpages-main {
+        max-height: 150px;
+        overflow-y: auto;
+        max-width: 215px;
+        white-space: nowrap;
+    }
+
+    .cookie-subpages-main .cookie-subpages {
+        margin: 0;
+    }
+
+
+</style>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        let categoryHeadersReport = document.querySelectorAll('.category-header-report');
+        categoryHeadersReport.forEach(header => {
+            console.log(header);
+            header.addEventListener('click', function() {
+                let table = header.nextElementSibling;
+
+                if (window.getComputedStyle(table).visibility === 'hidden') {
+                    table.classList.add('active');
+                    header.querySelector('.arrow').classList.add('down');
+                } else {
+                    table.classList.remove('active');
+                    header.querySelector('.arrow').classList.remove('down');
+                }
+            });
+        });
+
+        const tabs = document.querySelector(".wrapper");
+        const tabButton = document.querySelectorAll(".tab-button");
+        const contents = document.querySelectorAll(".content");
+
+        tabs.onclick = e => {
+        const id = e.target.dataset.id;
+        if (id) {
+            tabButton.forEach(btn => {
+            btn.classList.remove("active");
+            });
+            e.target.classList.add("active");
+
+            contents.forEach(content => {
+            content.classList.remove("active");
+            });
+            const element = document.getElementById(id);
+            element.classList.add("active");
+        }
+        }
+    });
+
+</script>

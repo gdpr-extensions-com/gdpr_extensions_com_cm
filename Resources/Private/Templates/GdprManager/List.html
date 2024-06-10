@@ -1,0 +1,152 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:layout name="Default" />
+
+This template is responsible for creating a table of domain objects.
+
+If you modify this template, do not forget to change the overwrite settings
+in /Configuration/ExtensionBuilder/settings.yaml:
+Resources:
+Private:
+Templates:
+GdprManager:
+List.html: keep
+
+Otherwise your changes will be overwritten the next time you save the extension in the extension builder
+
+<f:section name="content">
+    <style>
+        .panal {
+            background: #fff;
+            box-shadow: rgba(0, 0, 0, 0.16) 0px 2px 4px;
+            min-height: 200px;
+            width: calc(100%);
+            margin-right: 5px;
+            overflow-y: auto;
+            height: calc(90vh - 70px);
+            margin-top: 22px;
+            border-radius: 9px;
+        }
+        .panal table{
+            border-collapse: collapse;
+            border-spacing: 0;
+            width: 100%;
+        }
+        .panal tr{
+            border-bottom: 1px solid #e7e6e6;
+        }
+        .panal .row-data{
+            background: #e7e6e6;
+            text-align: left;
+        }
+        .panal .row-data th{
+            color: #343434;
+            font-size: 16px;
+            font-weight: 700;
+            line-height: 24px;
+            min-width: 200px;
+            padding: 16px;
+        }
+        .panal .row-data-inner{
+            border: 1px solid #e7e6e6;
+        }
+        .panal tr td{
+            color: #343434;
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 24px;
+            padding: 16px;
+        }
+        .heading {
+            font-size: 36px;
+            border-bottom: 1px solid #F3F2F2;
+            margin: 0 4px;
+            padding-bottom: 17px;
+        }
+        .w-25 {
+            width: 25px;
+        }
+        .btn {
+            color: #fff;
+            background: #ee7202;
+            border-radius: 6px;
+            padding: 7px 14px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+        }
+    </style>
+    <!-- Content  -->
+    <div>
+        <h1 class="heading">
+            <f:translate key="list.gdpr.manager" extensionName="GdprExtensionsComCm" />
+        </h1>
+    
+        <f:flashMessages />
+        <div class="panal">
+            <div>
+                <table>
+                    <tbody>
+                        <tr class="row-data">
+                            <th>
+                                <f:translate key="root.pid" extensionName="GdprExtensionsComCm" />
+                            </th>
+                            <th>
+                                <f:translate key="base.url" extensionName="GdprExtensionsComCm" />
+                            </th>
+                            <!-- <th>
+                                <f:translate key="status.head" extensionName="GdprExtensionsComCm" />
+                            </th> -->
+                            <th style="padding-left: 27px;">
+                                <f:translate key="actions.head" extensionName="GdprExtensionsComCm" />
+                            </th>
+                        </tr>
+                        <f:for each="{sites}" as="config" key="siteKey">
+                            <tr class="row-data-inner">
+                                <td class="w-25">(ID: {config.rootPageId})</td>
+                                <td>{config.base}</td>
+                                <!-- <td>
+                                    <f:variable name="status" value="Inactive" />
+                                    <f:for each="{apiStatus}" as="statusEntry">
+                                        <f:if condition="{statusEntry.location_page_id} == {config.rootPageId}">
+                                            <f:if condition="{statusEntry.api_status}">
+                                                <f:then>
+                                                    <f:variable name="status" value="Active" />
+                                                </f:then>
+                                                <f:else>
+                                                    <f:variable name="status" value="Inactive" />
+                                                </f:else>
+                                            </f:if>
+                                        </f:if>
+                                    </f:for>
+                                    {status}
+                                </td> -->
+                                <td>
+                                    <f:variable name="hasMatch" value="0" />
+                                    <f:for each="{apiStatus}" as="status">
+                                        <f:if condition="{status.location_page_id} == {config.rootPageId}">
+                                            <f:then>
+                                                <f:link.action class="btn" action="edit" arguments="{id: config.rootPageId, url: config.base, editStatus: 1}">
+                                                    <f:translate key="update.btn" extensionName="GdprExtensionsComCm" />
+                                                </f:link.action>
+                                                <f:variable name="hasMatch" value="1" />
+                                            </f:then>
+                                        </f:if>
+                                    </f:for>
+                                    <f:if condition="{hasMatch} == 0">
+                                        <f:link.action class="btn" action="edit" arguments="{id: config.rootPageId, url: config.base}">
+                                            <f:translate key="connect.btn" extensionName="GdprExtensionsComCm" />
+                                        </f:link.action>
+                                    </f:if>
+                                </td>            
+                            </tr>
+                        </f:for>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+</f:section>
+
+</html>

@@ -1,0 +1,1975 @@
+
+<f:section name="HeaderAssets">
+    <script
+        src="{f:uri.resource(path: 'Js/init.js', extensionName: 'gdpr_extensions_com_cm')}"></script>
+    <script
+        src="{f:uri.resource(path: 'Js/yett.js', extensionName: 'gdpr_extensions_com_cm')}"></script>
+</f:section>
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+    {namespace  my=GdprExtensionsCom\GdprExtensionsComCm\ViewHelpers}
+    {my:getTwoClickSolutions() -> f:variable(name: 'twoClickSol')}
+    <f:variable name="decodedArray"
+        value="{twoClickSol -> v:format.json.decode()}" />
+    <f:if condition="{groupedCookies -> f:count()} > 0 || {twoClickSol} != '[]' ">
+    <div id="gdpr-cookie-consent__icon" class="init-icon {f:if(condition: '{cookiesWidget.0.icon_placement} == bottom_left', then: 'left', else: '')}" {f:if(condition: '{cookiesWidget.0.icon_url}', then: 'style="background-image: url({cookiesWidget.0.icon_url});"', else: '')}>
+    </div>
+    </f:if>
+    <div id="gdpr-cookie-consent__model" class="modal">
+        <div class="modal-content">
+            <div class="scroll" style="background-color: {cookiesWidget.0.background_color};">
+                <div class="cookie-data">
+                    <div class="modal-header" style="color: {cookiesWidget.0.text_color};">
+                        {cookiesWidget.0.header_title}
+                        <!-- <span id="closeModal" class="close-modal d-none">&#10005;</span> -->
+                    </div>
+                    <p class="model-desc" style="color: {cookiesWidget.0.text_color};">
+                        {cookiesWidget.0.header_description}
+                    </p>
+                    <div>
+                        <f:for each="{groupedCookies}" as="category" key="categoryName">
+                            <f:variable name="lowercaseCategoryName" value="{categoryName -> f:format.case(mode: 'lower')}"/>
+                            <div class="category-container">
+                                <div class="category-header">
+                                    <span class="arrow">+</span>
+                                    {categoryName}
+                                    ({f:count(subject: category)})
+                                </div>
+                                <div class="category-content hide">
+                                    <div class="cookie-item">
+                                        {categories.{lowercaseCategoryName}.category_description}
+                                        <br>
+                                        <span class="more_details" data-identifier="{categoryName}"><f:translate key="more_details" /></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </f:for>
+                        <f:if condition="{cookiesWidget.0.two_click_desc}">
+                            <f:then>
+                                <div class="modal-header" style="color: {cookiesWidget.0.text_color};">
+                                    GDPR 2-Click Solution
+                                </div>
+                                <p class="two-click-header" style="color: {cookiesWidget.0.text_color};">{cookiesWidget.0.two_click_desc}</p>
+
+                            </f:then>
+                            <f:else>
+                                <!-- <p class="two-click-header" style="color: {cookiesWidget.0.text_color};">
+                                    <f:translate key="Manage_Consent_Preferences" />
+                                </p> -->
+
+                            </f:else>
+
+                        </f:if>
+                        <f:if condition="{categories.gdprExtensionsCom}">
+                            <div class="modal-header" style="color: {cookiesWidget.0.text_color};">
+                                GDPR 2-Click Solution
+                            </div>
+                        </f:if>
+                        <f:if condition="{categories.gdprExtensionsCom.category_description}">
+                            <f:then>
+                                <p class="two-click-header" style="color: {cookiesWidget.0.text_color};">
+                                    {categories.gdprExtensionsCom.category_description}
+                                </p>
+                            </f:then>
+                            <f:else>
+                                <!-- <p class="two-click-header" style="color: {cookiesWidget.0.text_color};">
+                                    <f:translate key="Manage_Consent_Preferences" />
+                                </p> -->
+                            </f:else>
+                        </f:if>
+                        <p class="two-click-header" style="color: {cookiesWidget.0.text_color};">
+                            <f:translate key="Manage_Consent_Preferences" />
+                        </p>
+                        <div class="category-container gdpr-cookies">
+                            <f:if condition="{twoClickCookies}">
+                                <f:then>
+                                    <f:for each="{twoClickCookies}" as="cookieKey" key="cookieName" iteration="i">
+                                        <div class="d-flex justify-content-btw align-items-ctr cookie-inner ">
+                                            <p class="mb-0" style="color: {cookiesWidget.0.text_color};">{cookieName}</p>
+                                            <label class="switch mb-0">
+                                                <input type="checkbox" class="toggleButton" id="{i.index}"
+                                                    data-ext-title="<f:format.raw>{cookieKey}</f:format.raw>">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                    </f:for>
+                                </f:then>
+                                <f:else>
+                                    <f:for each="{decodedArray}" as="cookieKey" key="cookieName" iteration="i">
+                                                <div class="d-flex justify-content-btw align-items-ctr cookie-inner ">
+                                                    <p class="mb-0" style="color: {cookiesWidget.0.text_color};">{cookieName}</p>
+                                                    <label class="switch mb-0">
+                                                        <input type="checkbox" class="toggleButton" id="{i.index}"
+                                                            data-ext-title="<f:format.raw>{cookieKey.extension_key}</f:format.raw>">
+                                                        <span class="slider"></span>
+                                                    </label>
+                                                </div>
+                                    </f:for>
+                                </f:else>
+                            </f:if>
+                        </div>
+
+                    </div>
+                </div>
+                <f:for each="{groupedCookies}" as="cookieCategory" key="identifier" iteration="i">
+                    <f:variable name="lowercaseCategoryName" value="{identifier -> f:format.case(mode: 'lower')}"/>
+                    <div class="main-frame more-detail-table d-none" data-identifier="{identifier}">
+                        <div class="modal-header go-back" style="color: {cookiesWidget.0.text_color};">
+                            {identifier}
+                        </div>
+                        <p class="model-desc" style="color: {cookiesWidget.0.text_color};">
+                            {data.{lowercaseCategoryName}}
+                        </p>
+                        <div class="table-border">
+                            <table class="" id="">
+                                <tbody>
+                                    <tr class="row-head">
+                                        <th class="web-id-head w-50px">Cookie Name</th>
+                                        <th>Domain</th>
+                                        <th {f:if(condition: '{cookieData.description}', then: 'style="min-width: 300px"', else: '')}>Description</th>
+                                        <th class="">Expires</th>
+                                        <th class="">Type</th>
+                                        <th>Session</th>
+                                        <th class="">Found in</th>
+                                    </tr>
+                                    <f:for each="{cookieCategory}" as="cookieData" iteration="i">
+                                        <tr class="row-data" style="{f:if(condition: i.last, then: 'border-bottom: 0;')}">
+                                            <f:if condition="{cookieData.name}">
+                                                <f:then>
+                                                    <td data-title="Cookie Name"><span {f:if(condition: '{cookiesWidget.0.text_color}', then: 'style="color: {cookiesWidget.0.text_color}"', else: 'style="color: #343434;"')}>{cookieData.name}</span></td>
+                                                </f:then>
+                                                <f:else>
+                                                    <td data-title="Cookie Name"><span {f:if(condition: '{cookiesWidget.0.text_color}', then: 'style="color: {cookiesWidget.0.text_color}"', else: 'style="color: #343434;"')}>-</span></td>
+                                                </f:else>
+                                            </f:if>
+                                            <f:if condition="{cookieData.domain}">
+                                                <f:then>
+                                                    <td data-title="Domain"><span {f:if(condition: '{cookiesWidget.0.text_color}', then: 'style="color: {cookiesWidget.0.text_color}"', else: 'style="color: #343434;"')}>{cookieData.domain}</span></td>
+                                                </f:then>
+                                                <f:else>
+                                                    <td data-title="Domain"><span {f:if(condition: '{cookiesWidget.0.text_color}', then: 'style="color: {cookiesWidget.0.text_color}"', else: 'style="color: #343434;"')}>-</span></td>
+                                                </f:else>
+                                            </f:if>
+                                            <f:if condition="{cookieData.description}">
+                                                <f:then>
+                                                    <td data-title="Description" class="{f:if(condition: '{cookieData.description}', then: 'desc', else: '')}" >
+                                                        <span {f:if(condition: '{cookiesWidget.0.text_color}', then: 'style="color: {cookiesWidget.0.text_color}"', else: 'style="color: #343434;"')}>{cookieData.description}</span>
+                                                    </td>
+                                                </f:then>
+                                                <f:else>
+                                                    <td data-title="Description"><span {f:if(condition: '{cookiesWidget.0.text_color}', then: 'style="color: {cookiesWidget.0.text_color}"', else: 'style="color: #343434;"')}>-</span></td>
+                                                </f:else>
+                                            </f:if>
+                                            <f:if condition="{cookieData.expire}">
+                                                <f:then>
+                                                    <td data-title="Expires"><span {f:if(condition: '{cookiesWidget.0.text_color}', then: 'style="color: {cookiesWidget.0.text_color}"', else: 'style="color: #343434;"')}>{cookieData.expire}</span></td>
+                                                </f:then>
+                                                <f:else>
+                                                    <td data-title="Expires"><span {f:if(condition: '{cookiesWidget.0.text_color}', then: 'style="color: {cookiesWidget.0.text_color}"', else: 'style="color: #343434;"')}>-</span></td>
+                                                </f:else>
+                                            </f:if>
+                                            <f:if condition="{cookieData.type}">
+                                                <f:then>
+                                                    <td data-title="Type"><span {f:if(condition: '{cookiesWidget.0.text_color}', then: 'style="color: {cookiesWidget.0.text_color}"', else: 'style="color: #343434;"')}>{cookieData.type}</span></td>
+                                                </f:then>
+                                                <f:else>
+                                                    <td data-title="Type"><span {f:if(condition: '{cookiesWidget.0.text_color}', then: 'style="color: {cookiesWidget.0.text_color}"', else: 'style="color: #343434;"')}>-</span></td>
+                                                </f:else>
+                                            </f:if>
+                                            <f:if condition="{cookieData.session}">
+                                                <f:then>
+                                                    <td data-title="Session"><span {f:if(condition: '{cookiesWidget.0.text_color}', then: 'style="color: {cookiesWidget.0.text_color}"', else: 'style="color: #343434;"')}>{cookieData.session}</span></td>
+                                                </f:then>
+                                                <f:else>
+                                                    <td data-title="Session"><span {f:if(condition: '{cookiesWidget.0.text_color}', then: 'style="color: {cookiesWidget.0.text_color}"', else: 'style="color: #343434;"')}>-</span></td>
+                                                </f:else>
+                                            </f:if>
+                                            <f:if condition="{cookieData.subPagesArray}">
+                                                <f:then>
+                                                    <td data-title="Found in" class="links-parent">
+                                                        <div class="links">
+                                                            <f:for each="{cookieData.subPagesArray}" as="list" iteration="i">
+                                                                <a href="{list}"> {list -> f:format.crop(maxCharacters: 20,append:..)}</a><br>
+                                                            </f:for>
+                                                        </div>
+                                                    </td>
+                                                </f:then>
+                                                <f:else>
+                                                    <td data-title="Found in"><span {f:if(condition: '{cookiesWidget.0.text_color}', then: 'style="color: {cookiesWidget.0.text_color}"', else: 'style="color: #343434;"')}>-</span></td>
+                                                </f:else>
+                                            </f:if>
+                                        </tr>
+                                    </f:for>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </f:for>
+                <f:if condition="{decodedArray}">
+                    <f:then>
+                        <div class="acceptance-btn" {f:if(condition: '{cookiesWidget.0.background_color}', then: 'style="background-color: {cookiesWidget.0.background_color}"', else: 'style="background-color: #fff;"')}>
+                            <button type="button"
+                                class="btn-lg accept-btn accept-btn-padding banner-confirm-gdpr"
+                                onclick="setCookies('false')">
+                                <f:translate key="Confirm" /></button>
+                        </div>
+                    </f:then>
+                    <f:else>
+                        <div class="acceptance-btn" {f:if(condition: '{cookiesWidget.0.background_color}', then: 'style="background-color: {cookiesWidget.0.background_color}"', else: 'style="background-color: #fff;"')}>
+                            <button type="button"
+                                class="btn-lg accept-btn accept-btn-padding banner-confirm-gdpr"
+                                onclick="setCookies('true')">
+                                <f:translate key="i_understand" /></button>
+                        </div>
+                    </f:else>
+                </f:if>
+            </div>
+
+        </div>
+    </div>
+
+    <style>
+        @font-face {
+            font-family: 'Poppins';
+            font-style: normal;
+            font-weight: 400;
+            src: local('Poppins Regular'), local('Poppins-Regular'),
+            url('/typo3conf/ext/gdpr_extensions_com_cm/Resources/Public/Fonts/Poppins-Regular.otf') format('opentype');
+        }
+
+        @font-face {
+            font-family: 'Poppins';
+            font-style: normal;
+            font-weight: 500;
+            src: local('Poppins Medium'), local('Poppins-Medium'),
+            url('/typo3conf/ext/gdpr_extensions_com_cm/Resources/Public/Fonts/Poppins-Medium.otf') format('opentype');
+        }
+
+        @font-face {
+            font-family: 'Poppins';
+            font-style: normal;
+            font-weight: 700;
+            src: local('Poppins Bold'), local('Poppins-Bold'),
+            url('/typo3conf/ext/gdpr_extensions_com_cm/Resources/Public/Fonts/Poppins-Bold.otf') format('opentype');
+        }
+        .d-flex {
+            display: flex;
+        }
+        .justify-content-btw {
+            justify-content: space-between;
+        }
+        .align-items-ctr{
+            align-items: center;
+        }
+
+
+        #gdpr-cookie-consent__icon.init-icon {
+            width: 70px;
+            height: 70px;
+            position: fixed;
+            bottom: 15px;
+            right: 20px;
+            border-radius: 50px;
+            background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgZmlsdGVyPSJ1cmwoI2ZpbHRlcjBfZF8zMzgzXzI4NzgwKSI+CjxjaXJjbGUgY3g9IjMwIiBjeT0iMzAiIHI9IjI0IiBmaWxsPSIjRUU3MjAyIi8+CjwvZz4KPHBhdGggZD0iTTI2LjUgMjYuNVYyNi41MU0zNCAzMy41VjMzLjUxTTMwIDMwVjMwLjAxTTI5IDM1VjM1LjAxTTI1IDMyVjMyLjAxTTMwIDIwQzI4LjAyMjIgMjAgMjYuMDg4OCAyMC41ODY1IDI0LjQ0NDMgMjEuNjg1M0MyMi43OTk4IDIyLjc4NDEgMjEuNTE4MSAyNC4zNDU5IDIwLjc2MTIgMjYuMTczMkMyMC4wMDQzIDI4LjAwMDQgMTkuODA2MyAzMC4wMTExIDIwLjE5MjIgMzEuOTUwOUMyMC41NzggMzMuODkwNyAyMS41MzA0IDM1LjY3MjUgMjIuOTI4OSAzNy4wNzExQzI0LjMyNzUgMzguNDY5NiAyNi4xMDkzIDM5LjQyMiAyOC4wNDkxIDM5LjgwNzlDMjkuOTg4OSA0MC4xOTM3IDMxLjk5OTYgMzkuOTk1NyAzMy44MjY4IDM5LjIzODhDMzUuNjU0MSAzOC40ODE5IDM3LjIxNTkgMzcuMjAwMiAzOC4zMTQ3IDM1LjU1NTdDMzkuNDEzNSAzMy45MTEyIDQwIDMxLjk3NzggNDAgMzBDMzkuMzA1IDMwLjIxNCAzOC41NjQ4IDMwLjIzNDUgMzcuODU5MSAzMC4wNTkzQzM3LjE1MzMgMjkuODg0MSAzNi41MDg3IDI5LjUxOTggMzUuOTk0NSAyOS4wMDU2QzM1LjQ4MDMgMjguNDkxMyAzNS4xMTYgMjcuODQ2NyAzNC45NDA3IDI3LjE0MDlDMzQuNzY1NSAyNi40MzUyIDM0Ljc4NiAyNS42OTUgMzUgMjVDMzQuMzA1IDI1LjIxNCAzMy41NjQ4IDI1LjIzNDUgMzIuODU5MSAyNS4wNTkzQzMyLjE1MzMgMjQuODg0MSAzMS41MDg3IDI0LjUxOTggMzAuOTk0NSAyNC4wMDU2QzMwLjQ4MDMgMjMuNDkxMyAzMC4xMTYgMjIuODQ2NyAyOS45NDA3IDIyLjE0MDlDMjkuNzY1NSAyMS40MzUyIDI5Ljc4NiAyMC42OTUgMzAgMjBaIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8ZGVmcz4KPGZpbHRlciBpZD0iZmlsdGVyMF9kXzMzODNfMjg3ODAiIHg9IjAiIHk9IjAiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgZmlsdGVyVW5pdHM9InVzZXJTcGFjZU9uVXNlIiBjb2xvci1pbnRlcnBvbGF0aW9uLWZpbHRlcnM9InNSR0IiPgo8ZmVGbG9vZCBmbG9vZC1vcGFjaXR5PSIwIiByZXN1bHQ9IkJhY2tncm91bmRJbWFnZUZpeCIvPgo8ZmVDb2xvck1hdHJpeCBpbj0iU291cmNlQWxwaGEiIHR5cGU9Im1hdHJpeCIgdmFsdWVzPSIwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAxMjcgMCIgcmVzdWx0PSJoYXJkQWxwaGEiLz4KPGZlT2Zmc2V0Lz4KPGZlR2F1c3NpYW5CbHVyIHN0ZERldmlhdGlvbj0iMyIvPgo8ZmVDb21wb3NpdGUgaW4yPSJoYXJkQWxwaGEiIG9wZXJhdG9yPSJvdXQiLz4KPGZlQ29sb3JNYXRyaXggdHlwZT0ibWF0cml4IiB2YWx1ZXM9IjAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAuMTUgMCIvPgo8ZmVCbGVuZCBtb2RlPSJub3JtYWwiIGluMj0iQmFja2dyb3VuZEltYWdlRml4IiByZXN1bHQ9ImVmZmVjdDFfZHJvcFNoYWRvd18zMzgzXzI4NzgwIi8+CjxmZUJsZW5kIG1vZGU9Im5vcm1hbCIgaW49IlNvdXJjZUdyYXBoaWMiIGluMj0iZWZmZWN0MV9kcm9wU2hhZG93XzMzODNfMjg3ODAiIHJlc3VsdD0ic2hhcGUiLz4KPC9maWx0ZXI+CjwvZGVmcz4KPC9zdmc+Cg==");
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            cursor: pointer;
+            z-index: 999;
+        }
+
+        #gdpr-cookie-consent__icon.init-icon.left {
+            left: 20px;
+            right: unset;
+        }
+
+        #gdpr-cookie-consent__model .gdpr-cookies {
+            margin-bottom: 24px;
+        }
+
+        #gdpr-cookie-consent__model.modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            font-family: 'Poppins', sans-serif;
+            overflow: unset;
+        }
+
+        #gdpr-cookie-consent__model .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 440px;
+            background-color: transparent;
+            padding: 20px;
+            border-radius: 7px;
+            overflow-y: unset;
+            width: 100%;
+        }
+
+        #gdpr-cookie-consent__model .modal-content .two-click-header {
+            font-size: 16px;
+            color: #343434;
+            margin-bottom: 6px;
+        }
+
+        #gdpr-cookie-consent__model .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 20px;
+            font-weight: 500;
+            margin-bottom: 0;
+            padding: 0;
+            border: 0;
+            color: black;
+            font-size: 20px;
+        }
+
+        #gdpr-cookie-consent__model .modal-desc {
+            color: #343434;
+            font-size: 14px;
+        }
+
+        #gdpr-cookie-consent__model .modal-content .cookie-section {
+            padding: 22px 11px;
+            background: #ffe8d8;
+            border-radius: 6px;
+            margin: 0 16px 20px 16px;
+        }
+
+        #gdpr-cookie-consent__model .modal-content .cookie-section .cookie-inner {
+            margin-bottom: 13px;
+        }
+
+        #gdpr-cookie-consent__model .modal-content .toggleButton {
+            opacity: 0;
+        }
+
+        #gdpr-cookie-consent__model .modal-content .cookie-section p {
+            margin-top: 0;
+        }
+
+        #gdpr-cookie-consent__model .close-modal {
+            cursor: pointer;
+            font-size: 24px;
+            margin-left: 20px;
+        }
+        #gdpr-cookie-consent__model .scroll {
+            max-height: 550px;
+            overflow-y: auto;
+            max-width: unset;
+            width: 100%;
+            background-color: white;
+            border-radius: 7px;
+            padding: 20px;
+            position: relative;
+        }
+
+        #gdpr-cookie-consent__model .scroll::-webkit-scrollbar-track {
+            background-color: transparent;
+        }
+
+        #gdpr-cookie-consent__model .scroll::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+
+
+        #gdpr-cookie-consent__model .scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+
+
+        #gdpr-cookie-consent__model .scroll {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+            max-height: 550px;
+            overflow-y: auto;
+            max-width: 440px;
+            width: 100%;
+        }
+
+
+        #gdpr-cookie-consent__model .scroll {
+            -webkit-overflow-scrolling: touch;
+        }
+
+        #gdpr-cookie-consent__model .d-none {
+            display: none;
+        }
+
+        #gdpr-cookie-consent__model .modal-content .category-container {
+            border: 1px solid #eaeaea;
+            padding: 9px 0;
+            background: #fafafa;
+            border-radius: 6px;
+            margin-bottom: 10px;
+        }
+
+        #gdpr-cookie-consent__model .modal-content .category-container.gdpr-cookies {
+            background-color: transparent;
+            padding: 0;
+        }
+
+        #gdpr-cookie-consent__model .modal-content .category-container.gdpr-cookies .cookie-inner {
+            padding: 8px;
+            border-top: 1px solid #E7E6E6;
+        }
+
+        #gdpr-cookie-consent__model .modal-content .category-container.gdpr-cookies .cookie-inner:first-child {
+            border-top: 0;
+        }
+
+        #gdpr-cookie-consent__model .modal-content .category-container.gdpr-cookies p {
+            font-size: 16px;
+            color: #343434;
+            width: 190px;
+            margin: 0;
+            padding: 0;
+            word-break: break-all;
+            line-height: 22px;
+        }
+
+        #gdpr-cookie-consent__model .switch {
+            position: relative;
+            display: inline-block;
+            width: 42px;
+            height: 22px;
+        }
+        #gdpr-cookie-consent__model .modal-content .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+            border-radius: 34px;
+            /* This line makes the slider rounded */
+        }
+        #gdpr-cookie-consent__model .modal-content .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+            border-radius: 50%;
+            /* This line makes the button inside the slider rounded */
+        }
+
+        #gdpr-cookie-consent__model .modal-content input:checked+.slider {
+            background-color: #ee7202;
+        }
+
+        #gdpr-cookie-consent__model .modal-content input:focus+.slider {
+            box-shadow: 0 0 1px #ee7202;
+        }
+
+        #gdpr-cookie-consent__model .modal-content input:checked+.slider:before {
+            -webkit-transform: translateX(20px);
+            -ms-transform: translateX(20px);
+            transform: translateX(20px);
+        }
+
+
+
+        #gdpr-cookie-consent__model .category-header {
+            color: #343434;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            padding: 0 15px;
+            border-top-left-radius: 7px;
+            border-top-right-radius: 7px;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        #gdpr-cookie-consent__model .arrow {
+            margin-right: 10px;
+            transition: 0.3s;
+            margin-top: -2px;
+            color: #343434;
+        }
+
+        #gdpr-cookie-consent__model .cookie-item {
+            padding-left: 39px;
+            padding-right: 20px;
+            color: #626262;
+        }
+
+        #gdpr-cookie-consent__model .cookie-item strong {
+            display: block;
+            font-size: 14px;
+        }
+
+        #gdpr-cookie-consent__model .cookie-item {
+            font-size: 13px;
+        }
+
+        #gdpr-cookie-consent__model .modal-footer {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        #gdpr-cookie-consent__model .accept-all {
+            text-align: right;
+            margin-top: 30px;
+        }
+
+        #gdpr-cookie-consent__model .accept-btn, .deny-btn {
+            width: auto;
+            padding: 7px 22px;
+            border-radius: 7px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        #gdpr-cookie-consent__model .accept-btn {
+            background-color: #EE7202;
+            color: white;
+            line-height: 26px;
+        }
+
+        #gdpr-cookie-consent__model .deny-btn {
+            background-color: white;
+            color: #EE7202;
+            border: 1px solid #EE7202;
+        }
+
+        #gdpr-cookie-consent__model .category-content.hide {
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.3s ease-in-out;
+        }
+
+
+        #gdpr-cookie-consent__model .category-content.show {
+            overflow: hidden;
+
+            transition: max-height 0.3s ease-in-out;
+        }
+
+        #gdpr-cookie-consent__model .more_details {
+            color: #EE7202;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #gdpr-cookie-consent__model .main-frame .table-border {
+            border: 1px solid #e7e6e6;
+            border-radius: 10px;
+            margin-top: 10px;
+            overflow-x: auto;
+            max-height: 60vh;
+        }
+        #gdpr-cookie-consent__model .main-frame table {
+            border-collapse: collapse;
+            border-spacing: 0;
+            width: 100%;
+        }
+        #gdpr-cookie-consent__model .main-frame table .row-head {
+            background: #e7e6e6;
+            text-align: left;
+        }
+        #gdpr-cookie-consent__model .main-frame table tr {
+            border-bottom: 1px solid #e7e6e6;
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 50px;
+        }
+        #gdpr-cookie-consent__model .main-frame table tr:last-child {
+            border-bottom: 0;
+        }
+        #gdpr-cookie-consent__model .main-frame table .row-head th {
+            color: #343434;
+            font-size: 16px;
+            font-weight: 700;
+            line-height: 24px;
+            min-width: 150px;
+            padding: 16px;
+        }
+        #gdpr-cookie-consent__model .main-frame table .row-data td {
+            color: #343434;
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 24px;
+            padding: 16px;
+        }
+
+        #gdpr-cookie-consent__model .main-frame table .row-data td.desc {
+            min-width: 300px;
+        }
+
+        #gdpr-cookie-consent__model .main-frame table .links {
+            max-width: 140px;
+            max-height: 76px;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        #gdpr-cookie-consent__model .main-frame table .links a {
+            white-space: pre;
+        }
+
+        #gdpr-cookie-consent__model .main-frame.more-detail-table .modal-header{
+            background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTcuODI0OCAxMi45OTk4TDEyLjcyNDggMTcuODk5OEMxMi45MjQ4IDE4LjA5OTggMTMuMDIwNiAxOC4zMzMxIDEzLjAxMjMgMTguNTk5OEMxMy4wMDQgMTguODY2NSAxMi44OTk4IDE5LjA5OTggMTIuNjk5OCAxOS4yOTk4QzEyLjQ5OTggMTkuNDgzMSAxMi4yNjY1IDE5LjU3OSAxMS45OTk4IDE5LjU4NzNDMTEuNzMzMSAxOS41OTU2IDExLjQ5OTggMTkuNDk5OCAxMS4yOTk4IDE5LjI5OThMNC42OTk4IDEyLjY5OThDNC41OTk4IDEyLjU5OTggNC41Mjg5NyAxMi40OTE1IDQuNDg3MyAxMi4zNzQ4QzQuNDQ1NjQgMTIuMjU4MSA0LjQyNDggMTIuMTMzMSA0LjQyNDggMTEuOTk5OEM0LjQyNDggMTEuODY2NSA0LjQ0NTY0IDExLjc0MTUgNC40ODczIDExLjYyNDhDNC41Mjg5NyAxMS41MDgxIDQuNTk5OCAxMS4zOTk4IDQuNjk5OCAxMS4yOTk4TDExLjI5OTggNC42OTk4QzExLjQ4MzEgNC41MTY0NyAxMS43MTIzIDQuNDI0OCAxMS45ODczIDQuNDI0OEMxMi4yNjIzIDQuNDI0OCAxMi40OTk4IDQuNTE2NDcgMTIuNjk5OCA0LjY5OThDMTIuODk5OCA0Ljg5OTggMTIuOTk5OCA1LjEzNzMgMTIuOTk5OCA1LjQxMjNDMTIuOTk5OCA1LjY4NzMgMTIuODk5OCA1LjkyNDggMTIuNjk5OCA2LjEyNDhMNy44MjQ4IDEwLjk5OThIMTguOTk5OEMxOS4yODMxIDEwLjk5OTggMTkuNTIwNiAxMS4wOTU2IDE5LjcxMjMgMTEuMjg3M0MxOS45MDQgMTEuNDc5IDE5Ljk5OTggMTEuNzE2NSAxOS45OTk4IDExLjk5OThDMTkuOTk5OCAxMi4yODMxIDE5LjkwNCAxMi41MjA2IDE5LjcxMjMgMTIuNzEyM0MxOS41MjA2IDEyLjkwNCAxOS4yODMxIDEyLjk5OTggMTguOTk5OCAxMi45OTk4SDcuODI0OFoiIGZpbGw9IiM2MjYyNjIiLz4KPC9zdmc+Cg==");
+            background-repeat: no-repeat;
+            width: 24px;
+            height: 24px;
+            padding-left: 31px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            display: inline-flex;
+        }
+
+        #gdpr-cookie-consent__model .modal-content, .scroll {
+            transition: max-width 0.3s ease-in-out,
+                        max-height 0.3s ease-in-out;
+        }
+
+        #gdpr-cookie-consent__model .modal-content.expanded, #gdpr-cookie-consent__model .scroll.expanded {
+            max-width: 1400px;
+        }
+
+        #gdpr-cookie-consent__model .scroll.expanded {
+            max-height: 90vh;
+        }
+
+        #gdpr-cookie-consent__model .modal-content .acceptance-btn {
+            margin-top: 20px;
+            text-align: end;
+            position: sticky;
+            bottom: -20px;
+            width: 100%;
+            left: 0;
+            padding: 10px 0px;
+        }
+
+        #gdpr-cookie-consent__model .modal-content .model-desc {
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 21px;
+            color: #343434;
+        }
+
+        @media (max-width: 767px) {
+            #gdpr-cookie-consent__model .main-frame .table-border{
+                border: none;
+            }
+            #gdpr-cookie-consent__model .main-frame table {
+                width: 100%;
+                border-collapse: separate;
+                border-spacing: 0 16px;
+            }
+
+            #gdpr-cookie-consent__model .main-frame .row-head {
+                display: none;
+            }
+
+            #gdpr-cookie-consent__model .main-frame tbody,
+            #gdpr-cookie-consent__model .main-frame th,
+            #gdpr-cookie-consent__model .main-frame td {
+                display: block;
+            }
+
+            #gdpr-cookie-consent__model .main-frame tr {
+                margin-bottom: 0.625em;
+            }
+
+            #gdpr-cookie-consent__model .main-frame td {
+                text-align: left;
+                position: relative;
+                padding: 0 !important;
+                background-color: #E7E6E6;
+                border: 1px solid #F3F2F2;
+                border-bottom: 0;
+                overflow: hidden;
+            }
+
+            #gdpr-cookie-consent__model .main-frame td:first-child {
+                border-top-left-radius: 6px;
+                border-top-right-radius: 6px;
+            }
+
+            #gdpr-cookie-consent__model .main-frame td:last-child {
+                border-bottom-left-radius: 6px;
+                border-bottom-right-radius: 6px;
+                border-bottom: 1px solid #F3F2F2;
+            }
+
+            #gdpr-cookie-consent__model .main-frame td span {
+                width: 100%;
+                display: block;
+                padding: 7px;
+                padding-left: 150px;
+                position: relative;
+                overflow: hidden;
+                z-index: 0;
+            }
+
+            #gdpr-cookie-consent__model .main-frame td .links {
+                margin-left: 146px;
+                width: 100%;
+                max-width: unset;
+            }
+
+            #gdpr-cookie-consent__model .main-frame td.links-parent {
+                position: relative;
+                z-index: 0;
+            }
+
+            #gdpr-cookie-consent__model .main-frame td span::before, #gdpr-cookie-consent__model .main-frame td .links::before {
+                content: '';
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                background-color: white;
+                z-index: -1;
+                top: 0;
+                left: 130px;
+            }
+
+            #gdpr-cookie-consent__model .main-frame td::before {
+                content: attr(data-title);
+                position: absolute;
+                left: 10px;
+                width: 140px;
+                padding-right: 10px;
+                white-space: nowrap;
+                text-align: left;
+                font-weight: bold;
+                top: 8px;
+            }
+
+            #gdpr-cookie-consent__model .main-frame .table-border {
+                margin-top: 0;
+            }
+
+            #gdpr-cookie-consent__model .main-frame .model-desc {
+                margin-bottom: 0;
+            }
+
+            #gdpr-cookie-consent__model .main-frame table tr {
+                width: 100%;
+                display: block;
+                border-bottom: 0;
+            }
+        }
+
+        @media (max-width: 580px) {
+            #gdpr-cookie-consent__model .modal-content .model-desc {
+                font-size: 14px;
+            }
+            #gdpr-cookie-consent__model .main-frame td::before {
+                font-size: 12px;
+                top: 3px;
+            }
+            #gdpr-cookie-consent__model .main-frame td span::before, #gdpr-cookie-consent__model .main-frame td .links::before {
+                left: 100px;
+                font-size: 12px;
+            }
+            #gdpr-cookie-consent__model .main-frame td span {
+                padding-left: 115px;
+                font-size: 12px;
+                line-height: 15px;
+            }
+            #gdpr-cookie-consent__model .main-frame td .links {
+                font-size: 11px;
+                line-height: 18px;
+                margin-left: 113px;
+            }
+            #gdpr-cookie-consent__model .main-frame table .row-data td.desc {
+                min-width: unset;
+            }
+            #gdpr-cookie-consent__model .modal-content .category-container.gdpr-cookies p {
+                font-size: 12px;
+                width: 160px;
+            }
+        }
+
+        @media (max-height: 580px) {
+            #gdpr-cookie-consent__model .scroll {
+                max-height: 450px;
+            }
+        }
+
+    </style>
+
+
+    <f:asset.script identifier="2ClickSol">
+
+
+        /*
+
+        _2ClickIframePrivacy Class contains methods for handling user consent about cookies.
+
+        It internally uses cookies to remember user choices about privacy settings.
+
+        Classes:
+        - privacy-msg: Used to style privacy message displayed within iframe
+        - toggleButton : Used by buttons which enables/disables specific services
+
+        Methods:
+        - setConsentStatus(service,status) : Sets the consent status for a service and stores it as a cookie.
+        - deleteCookie(name) : Deletes the specified cookie.
+        - getConsentStatuses(): Returns a JSON object representing all the cookies whose consent was obtained.
+        - wrap(el, wrapper, type, text, heading): Adds 'privacy-msg' div element inside an iframe containing info about data security and obtain user’s consent
+        - EnableContent(type): Enables the iframe content once user provides consent.
+        - DisableContent(type,e): Disables the iframe content if user withdraws consent.
+        - Init(UserConfig) : Initializes the instance with user provided configurations.
+
+        Properties:
+
+        - consentCookieName: Specifies the name of the cookie used for preserving user consent settings
+        - toggleButtons: Represents all buttons which enables/disables specific services.
+        - consentStatuses: Stores the statuses of users' consent for cookies
+
+        */
+
+        let arr = JSON.parse('<f:format.raw>{twoClickSol}</f:format.raw>');
+        console.log(arr);
+        document.addEventListener('DOMContentLoaded', () => {
+        _2ClickIframePrivacy.init('', arr)
+        });
+        let switchs = document.querySelectorAll('.switch .toggleButton');
+        if (switchs.length !== 0) {
+        // let acceptBtn = document.querySelector('.accept-all .btn-lg');
+        // acceptBtn.addEventListener('click', function () {
+        //     switchs.forEach((item, index) => {
+        //         if (item.checked != true) {
+        //             item.click();
+        //             acceptBtn.disabled = true;
+        //             acceptBtn.classList.add('disabled');
+        //         }
+        //     })
+        // })
+        }
+
+        //////////////////////Special One time PopUp///////////////////////////
+        document.addEventListener('DOMContentLoaded', () => {
+        const popUpShownMt = localStorage.getItem('popUpShownMt');
+        const popUpShownGt = localStorage.getItem('popUpShownGt');
+
+
+        if (!popUpShownMt) {
+        const trackModalMt = document.getElementById("gdpr-extensions-com-cookie-track-model-mt");
+
+        if (trackModalMt) {
+        trackModalMt.style.display = "block";
+        localStorage.setItem('popUpShownMt', true);
+        }
+
+
+        }
+        if(!popUpShownGt){
+
+        const trackModalGt = document.getElementById("gdpr-extensions-com-cookie-track-model-gt");
+
+
+        if (trackModalGt) {
+
+
+        trackModalGt.style.display = "block";
+        localStorage.setItem('popUpShownGt', true);
+        }
+        }
+        });
+
+        const acceptBtntrack = document.querySelector('.accept-all .btn-lg');
+        if (acceptBtntrack) {
+        // acceptBtntrack.addEventListener('click', () => {
+        //const switchs = document.querySelectorAll('.switch .toggleButton');
+        //switchs.forEach((item) => {
+        //if (!item.checked) {
+        //item.click();
+        // acceptBtntrack.disabled = true;
+        //acceptBtntrack.classList.add('disabled');
+        //}
+        // });
+        // });
+
+        const spackTrack = document.querySelector('.trackclose');
+        const acceptAllBtnMt = document.getElementById('acceptAllBtnMt');
+        const acceptAllBtnGt = document.getElementById('acceptAllBtnGt');
+
+        if(acceptAllBtnMt){
+        acceptAllBtnMt.addEventListener("click" ,()=>{
+        spackTrack.click();
+        })
+        }
+
+        const spackTrackGt = document.querySelector('.trackcloseGt');
+
+        if(acceptAllBtnGt){
+        acceptAllBtnGt.addEventListener("click" ,()=>{
+        spackTrackGt.click();
+        })
+        }
+
+        if(spackTrackGt){
+        spackTrackGt.onclick = function () {
+
+        const trackModalGt = document.getElementById("gdpr-extensions-com-cookie-track-model-gt");
+
+        if(trackModalGt){
+        trackModalGt.style.display = "none";
+        }
+
+        };
+        }
+        if(spackTrack){
+
+        spackTrack.onclick = function () {
+        const trackModalMt = document.getElementById("gdpr-extensions-com-cookie-track-model-mt");
+
+        if(trackModalMt){
+        trackModalMt.style.display = "none";
+
+        }
+
+        };
+        }
+
+
+        window.onclick = function (event) {
+        const trackModalMt = document.getElementById("gdpr-extensions-com-cookie-track-model-mt");
+        const trackModalGt = document.getElementById("gdpr-extensions-com-cookie-track-model-gt");
+
+        if (event.target == trackModalMt) {
+        trackModalMt.style.display = "none";
+        }
+        if (event.target == trackModalGt) {
+        trackModalGt.style.display = "none";
+        }
+        };
+        }
+
+        //////////////////////Special One time PopUp//////////////////////////
+
+        for (let sol in arr) {
+
+        let solSetting = arr[sol];
+
+
+        var modal = document.getElementById("gdpr-extensions-com-cookie-model");
+        if (modal) {
+        var btn = document.querySelectorAll(".gdpr-extensions-com-cookie-fab-mo");
+        var span = document.getElementsByClassName("close")[0];
+        btn.forEach((item, index) => {
+        item.addEventListener('click', function () {
+        modal.style.display = "block";
+        })
+        })
+
+
+        span.onclick = function () {
+        modal.style.display = "none";
+        }
+
+        window.onclick = function (event) {
+        if (event.target == modal) {
+        modal.style.display = "none";
+        }
+        }
+        }
+
+
+        var _2ClickIframePrivacy = new function () {
+
+        var consentCookieName = 'GDPR_Extensions_2ClickCookieConsent';
+        var toggleButtons = document.getElementsByClassName("toggleButton");
+        let gdprInner = document.getElementById('gdpr-inner')
+
+
+        // Initialize consent statuses:
+        var consentStatuses = getConsentStatuses();
+
+        var config = {
+        enableCookies: true,
+        useSessionCookie: true,
+        cookieNamespace: '_2ClickIPEnable-',
+        showContentLabel: 'Inhalt anzeigen',
+        rememberChoiceLabel: 'Auswahl merken',
+        privacyPolicyLabel: 'Datenschutzerklärung',
+        privacyPolicyUrl: false
+        };
+
+        this.types = new Array(
+        {
+        type: 'video',
+        description: solSetting.content,
+        heading: solSetting.heading,
+        btnColor: solSetting.button_color,
+        textColor: solSetting.text_color,
+        imagePath: solSetting.background_image,
+        imageStatus: solSetting.enable_background_image,
+        bgColor: solSetting.background_image_color,
+        buttonTextColor: solSetting.button_text_color,
+        btnText: solSetting.button_text,
+        btnShape: solSetting.button_shape,
+        },
+        {
+        type: 'map',
+        description: solSetting.content,
+        heading: solSetting.heading,
+        btnColor: solSetting.button_color,
+        textColor: solSetting.text_color,
+        imagePath: solSetting.background_image,
+        imageStatus: solSetting.enable_background_image,
+        bgColor: solSetting.background_image_color,
+        buttonTextColor: solSetting.button_text_color,
+        btnText: solSetting.button_text,
+        btnShape: solSetting.button_shape,
+        },
+        {
+        type: 'calendar',
+        description: '<f:format.raw>{YoutubeSettings.content}</f:format.raw><br />',
+        heading: 'Zum Aktivieren des Videos bitte auf den Link klicken. Durch das Aktivieren von eingebetteten Videos werden Daten an den jeweiligen Anbieter übermittelt. Weitere Informationen können unserer Datenschutzerklärung entnommen werden.<br />'
+
+        }
+        );
+
+        function setConsentStatus(service, status) {
+        consentStatuses[service] = status;
+
+        let cookie = getConsentStatuses();
+        if (cookie != {}) {
+        deleteCookie(consentCookieName);
+        }
+        var d = new Date;
+        d.setTime(d.getTime() + 24 * 60 * 60 * 1000 * 30);
+        document.cookie = consentCookieName + "=" + JSON.stringify(consentStatuses) + ";path=/;expires=" + d.toGMTString();
+
+        }
+
+        function deleteCookie(name) {
+        // Create an expired date.
+        var expiredDate = new Date();
+        expiredDate.setTime(expiredDate.getTime() - (1000 * 3600)); // Subtracting 1 hour from current time
+
+        // Setting the cookie with an expired date deletes it.
+        document.cookie = name + "=; expires=" + expiredDate.toGMTString() + "; path=/";
+        }
+
+        function getConsentStatuses() {
+        var v = document.cookie.match('(^|;) ?' + consentCookieName + '=([^;]*)(;|$)');
+        return v ? JSON.parse(v[2]) : {};
+        }
+
+        // Create div-element within the respective iframe to display the defined data-security message and get consent for loading the iframe content.
+
+        function wrap(el, wrapper, type, text, heading, btnColor, textColor, imagePath, imageStatus, bgColor, buttonTextColor, btnText, btnShape) {
+        el.parentNode.insertBefore(wrapper, el);
+        wrapper.className = 'privacy-msg privacy-' + type + '-msg';
+        wrapper.style.width = el.clientWidth + 'px';
+        wrapper.style.height = el.clientHeight + 'px';
+        wrapper.innerHTML = imageStatus == 1 ? "<div class='bgComtainer-image'><img class='bg-image' src='" + window.location.origin +"/"+ imagePath + "'/><div class='overlay'></div>" : "";
+        wrapper.innerHTML += '<h2 style="color:' + textColor + '">' + heading + '</h2>';
+        wrapper.innerHTML += '<p class="description" style="color:' + textColor + '">' + text + '</p>' + '<a href="#foo" class="link-action-gdpr ' + btnShape + '" style="background-color: ' + btnColor + ';color:' + buttonTextColor + '" onclick="_2ClickIframePrivacy.EnableContent(\'' + type + '\'); return false;">' + btnText + '</a>';
+        if (config.enableCookies) {
+        wrapper.innerHTML = wrapper.innerHTML + '<label class="checkbox-label"  style="color:' + textColor + ';display: none"><input type="checkbox" checked style="border-color: ' + btnColor + '" name="remind-\'' + type + '\'" /> ' + config.rememberChoiceLabel + '</label>';
+        }
+        if (config.privacyPolicyUrl) {
+        wrapper.innerHTML = wrapper.innerHTML + '<br /><a href="' + config.privacyPolicyUrl + '">' + config.privacyPolicyLabel + '</a>';
+        }
+        wrapper.innerHTML = '<div class="wraper" style="background-color: ' + bgColor + '"><p>' + wrapper.innerHTML + '</p></div>';
+        wrapper.appendChild(el);
+        }
+
+        this.EnableContent = function (type) {
+        var i;
+
+        // Cookies globally enabled by config?
+        var checkboxes = document.querySelectorAll('div.privacy-' + type + '-msg input');
+
+        if (config.enableCookies) {
+        for (let i = 0; i < checkboxes.length; i++) {
+        if (checkboxes[i].checked == true) {
+        let service = checkboxes[i].parentNode.parentNode.nextElementSibling.getAttribute('data-2click-service'); // get service name from iframe
+        ;
+        setConsentStatus(service + '_<f:format.raw>{rootPid}</f:format.raw>', '1');
+        }
+        }
+        }
+
+
+        var x = document.querySelectorAll('div.privacy-' + type + '-msg .wraper');
+        for (i = 0; i < x.length; i++) {
+        while (x[i].firstChild) {
+        x[i].removeChild(x[i].firstChild);
+        }
+        }
+
+        x = document.querySelectorAll('div.privacy-' + type + '-msg');
+        for (i = 0; i < x.length; i++) {
+        var parent = x[i].parentNode;
+
+        // Move all children out of the element
+        while (x[i].firstChild) parent.insertBefore(x[i].firstChild, x[i]);
+
+        // Remove the empty element
+        parent.removeChild(x[i]);
+        }
+
+        x = document.querySelectorAll('iframe[data-2click-service="' + type + '"]');
+
+        for (i = 0; i < x.length; i++) {
+
+
+        let serviceType = x[i].getAttribute("data-2click-service");
+        x[i].style.display = 'block';
+        if (serviceType === 'gdpr_extensions_com_gmap') {
+        if (i == 0) {
+        let parent = x[i];
+        let mapDiv = document.createElement('div');
+        mapDiv.id = "map" + i;
+        mapDiv.className = "map";
+        parent.parentNode.insertBefore(mapDiv, parent.nextSibling)
+
+        loadMapScript(x[i].nextElementSibling);
+        } else {
+        initMap((x[i].nextElementSibling));
+        }
+        }
+        if (serviceType === 'gdpr_extensions_com_bmap') {
+        gdpr_extensions_com_bmap_gdpr(x[i],'add');
+        }
+
+        x[i].src = x[i].getAttribute("data-src");
+        }
+
+        // If available, execute the callback that is defined for the currently active type
+        for (i = 0; i < this.types.length; i++) {
+        if (this.types[i].type == type && this.types[i].callback) {
+        window[this.types[i].callback]();
+        }
+        }
+
+        gdprInner?.classList.remove('gdprInner');
+
+        if (toggleButtons.length !== 0) {
+        for (let i = 0; i < toggleButtons.length; i++) {
+        let extTitle = toggleButtons[i].getAttribute('data-ext-title');
+        let service = extTitle + '<f:format.raw>_{rootPid}</f:format.raw>'; // assuming that extension title always has the service name at the third position
+        ;
+        // initially set the checkbox according to the cookie value
+
+        toggleButtons[i].checked = Boolean(Number(consentStatuses[service])); // convert string to boolean
+
+        }
+        if (areAllChecked()) {
+        // acceptBtn.disabled = true;
+        // acceptBtn.classList.add('disabled');
+        }
+        }
+
+
+        }
+
+        function DisableContent(type, e) {
+        var i;
+
+        // Accessing all relevant checkboxes
+        var checkboxes = document.querySelectorAll('div.privacy-' + type + '-msg input');
+
+        for (let i = 0; i < checkboxes.length; i++) {
+        if (checkboxes[i].checked == false) { // Checking if the checkbox is not checked
+        let service = checkboxes[i].parentNode.parentNode.nextElementSibling.getAttribute('data-2click-service');
+        setConsentStatus(service + '<f:format.raw>_{rootPid}</f:format.raw>', '0'); // Set consent status to '0' indicating disapproval
+        }
+        }
+
+        var x = document.querySelectorAll('iframe[data-2click-service="' + type + '"]');
+        for (i = 0; i < x.length; i++) {
+        let dummy = x[i].innerHTML;
+        x[i].style.display = 'none';
+
+        x[i].src = ''; // Disabling the iframe by setting src as empty
+        if (type == 'gdpr_extensions_com_gmap') {
+        let elementToRemove = x[i].nextElementSibling;
+        if (elementToRemove) {
+        elementToRemove.parentNode.removeChild(elementToRemove);
+        }
+
+        }
+        if (type == 'gdpr_extensions_com_bmap') {
+        gdpr_extensions_com_bmap_gdpr(x[i],'remove');
+
+        }
+        }
+
+        // If available, execute the callback that is defined for the currently active type
+        for (i = 0; i < e.length; i++) {
+        if (e[i].type == type && e[i].callback) {
+        window[e[i].callback]();
+        }
+        }
+        gdprInner?.classList.add('gdprInner');
+        // acceptBtn.disabled = false;
+        // acceptBtn.classList.remove('disabled');
+        }
+
+        const loadMapScript = function (parent) {
+        ;
+        const mapScript = document.createElement("script");
+        const body = document.querySelector("body");
+        const mapsApiKey = document.getElementById("mapApiKey").innerText;
+
+        mapScript.setAttribute(
+        "src",
+        `https://maps.googleapis.com/maps/api/js?key=${mapsApiKey}&libraries=geometry`
+        );
+
+        console.log("exec: ", `https://maps.googleapis.com/maps/api/js?key=${mapsApiKey}&libraries=geometry`);
+        body.insertAdjacentElement("beforeend", mapScript);
+
+        mapScript.onload = () => {
+        initMap(parent);
+        };
+
+        mapScript.onerror = function (error) {
+        console.error("Error loading Google Maps API:", error);
+        };
+        };
+
+        function initMap(parent) {
+
+        const latLongData = JSON.parse(document.getElementById("LatLongData").innerText);
+        const markerImagePath = document.getElementById("markerImagePath").innerText;
+        var firstKey = Object.keys(latLongData)[0];
+        var firstLocation = latLongData[Object.keys(latLongData)[0]];
+
+
+        const zoomButton = 1;
+        const satelliteView = 'SATELLITE';
+
+        const mapTypeIdMapping = {
+        HYBRID: google.maps.MapTypeId.HYBRID,
+        ROADMAP: google.maps.MapTypeId.ROADMAP,
+        SATELLITE: google.maps.MapTypeId.SATELLITE,
+        TERRAIN: google.maps.MapTypeId.TERRAIN,
+        };
+        const map = new google.maps.Map(parent, {
+        zoom: 13,
+        center: {lat: firstLocation.lat / 1000000, lng: firstLocation.long / 1000000},
+        });
+
+        map.setOptions({
+        zoomControl: zoomButton ? true : false,
+        });
+        // const locationMarkers = document.querySelectorAll(".location-marker");
+
+        latLongData.forEach((markerElement) => {
+
+        const latitude = parseFloat(markerElement.lat);
+        const longitude = parseFloat(markerElement.long);
+        const bodyText = markerElement.address;
+
+        const title = markerElement.title;
+        let markerIcon;
+        if (markerImagePath) {
+
+        markerIcon = {
+        url: `${window.location.origin}${markerImagePath}`, // url
+        scaledSize: new google.maps.Size(70, 70), // scaled size
+        origin: new google.maps.Point(0, 0), // origin
+        anchor: new google.maps.Point(0, 0) // anchor
+        };
+        }
+
+        if (!isNaN(latitude) && !isNaN(longitude)) {
+        const marker = new google.maps.Marker({
+        position: {lat: latitude / 1000000, lng: longitude / 1000000},
+        map: map,
+        title: title,
+        icon: markerIcon,
+        });
+
+        let contentString = `
+        <div class="location-marker__info-window" style="padding: 6px 2px; max-width: 150px">
+            <div class="location-marker__title" style="font-weight: bold; margin-bottom: 5px">${title}</div>
+            <div class="location-marker__body-text" style="line-height: 1.4">${bodyText}</div>
+        </div>
+        `;
+
+        const infoWindow = new google.maps.InfoWindow({
+        content: contentString,
+        });
+
+        marker.addListener("click", () => {
+        infoWindow.open(map, marker);
+        });
+
+
+        }
+        });
+
+
+        }
+
+
+        this.init = function (Userconfig, solSetting, key) {
+        // Read UserConfiguration:
+        if (typeof Userconfig.enableCookies !== 'undefined') {
+        config.enableCookies = Userconfig.enableCookies;
+        }
+        if (typeof Userconfig.useSessionCookie !== 'undefined') {
+        config.useSessionCookie = Userconfig.useSessionCookie;
+        }
+        if (typeof Userconfig.cookieNamespace !== 'undefined') {
+        config.cookieNamespace = Userconfig.cookieNamespace;
+        }
+        if (typeof Userconfig.privacyPolicyUrl !== 'undefined') {
+        config.privacyPolicyUrl = Userconfig.privacyPolicyUrl;
+        }
+        if (typeof Userconfig.showContentLabel !== 'undefined') {
+        config.showContentLabel = Userconfig.showContentLabel;
+        }
+        if (typeof Userconfig.rememberChoiceLabel !== 'undefined') {
+        config.rememberChoiceLabel = Userconfig.rememberChoiceLabel;
+        }
+        if (typeof Userconfig.privacyPolicyLabel !== 'undefined') {
+        config.privacyPolicyLabel = Userconfig.privacyPolicyLabel;
+        }
+
+        if (Array.isArray(Userconfig.CustomTypes)) {
+        this.types = Userconfig.CustomTypes;
+        }
+        for (let i = 0; i < this.types.length; i++) {
+        var selector = document.querySelectorAll('iframe[data-2click-type="' + this.types[i].type + '"]');
+
+        for (let x = 0; x < selector.length; x++) {
+
+        let service = selector[x].getAttribute('data-2click-service'); // get service name from iframe
+        let service_root = service + '_<f:format.raw>{rootPid}</f:format.raw>';
+        let check = solSetting[service];
+
+        if (consentStatuses[service_root] !== '1') {
+
+        wrap(selector[x], document.createElement('div'),
+        service,
+        solSetting[service].content,
+        solSetting[service].heading,
+        solSetting[service].button_color,
+        solSetting[service].text_color,
+        solSetting[service].background_image,
+        solSetting[service].enable_background_image,
+        solSetting[service].background_image_color,
+        solSetting[service].button_text_color,
+        solSetting[service].button_text,
+        solSetting[service].button_shape,
+        );
+        } else {
+        if (service === 'gdpr_extensions_com_gmap') {
+        let parent = selector[x];
+        let mapDiv = document.createElement('div');
+        mapDiv.id = "map" + i;
+        mapDiv.className = "map";
+        parent.parentNode.insertBefore(mapDiv, parent.nextSibling)
+        loadMapScript(selector[x].nextElementSibling);
+        }
+        if (service === 'gdpr_extensions_com_bmap') {
+        gdpr_extensions_com_bmap_gdpr(selector[x],'add');
+        }
+
+        selector[x].src = selector[x].getAttribute("data-src");
+        gdprInner?.classList.remove('gdprInner');
+        selector[x].style.display = 'block';
+        }
+
+
+        }
+
+        }
+
+
+
+        // Get all toggle buttons
+        // For each toggle button
+        // let GtmScriptAdded = false;
+        let GtmScriptAdded = {
+        GtmScriptAdded : false
+        };
+        let MatomoScriptAdded = {
+        MatomoScriptAdded : false
+        };
+
+        if (toggleButtons.length !== 0) {
+        for (let i = 0; i < toggleButtons.length; i++) {
+
+        let extTitle = toggleButtons[i].getAttribute('data-ext-title');
+        let service = extTitle + '<f:format.raw>_{rootPid}</f:format.raw>';
+
+        // initially set the checkbox according to the cookie value
+
+        toggleButtons[i].checked = Boolean(Number(consentStatuses[service])); // convert string to boolean
+
+
+        // Adding GTM custom code here
+
+        gdpr_extensions_com_gt_gdpr({service: service, track:'tag',togglebtn: toggleButtons[i].checked, fnType: 'add', state: GtmScriptAdded});
+
+        // Adding matomo custom code here
+
+
+        gdpr_extensions_com_mt_gdpr({service: service, track:'matomo',togglebtn: toggleButtons[i].checked, fnType: 'add', state: MatomoScriptAdded});
+
+        let wrapperFunctionData = this.types;
+
+        // add event listener on checkbox change
+
+        toggleButtons[i].addEventListener('change', function (e) {
+
+        setConsentStatus(service, this.checked ? '1' : '0'); // convert boolean to number
+        this.checked;
+
+        if (this.checked == false) {
+
+
+        gdpr_extensions_com_gt_gdpr({service: service, track:'tag', fnType: 'remove' });
+
+
+        // Removing matomo custom code here
+
+        gdpr_extensions_com_mt_gdpr({service: service, track:'matomo', fnType: 'remove' });
+
+
+        DisableContent(extTitle, wrapperFunctionData)
+        wrapfunction(wrapperFunctionData, arr, extTitle);
+
+        } else {
+
+
+        // Adding GTM custom code here
+
+
+        gdpr_extensions_com_gt_gdpr({service: service, track:'tag', fnType: 'add' });
+
+        // Adding matomo custom code here
+
+        gdpr_extensions_com_mt_gdpr({service: service, track:'matomo', fnType: 'add' });
+
+
+        _2ClickIframePrivacy.EnableContent(extTitle)
+        }
+        });
+        }
+        }
+
+
+        function wrapfunction(e, settings, key) {
+
+        for (let i = 0; i < e.length; i++) {
+
+        var selector = document.querySelectorAll('iframe[data-2click-type="' + e[i].type + '"]');
+        for (let x = 0; x < selector.length; x++) {
+        let service = selector[x].getAttribute('data-2click-service'); // get service name from iframe
+        if (service == key) {
+        if (consentStatuses[service] !== '1') {
+        wrap(selector[x],
+        document.createElement('div'),
+        service, settings[service].content,
+        settings[service].heading,
+        settings[service].button_color,
+        settings[service].button_text_color,
+        settings[service].background_image,
+        settings[service].enable_background_image,
+        settings[service].background_image_color,
+        settings[service].button_text_color,
+        settings[service].button_text,
+        settings[service].button_shape,
+        );
+        } else {
+        selector[x].src = selector[x].getAttribute("data-src");
+        }
+        }
+
+        }
+
+        }
+
+        }
+
+        if (toggleButtons.length !== 0) {
+        if (areAllChecked()) {
+        // acceptBtn.disabled = true;
+        // acceptBtn.classList.add('disabled');
+        }
+        }
+
+        };
+        }
+        }
+
+        // Call the function to add the GTM script
+
+        function areAllChecked() {
+        for (let i = 0; i < switchs.length; i++) {
+        if (!switchs[i].checked) {
+        return false;
+        }
+        }
+        return true;
+        }
+
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+        let gdpr_categoryHeaders = document.querySelectorAll('.category-header');
+        let gdpr_moreBtn = document.querySelectorAll('.category-container .more_details');
+        let gdpr_cookieDataContainer = document.querySelector('.cookie-data');
+        let gdpr_goBackBtn = document.querySelectorAll('.go-back');
+        let gdpr_detailTable = document.querySelectorAll('.more-detail-table');
+        let gdpr_modalContent = document.querySelector('.modal-content');
+        let gdpr_scroll = document.querySelector('.modal-content .scroll');
+        let gdpr_icon = document.getElementById('gdpr-cookie-consent__icon');
+        let gdpr_model = document.getElementById('gdpr-cookie-consent__model');
+
+        if (gdpr_model) {
+        gdpr_icon?.addEventListener('click', function () {
+        gdpr_model.style.display = 'block';
+        })
+
+        gdpr_categoryHeaders?.forEach(header => {
+        header?.addEventListener('click', function () {
+        let content = header.nextElementSibling;
+
+        if (content.classList.contains('show')) {
+
+        content.style.maxHeight = content.scrollHeight + 'px';
+        setTimeout(function () {
+        content.style.maxHeight = '0';
+        }, 10);
+
+        content.classList.remove('show');
+        content.classList.add('hide');
+        header.querySelector('.arrow').textContent = '+';
+        } else {
+        content.style.maxHeight = content.scrollHeight + 'px';
+
+        content.classList.remove('hide');
+        content.classList.add('show');
+        header.querySelector('.arrow').textContent = '-';
+        }
+        });
+        });
+
+
+        let closeModal = document.getElementById('closeModal');
+        closeModal?.addEventListener('click', function () {
+        document.getElementById('gdpr-cookie-consent__model').style.display = 'none';
+        });
+
+        // let modal = document.getElementById('gdpr-cookie-consent__model');
+        let cookiesRejected = localStorage.getItem('cookiesRejected');
+        console.log(cookiesRejected);
+        console.log(!cookiesRejected);
+        if (!cookiesRejected) {
+        console.log('inif');
+        gdpr_model.style.display = "block";
+        }
+
+        gdpr_moreBtn?.forEach((btn) => {
+        btn?.addEventListener('click', function () {
+        let btnIdentifier = this?.getAttribute('data-identifier');
+        const table = document.querySelector(`.more-detail-table[data-identifier="${btnIdentifier}"]`);
+        if (table) {
+        gdpr_cookieDataContainer.classList.add('d-none');
+        table.classList.remove('d-none');
+        gdpr_modalContent.classList.add('expanded');
+        gdpr_scroll.classList.add('expanded');
+        adjustModalWidth();
+        }
+        })
+        })
+
+        gdpr_goBackBtn.forEach((btn, index) => {
+        btn.addEventListener('click', function () {
+        gdpr_detailTable.forEach((item) => {
+        item.classList.add('d-none');
+        })
+        gdpr_cookieDataContainer.classList.remove('d-none');
+        if (gdpr_modalContent && gdpr_scroll) {
+        gdpr_modalContent.classList.remove('expanded');
+        gdpr_modalContent.style.width = '100%';
+
+        gdpr_scroll.classList.remove('expanded');
+        gdpr_scroll.style.maxWidth = '440px';
+        }
+        })
+        })
+        }
+
+
+        });
+        window.addEventListener('resize', adjustModalWidth);
+
+        function adjustModalWidth() {
+        // query for the elements that we want to dynamically change their widths
+        var gdpr_modalContent = document.querySelector('.modal-content.expanded');
+        var scrollElement = document.querySelector('.scroll.expanded');
+
+        var windowWidth = window.innerWidth;
+        var maxWidth = windowWidth - 20;
+
+        // Check if window width is less than 1400px, if so, set max-width to windowWidth - 40px
+        if (windowWidth < 1400) {
+        gdpr_modalContent.style.width = maxWidth + 'px';
+        scrollElement.style.maxWidth = maxWidth + 'px';
+        } else {
+        gdpr_modalContent.style.width = 'unset';
+        scrollElement.style.maxWidth = '1400px';
+        }
+        }
+
+        function setCookies(value) {
+        if (value === 'false') {
+        window.yett.unblock()
+        }
+        localStorage.setItem('cookiesRejected', value);
+        document.getElementById('gdpr-cookie-consent__model').style.display = 'none';
+        }
+        function gdpr_extensions_com_bmap_gdpr(iframe, type) {
+
+        if (type != 'add' ) {
+        const BingMap = document.getElementById('bingmap');
+
+        BingMap.remove();
+        let elementToRemove = iframe.nextElementSibling;
+        if (elementToRemove) {
+        elementToRemove.parentNode.removeChild(elementToRemove);
+        }
+        }else{
+        let parent = iframe;
+        let mapDiv = document.createElement('div');
+        mapDiv.id = "bingmap";
+        mapDiv.className = "bingmap";
+
+        parent.parentNode.insertBefore(mapDiv, parent.nextSibling)
+
+        const bingMapScript = document.createElement("script");
+        const bingBody = document.querySelector("body");
+
+        bingMapScript.setAttribute(
+        "src",
+        'https://www.bing.com/api/maps/mapcontrol?callback=GetMap'
+        );
+        bingBody.insertAdjacentElement("beforeend", bingMapScript);
+
+        bingMapScript.onload = () => {
+        GetMap(parent);
+        };
+
+        bingMapScript.onerror = function (error) {
+        console.error("Error loading Google Maps API:", error);
+        };
+        }
+        }
+
+
+        function GetMap() {
+        const bingMarkers = document.getElementById('LatLongData').innerHTML;
+        const bingmarkerImagePath = document.getElementById('bingmarkerImagePath').innerHTML;
+        const bingmapApiKey = document.getElementById('bingmapApiKey').innerHTML;
+        const bingMarkersData = JSON.parse(bingMarkers);
+        let map = new Microsoft.Maps.Map('#bingmap', {
+        credentials: bingmapApiKey,
+        supportedMapTypes: [ Microsoft.Maps.MapTypeId.grayscale],
+        zoom: 7
+        });
+
+        let locationPoints = [];
+        let promises = bingMarkersData.map(location => new Promise(resolve => {
+        let img = new Image();
+        img.onload = function() {
+        let canvas = document.createElement('canvas');
+        let markerWidth = 100;
+        let markerHeight = 50;
+        canvas.width = markerWidth;
+        canvas.height = markerHeight;
+
+        let ctx = canvas.getContext('2d');
+        ctx.drawImage(this, 0, 0, markerWidth, markerHeight);
+
+        let icon = canvas.toDataURL();
+
+        let pushpin = new Microsoft.Maps.Pushpin(new Microsoft.Maps.Location(location.lat / 1000000, location.long / 1000000),{
+        icon: icon,
+        anchor: new Microsoft.Maps.Point(0.5, 0.5)
+        });
+
+        let infobox = new Microsoft.Maps.Infobox(pushpin.getLocation(), { title: location.title, description: location.address, visible: true });
+        Microsoft.Maps.Events.addHandler(pushpin, 'click', function () {
+        infobox.setOptions({ visible: true });
+        });
+
+        map.entities.push(pushpin);
+        map.entities.push(infobox);
+        locationPoints.push(new Microsoft.Maps.Location(location.lat / 1000000, location.long / 1000000));
+        resolve();
+        };
+
+        img.src = bingmarkerImagePath;
+        }));
+
+        Promise.all(promises).then(() => {
+        var totalLat = 0;
+        var totalLong = 0;
+
+        for (var i = 0; i < locationPoints.length; i++) {
+        totalLat += locationPoints[i].latitude;
+        totalLong += locationPoints[i].longitude;
+        }
+
+        var centerLocation = new Microsoft.Maps.Location(totalLat / locationPoints.length, totalLong / locationPoints.length);
+        map.setView({ center: centerLocation });
+        });
+
+        let bingMapDiv = document.getElementById('bingmap');
+        if (bingMapDiv != null){
+        bingMapDiv.style.cssText = 'position: relative; width: 100%; height: 600px;';
+        }
+        }
+
+        function gdpr_extensions_com_mt_gdpr({service, track,togglebtn, fnType,state} = {}) {
+
+        if (service === 'gdpr_extensions_com_mt_' + '<f:format.raw>{rootPid}</f:format.raw>') {
+
+        if(track == 'matomo' && fnType == 'add'){
+
+        if(typeof togglebtn === 'undefined'){
+
+        addMatomo(service);
+        }else{
+
+        var headScriptMatomoJs = document.querySelector('script[src*="matomo.js"]');
+
+        if (!headScriptMatomoJs && (service === 'gdpr_extensions_com_mt_' + '<f:format.raw>{rootPid}</f:format.raw>') && togglebtn && !state.MatomoScriptAdded) {
+        addMatomo(service);
+        state.MatomoScriptAdded = true;
+
+        }
+        }
+
+        }
+
+        if(track == 'matomo' && fnType == 'remove') {
+
+        removeMatomo();
+        }
+
+        }
+
+        function addMatomo(service) {
+        // Create the Matomo script element for the head
+        let cookieWidgetAjax = '<f:format.raw><f:uri.action action="ajax" controller="GdprExtensionsComMt" pluginName="gdprmt" extensionName="GdprExtensionsComMt"/></f:format.raw>';
+        // Get Current URL
+        const currentUrl = window.location.href;
+        // Prepare your data
+        let data = {
+        url: currentUrl,
+        rootPid: '<f:format.raw>{rootPid}</f:format.raw>'
+        };
+
+        ;
+
+
+        // Send data using Fetch API
+        fetch(cookieWidgetAjax, {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(result => {
+        console.log('Success:', result);
+        // Assuming the result is a plain text or HTML code for Matomo
+        if (result.status !== 0) {
+        var matomoCode = result.matomo_code;
+
+        if (matomoCode !== '') {
+        let orignalContent = atob(matomoCode);
+        var matomoCodesdd = extractMatomoCode(orignalContent);
+        var matomoScript = document.createElement('script');
+        matomoScript.id = 'matomo-script';
+        matomoScript.innerHTML = matomoCodesdd;
+
+        // Append the Matomo script to the head
+        document.head.appendChild(matomoScript);
+        // window.dispatchEvent(new Event('yett-unblock'))
+
+        }
+        }
+
+        })
+        .catch(error => console.error('Error:', error));
+
+        }
+
+        function removeMatomo() {
+        // Remove the Matomo script from the head
+        var toRemoveheadScriptJs = document.querySelector('script[src*="matomo.js"]');
+        var matomoScript = document.getElementById('matomo-script');
+        if (matomoScript) {
+        matomoScript.parentNode.removeChild(matomoScript);
+        }
+        if (toRemoveheadScriptJs) {
+
+        toRemoveheadScriptJs.parentNode.removeChild(toRemoveheadScriptJs);
+        }
+        }
+
+        function extractMatomoCode(html) {
+        // Match the content of the script tag
+        var scriptRegex = /<script>([\s\S]+?)<\/script>/;
+
+        // Extract the content of the <script> tag
+        var match = html.match(scriptRegex);
+        if (match) {
+            return match[1];
+        } else {
+            return null;
+        }
+        }
+        }
+        function gdpr_extensions_com_gt_gdpr({service, track,togglebtn, fnType,state} = {}) {
+
+            if (service === 'gdpr_extensions_com_gt_' + '<f:format.raw>{rootPid}</f:format.raw>') {
+
+                if(track == 'tag' && fnType == 'add'){
+
+                    if(typeof togglebtn === 'undefined'){
+
+                        addGTM(service);
+                    }else{
+
+                        var headScriptJs = document.querySelector('script[src*="gtm.js"]');
+
+                        if (!headScriptJs && (service === 'gdpr_extensions_com_gt_' + '<f:format.raw>{rootPid}</f:format.raw>') && togglebtn && !state.GtmScriptAdded) {
+                            addGTM(service);
+                            state.GtmScriptAdded = true;
+
+                        }
+                    }
+
+                }
+
+                if(track == 'tag' && fnType == 'remove') {
+
+                    removeGTM();
+                }
+
+            }
+
+            function addGTM() {
+
+                // Create the Matomo script element for the head
+                let cookieWidgetAjax = '<f:format.raw><f:uri.action action="ajax" controller="GdprExtensionsComGt" pluginName="gdprgt" extensionName="GdprExtensionsComGt"/></f:format.raw>';
+                // Get Current URL
+                const currentUrl = window.location.href;
+                ;
+                // Prepare your data
+                let data = {
+                    url: currentUrl,
+                    rootPid: '<f:format.raw>{rootPid}</f:format.raw>'
+                };
+
+                // Send data using Fetch API
+                fetch(cookieWidgetAjax, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                    .then(response => response.json())
+                    .then(result => {
+                        console.log('Success:', result);
+                        // Assuming the result is a plain text or HTML code for Matomo
+                        if (result.status !== 0) {
+                            var gtmCode = result.gtm_code;
+
+                            if (gtmCode !== '') {
+                                var headScript = document.createElement('script');
+
+                                headScript.id = 'gtm-script';
+                                headScript.innerHTML = `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+                new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+                j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+                'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+                })(window,document,'script','dataLayer','${gtmCode}');`;
+
+                                // Append the GTM script to the head
+                                document.head.appendChild(headScript);
+
+                                // Create the GTM noscript element for the body
+                                var noscript = document.createElement('noscript');
+                                var iframe = document.createElement('iframe');
+                                iframe.src = `https://www.googletagmanager.com/ns.html?id=${gtmCode}`;
+                                iframe.height = "0";
+                                iframe.width = "0";
+                                iframe.style.display = "none";
+                                iframe.style.visibility = "hidden";
+
+                                // Append the iframe to the noscript element
+                                noscript.appendChild(iframe);
+
+                                // Append the noscript element to the body
+                                document.body.insertBefore(noscript, document.body.firstChild);
+                            }
+                        }
+
+                    })
+                    .catch(error => console.error('Error:', error));
+
+            }
+
+            // Call the function to remove the GTM script
+            function removeGTM() {
+                // Remove the GTM script from the head
+                var headScriptJs = document.querySelector('script[src*="gtm.js"]');
+                var headScript = document.getElementById('gtm-script');
+                if (headScript) {
+
+                    headScript.parentNode.removeChild(headScript);
+                }
+                if (headScriptJs) {
+
+                    headScriptJs.parentNode.removeChild(headScriptJs);
+                }
+
+                // Remove the GTM noscript from the body
+                var noscript = document.querySelector('body noscript');
+                if (noscript) {
+                    noscript.parentNode.removeChild(noscript);
+                }
+            }
+
+        }
+
+
+
+
+
+        </f:asset.script>
+
+        </html>

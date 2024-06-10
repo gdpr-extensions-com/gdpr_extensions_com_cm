@@ -1,0 +1,1518 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers" data-namespace-typo3-fluid="true">
+
+<f:layout name="Default" />
+
+This template displays a EDIT form for the current domain object.
+
+If you modify this template, do not forget to change the overwrite settings
+in /Configuration/ExtensionBuilder/settings.yaml:
+Resources:
+Private:
+Backend:
+Templates:
+GdprManager:
+Edit.html: keep
+
+Otherwise your changes will be overwritten the next time you save the
+extension in the extension builder
+
+<f:section name="content">
+    <style>
+        .warpper {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .panel {
+            display: none;
+            animation: fadein 0.8s;
+        }
+
+        @keyframes fadein {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .tab {
+            cursor: pointer;
+            padding: 8px 20px;
+            margin: 0;
+            background: #E7E6E6;
+            display: inline-block;
+            color: black;
+            border-radius: 3px 3px 0px 0px;
+            box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+            border-radius: 6px 6px 0 0;
+        }
+
+        .panels {
+            background: #fff;
+            box-shadow: rgba(0, 0, 0, 0.16) 0px 2px 4px;
+            min-height: 200px;
+            width: calc(100% - 45px);
+            margin-right: 5px;
+            padding: 20px 20px 30px;
+            overflow: auto;
+            height: calc(90vh - 70px);
+            border-top: 1px solid #e7e6e6;
+        }
+
+        .empty-state p {
+            line-height: 24px;
+        }
+
+        .radio {
+            display: none;
+        }
+
+        #one:checked~.panels #one-panel,
+        #two:checked~.panels #two-panel {
+            display: block;
+        }
+
+        #one:checked~.tabs #one-tab,
+        #two:checked~.tabs #two-tab {
+            background: #EE7202;
+            color: white;
+        }
+
+        .panel table {
+            border-collapse: collapse;
+            border-spacing: 0;
+            width: 100%;
+        }
+
+        .panel tr {
+            border-bottom: 1px solid #e7e6e6;
+        }
+
+        .panel .row-data {
+            background: #e7e6e6;
+            text-align: left;
+        }
+
+        .panel .row-data th {
+            color: #343434;
+            font-size: 16px;
+            font-weight: 700;
+            line-height: 24px;
+            min-width: 200px;
+            padding: 16px;
+        }
+
+        .panel .row-data-inner {
+            border-radius: 8px 0;
+        }
+
+        .panel .row-data-inner a {
+            text-decoration: none;
+        }
+
+        .panel .row-data-inner:last-child {
+            border-bottom: 0;
+        }
+
+        .panel .table-outer-bdr {
+            border: 1px solid #e7e6e6;
+            border-radius: 7px;
+        }
+
+        .panel tr td {
+            color: #343434;
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 24px;
+            padding: 16px;
+        }
+
+        .panel .row-data-inner form {
+            margin-bottom: 7px;
+            line-height: 0;
+        }
+
+        .panel .row-data-inner .info {
+            margin: 6px 0;
+            color: #525252;
+        }
+
+        .btn {
+            color: #fff;
+            background: #ee7202;
+            border-radius: 6px;
+            padding: 7px 14px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid #ee7202;
+            color: #ee7202;
+        }
+
+        .apikey-input {
+            border: 1px solid #D1D1D1;
+            padding: 6px 5px;
+            border-radius: 6px;
+            max-width: 300px;
+            width: 100%;
+            margin-top: 5px;
+            outline: none;
+            margin-right: 5px;
+        }
+
+        .back-img {
+            display: flex;
+            align-items: center;
+            width: fit-content;
+            text-decoration: none;
+            color: black;
+            margin-bottom: 16px;
+        }
+
+        .back-img img {
+            width: 25px;
+            margin-right: 6px;
+        }
+
+        .loader {
+            width: 22px;
+            height: 22px;
+            border: 2px solid #939393;
+            border-bottom-color: transparent;
+            border-radius: 50%;
+            display: inline-block;
+            box-sizing: border-box;
+            animation: rotation 1s linear infinite;
+        }
+
+        @keyframes rotation {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .swal-msg .msg {
+            position: absolute;
+            top: 17px;
+            right: 27px;
+        }
+
+        .swal-msg .msg .msg-container {
+            background: white;
+            display: flex;
+            align-items: center;
+            box-shadow: 0px 0px 12px 0px #00000012;
+            height: 56px;
+            padding: 0px 12px;
+            border-radius: 6px;
+        }
+
+        .swal-msg .msg img {
+            width: 24px;
+            margin-right: 11px;
+        }
+
+        .swal-msg .msg p {
+            margin: 0;
+        }
+
+        .invalid-err {
+            color: #E90B0B;
+            font-size: 14px;
+            margin: 10px 0;
+        }
+
+        .apikey-input.error {
+            border-color: #E90B0B;
+        }
+
+        .custom-accordion .accordion-toggle {
+            background-color: #F3F2F2;
+            color: black;
+            cursor: pointer;
+            padding: 10px;
+            width: 100%;
+            text-align: left;
+            border: none;
+            outline: none;
+            transition: background-color 0.3s ease;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .accordion-toggle.rotate-image img {
+            transform: rotate(90deg);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .custom-accordion .accordion-toggle:not(:last-child) {
+            border-bottom: 1px solid #e7e7e7;
+        }
+
+        .custom-accordion .accordion-toggle:hover,
+        .custom-accordion .accordion-toggle.active {
+            background-color: #F3F2F2;
+        }
+
+        .custom-accordion .accordion-content {
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            max-height: 0;
+            padding-left: 15px;
+            background-color: #fff;
+        }
+
+        .custom-accordion .accordion-content p {
+            margin: 8px 0;
+        }
+
+        .radio-btn {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .radio-btn+.radio-btn-label {
+            display: inline-block;
+            border-radius: 6px;
+            padding: 7px 14px;
+            cursor: pointer;
+            background-color: transparent;
+            color: #ee7202;
+            margin-right: 4px;
+            transition: background-color 0.3s ease;
+            border: 1px solid #ee7202;
+        }
+
+        .radio-btn:checked+.radio-btn-label {
+            background-color: #ee7202;
+            color: #fff;
+        }
+
+        .upload-btn {
+            color: #ee7202;
+            background: transparent;
+            border-radius: 6px;
+            padding: 7px 14px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            border: 1px solid #ee7202;
+            display: flex;
+            align-items: center;
+        }
+
+        .upload-btn img {
+            margin-left: 5px;
+        }
+
+        #imageUpload {
+            position: absolute;
+            bottom: 19%;
+            left: 0;
+            padding: 8px 0px;
+            opacity: 0;
+            width: 129px;
+            z-index: 1;
+            cursor: pointer;
+        }
+
+        input[type="color"] {
+            position: relative;
+            width: 30px;
+            height: 30px;
+            border-radius: 6px;
+            padding: 0;
+            border: 1px solid #2172B1;
+            overflow: hidden;
+            margin-right: 8px;
+        }
+
+        input[type="color"]::-moz-color-swatch {
+            border: none;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        input[type="color"]::-webkit-color-swatch-wrapper {
+            padding: 0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        input[type="color"]::-webkit-color-swatch {
+            border: none;
+        }
+
+        input[type="color"]::after {
+            content: "";
+            display: block;
+            position: absolute;
+            left: 0px;
+            top: 0px;
+            width: 42px;
+            height: 27px;
+            border-radius: 5px;
+            padding: 0;
+            border: 0px solid #2172B1;
+        }
+
+        input[type="color"]:disabled {
+            filter: grayscale(100%);
+        }
+
+        .rec-size {
+            margin-top: 8px !important;
+            margin-bottom: 12px !important;
+            font-size: 10px;
+        }
+
+        .text-content input,
+        .text-content textarea {
+            width: 50%;
+            min-width: 300px;
+            border: 1px solid #D1D1D1;
+            padding: 10px;
+            border-radius: 6px;
+            outline: none;
+        }
+
+        .text-content textarea {
+            resize: none;
+            padding: 8px;
+            min-height: 100px;
+            margin-bottom: 20px;
+        }
+
+        .save-category {
+            position: absolute;
+            top: 0;
+            right: 40px
+        }
+
+        .preview-img {
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+        }
+
+        #imagePreviewContainer {
+            margin-left: 10px;
+        }
+
+        #imagePreviewContainer .preview-img {
+            width: 25px;
+            height: 25px;
+            object-fit: cover;
+            padding: 5px;
+            border: 1px solid #EE7202;
+            border-radius: 6px;
+        }
+
+        .cancel-upload {
+            margin-left: 7px;
+            cursor: pointer;
+        }
+
+        .category-2click label {
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .category-2click p {
+            font-size: 20px;
+            margin: 0 0 4px 0 !important;
+        }
+
+        .checkStatus:disabled {
+            opacity: 0.5;
+        }
+
+        .d-none {
+            display: none;
+        }
+
+        .d-block {
+            display: block;
+        }
+
+        .d-flex {
+            display: flex;
+        }
+
+        .align-items-center {
+            align-items: center;
+        }
+
+        .pb-10 {
+            padding-bottom: 10px;
+        }
+
+        .mb-10 {
+            margin-bottom: 10px;
+        }
+
+        .mb-12 {
+            margin-bottom: 12px;
+        }
+
+        .mb-8 {
+            margin-bottom: 12px;
+        }
+
+        .my-8 {
+            margin: 8px 0px;
+        }
+
+        .mt-8 {
+            margin-top: 8px;
+        }
+
+        .mb-4 {
+            margin-bottom: 4px;
+        }
+
+        .m-0 {
+            margin: 0;
+        }
+
+        .mb-0 {
+            margin-bottom: 0;
+        }
+
+        .mt-0 {
+            margin-top: 0;
+        }
+
+        .mr-9 {
+            margin-right: 9px;
+        }
+
+        .position-relative {
+            position: relative;
+        }
+
+        .h2 {
+            font-size: 24px;
+            margin: 0 0 10px 0;
+        }
+        .txt-natural {
+            color: #626262;
+        }
+    </style>
+    <h1>
+        <f:translate key="list.gdpr.manager" extensionName="GdprExtensionsComCm" />
+    </h1>
+
+    <f:flashMessages />
+    <f:link.action action="list" class="back-img">
+        <f:image src="EXT:gdpr_extensions_com_cm/Resources/Public/Icons/rightArrow.svg" treatIdAsReference="1" />
+        <f:translate key="back.btn" extensionName="GdprExtensionsComCm" />
+    </f:link.action>
+    <div class="warpper position-relative">
+        <input class="radio" id="one" name="group" type="radio" checked>
+        <input class="radio" id="two" name="group" type="radio">
+
+        <div class="tabs">
+            <label class="tab" id="one-tab" for="one">
+                <f:translate key="Connection.tab" extensionName="GdprExtensionsComCm" />
+            </label>
+            <label class="tab" id="two-tab" for="two">
+                <f:translate key="cookie.widget.tab" extensionName="GdprExtensionsComCm" />
+            </label>
+        </div>
+
+
+        <div class="panels">
+            <div class="panel" id="one-panel">
+                <div class="table-outer-bdr">
+                    <table>
+                        <tr class="row-data">
+                            <th style="border-radius: 6px 0 0 0;">
+                                <f:translate key="root.pid" extensionName="GdprExtensionsComCm" />
+                            </th>
+                            <th>
+                                <f:translate key="base.url" extensionName="GdprExtensionsComCm" />
+                            </th>
+                            <th style="border-radius: 0 6px 0 0;">
+                                <f:translate key="status.head" extensionName="GdprExtensionsComCm" />
+                            </th>
+
+                        </tr>
+                        <tr class="row-data-inner">
+                            <td style="width: 1%;">(ID: {id})</td>
+                            <td><a href="{url}" target="_blank">{url}</a></td>
+                            <td>
+                                <f:if condition="{editStatus} == 'new'">
+                                    <f:then>
+                                        <f:image class="active d-none"
+                                            src="EXT:gdpr_extensions_com_cm/Resources/Public/Icons/active.svg" />
+                                        <f:image class="inactive"
+                                            src="EXT:gdpr_extensions_com_cm/Resources/Public/Icons/inactive.svg" />
+                                        <span class="loader d-none"></span>
+                                    </f:then>
+                                    <f:else>
+                                        <f:image class="active d-none"
+                                            src="EXT:gdpr_extensions_com_cm/Resources/Public/Icons/active.svg" />
+                                        <f:image class="inactive d-none"
+                                            src="EXT:gdpr_extensions_com_cm/Resources/Public/Icons/inactive.svg" />
+                                        <span class="loader"></span>
+                                    </f:else>
+                                </f:if>
+                            </td>
+                        </tr>
+                        <tr class="row-data-inner">
+                            <td colspan="2">
+                                Dashboard API Key
+                                <form id="updateForm" action="{f:uri.action(action: 'update')}" method="post">
+                                    <input type="text" id="apikey" placeholder="Enter the key here" value="{apiKey}"
+                                        class="apiKey apikey-input {editStatus -> f:if(condition: '{editStatus} == \'Invalid key\'', then: 'error')}"
+                                        name="apiKey" required>
+                                    <input type="hidden" id="id" name="id" value="{id}">
+                                    <input type="hidden" id="url" name="url" value="{url}">
+                                    <input type="hidden" id="status" name="status" value="{status}">
+                                    <input type="submit" value="Validate Key" class="btn checkStatus" disabled><br><br>
+                                    <p
+                                        class="invalid-err {editStatus -> f:if(condition: '{editStatus} == \'Invalid key\'', then: '', else: 'd-none')}">
+                                        Invalid Key</p>
+                                </form>
+                                <p class="info">Paste the API key to connect with the dashboard</p>
+                                <p class="info">Key Location : <b>https://dashboard.gdpr-extensions.com/websites</b></p>
+                                <p class="info">Visit schedulers page and run the scheduler <b>"Update Website
+                                        Status"</b></p>
+                            </td>
+                        </tr>
+                    </table>
+                    <br />
+                </div>
+            </div>
+            <div class="panel" id="two-panel">
+                <f:if condition="({apiKey} == '' && {contains2xClick} != 'TRUE') || ({apiKey} != '' && {contains2xClick} != 'TRUE' && {editStatus} != '1') ">
+                    <div class="d-flex align-items-center">
+                        <div style="margin-right: 9%; max-width: 620px;" class="empty-state">
+                            <div class="d-flex align-items-center">
+                                <f:image src="EXT:gdpr_extensions_com_cm/Resources/Public/Icons/holoexc.svg" class="mr-9"/>
+                                <p class="m-0 txt-natural">In order to ensure every cookie and external source is captured</p>
+                            </div>
+                            <h2 class="my-8">DSVGO Scanner</h2>
+                            <p class="mt-0 pb-10">Connect your website and run the scan on the dashboard, after that run the appropriate scheduler.</p>
+                            <div>
+                                <a href="#" class="btn">Go to Scanner</a>
+                            </div>
+                        </div>
+                        <div>
+                            <f:image src="EXT:gdpr_extensions_com_cm/Resources/Public/Icons/dsgvo.svg"/>
+                        </div>
+                    </div>
+                    <hr style="border: 1px solid #E7E6E6;"/>
+                    <div class="d-flex align-items-center" style="margin-top: 46px;">
+                        <div style="margin-right: 9%; max-width: 620px;" class="empty-state">
+                            <div class="d-flex align-items-center">
+                                <f:image src="EXT:gdpr_extensions_com_cm/Resources/Public/Icons/holoexc.svg" class="mr-9"/>
+                                <p class="m-0 txt-natural">In order to manage your cookies with better control</p>
+                            </div>
+                            <h2 class="my-8">2-Click Solutions</h2>
+                            <p class="mt-0 pb-10">Effortlessly achieve GDPR compliance. Simplify consent management and ensure data protection with just two clicks. Stay
+                                compliant, stay secure!</p>
+                            <div>
+                                <a href="https://www.gdpr-extensions.com/gdpr-solutions/our-2-click-solutions" target="_blank" class="btn btn-outline">Learn More</a>
+                            </div>
+                        </div>
+                        <div>
+                            <f:image src="EXT:gdpr_extensions_com_cm/Resources/Public/Icons/product.svg"/>
+                        </div>
+                    </div>
+                </f:if>
+                <f:if condition="({apiKey} == '' && {contains2xClick} == 'TRUE') || ({apiKey} != '' && {contains2xClick} == 'TRUE' && {editStatus} != '1') ">
+                    <div class="d-flex align-items-center">
+                        <div style="margin-right: 9%; max-width: 620px;" class="empty-state">
+                            <div class="d-flex align-items-center">
+                                <f:image src="EXT:gdpr_extensions_com_cm/Resources/Public/Icons/holoexc.svg" class="mr-9"/>
+                                <p class="m-0 txt-natural">In order to ensure every cookie and external source is captured</p>
+                            </div>
+                            <h2 class="my-8">DSVGO Scanner</h2>
+                            <p class="mt-0 pb-10">Connect your website and run the scan on the dashboard, after that run the appropriate scheduler.</p>
+                            <div>
+                                <a href="#" class="btn">Go to Scanner</a>
+                            </div>
+                        </div>
+                        <div>
+                            <f:image src="EXT:gdpr_extensions_com_cm/Resources/Public/Icons/dsgvo.svg"/>
+                        </div>
+                    </div>
+                    <form id="showForm" action="{f:uri.action(action: 'show')}" method="post" enctype="multipart/form-data">
+                        <input type="hidden" id="editStatus" name="editStatus" value="save">
+                        <input type="hidden" id="id" name="id" value="{id}">
+                        <input type="hidden" id="url" name="url" value="{url}">
+                        <div class="custom-accordion">
+                            <button type="button" class="accordion-toggle">
+                                <f:image src="EXT:gdpr_extensions_com_cm/Resources/Public/Icons/dropdown.svg" />
+                                Customize Look
+                            </button>
+                            <div class="accordion-content">
+            
+                                <div class="mb-12">
+                                    <label for="iconUpload" class="mb-8 d-block">Icon Placement</label>
+                                    <input type="radio" class="radio-btn" name="icon_placement" id="btnLeft" value="bottom_left"
+                                        {f:if(condition: '{gdprRecord.icon_placement} == "bottom_left"' , then: 'checked' , else: ''
+                                        )}>
+                                    <label for="btnLeft" class="radio-btn-label">Button Left</label>
+                                    <input type="radio" class="radio-btn" name="icon_placement" id="btnRight" value="bottom_right"
+                                        {f:if(condition: '{gdprRecord.icon_placement} == "bottom_right"' , then: 'checked' ,
+                                        else: '' )}>
+                                    <label for="btnRight" class="radio-btn-label">Button Right</label>
+                                </div>
+                                <div class="position-relative">
+                                    <label for="imageUpload" class="d-block mb-10">Upload Image</label>
+                                    <div class="d-flex">
+                                        <button class="upload-btn " type="button">
+                                            Upload Icon
+                                            <f:image src="EXT:gdpr_extensions_com_cm/Resources/Public/Icons/upload.svg" />
+                                        </button>
+                                        <input type="file" id="imageUpload" name="imageUpload" accept="image/*,.svg">
+                                        <div id="imagePreviewContainer">
+                                            <div class="d-flex align-items-center">
+                                                <f:image class="preview-img"
+                                                    src="{f:if(condition: '{gdprRecord.icon_url}', then: '{gdprRecord.icon_url}', else: 'EXT:gdpr_extensions_com_cm/Resources/Public/Icons/cookie.svg')}" />
+                                                <label
+                                                    style="margin: 0 9px; font-size: 12px;" class="file-name">{gdprRecord.uploaded_file_name -> f:if(condition: '{gdprRecord.uploaded_file_name}', then: '{gdprRecord.uploaded_file_name}', else: 'default.png')}</label>
+
+                                                <f:image class="cancel-upload"
+                                                    src="EXT:gdpr_extensions_com_cm/Resources/Public/Icons/cancel.svg" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p class="rec-size">Recommended Size 70x70px</p>
+                                </div>
+                                <div style="padding-bottom: 20px">
+                                    <p>Color</p>
+                                    <div class="d-flex">
+                                        <div class="d-flex align-items-center" style="margin-right: 20px;">
+                                            <input type="color" name="bg-color"
+                                                value="{f:if(condition: '{gdprRecord.background_color}', then: '{gdprRecord.background_color}', else: '#ffffff')}"
+                                                id="bgColor">
+                                            <label for="bgColor">Background Color</label>
+                                        </div>
+                                        <div class="d-flex align-items-center">
+                                            <input type="color" name="text-color"
+                                                value="{f:if(condition: '{gdprRecord.text_color}', then: '{gdprRecord.text_color}', else: '#000')}"
+                                                id="textColor">
+                                            <label for="textColor">Text Color</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+            
+                            <button type="button" class="accordion-toggle">
+                                <f:image src="EXT:gdpr_extensions_com_cm/Resources/Public/Icons/dropdown.svg" />
+                                Update Heading
+                            </button>
+                            <div class="accordion-content text-content">
+                                <input type="hidden" id="url" name="url" value="{url}">
+                                <p>Header Title</p>
+                                <input id="title" name="title" value="{gdprRecord.header_title}" class="title" name="title">
+                                <p>Header Description</p>
+                                <textarea id="desc" class="desc" value="{gdprRecord.header_description}" name="desc"
+                                    row="5">{gdprRecord.header_description}</textarea>
+                            </div>
+            
+                            <button type="button" class="accordion-toggle">
+                                <f:image src="EXT:gdpr_extensions_com_cm/Resources/Public/Icons/dropdown.svg" />
+                                <f:translate key="update.category.description.twoclick" extensionName="GdprExtensionsComCm" />
+                            </button>
+                            <div class="accordion-content text-content category-2click">
+                                <div>
+                                    <p>GDPR 2-Click Solution</p>
+                                    <label class="d-block">Category Description</label>
+                                    <textarea name="two_click_desc" id="twoClickDesc"
+                                        value="{gdprRecord.two_click_desc}">{gdprRecord.two_click_desc}</textarea>
+                                </div>
+                            </div>
+            
+                        </div>
+                        <input type="submit" class="submit-form save-category btn" value="Save">
+                    </form>
+                </f:if>
+                <f:if condition="{apiKey} != '' && {cookies -> f:count()} == 0 && {reportRecord.report} != 'report not created' && {editStatus} == '1'">
+                    <h2 class="h2">Couldn't fetch any cookie categories</h2>
+                    <p>You need to run the scheduler Fetch Cookies Report & External Resources</p>
+                    <f:image src="EXT:gdpr_extensions_com_cm/Resources/Public/Icons/emptyReport.svg" />
+                        <f:if condition="{contains2xClick} != 'TRUE'">
+                            <div class="d-flex align-items-center" style="margin-bottom: 46px;">
+                                <div style="margin-right: 9%; max-width: 620px;" class="empty-state">
+                                    <div class="d-flex align-items-center">
+                                        <f:image src="EXT:gdpr_extensions_com_cm/Resources/Public/Icons/holoexc.svg" class="mr-9"/>
+                                        <p class="m-0 txt-natural">In order to manage your cookies with better control</p>
+                                    </div>
+                                    <h2 class="my-8">2-Click Solutions</h2>
+                                    <p class="mt-0 pb-10">Effortlessly achieve GDPR compliance. Simplify consent management and ensure data protection with just two clicks. Stay
+                                        compliant, stay secure!</p>
+                                    <div>
+                                        <a href="https://www.gdpr-extensions.com/gdpr-solutions/our-2-click-solutions" target="_blank" class="btn btn-outline">Learn More</a>
+                                    </div>
+                                </div>
+                                <div>
+                                    <f:image src="EXT:gdpr_extensions_com_cm/Resources/Public/Icons/product.svg"/>
+                                </div>
+                            </div>
+                        </f:if>
+                    <form id="showForm" action="{f:uri.action(action: 'show')}" method="post" enctype="multipart/form-data">
+                        <input type="hidden" id="editStatus" name="editStatus" value="save">
+                        <input type="hidden" id="id" name="id" value="{id}">
+                        <input type="hidden" id="url" name="url" value="{url}">
+                        <div class="custom-accordion">
+                            <button type="button" class="accordion-toggle">
+                                <f:image src="EXT:gdpr_extensions_com_cm/Resources/Public/Icons/dropdown.svg" />
+                                Customize Look
+                            </button>
+                            <div class="accordion-content">
+                    
+                                <div class="mb-12">
+                                    <label for="iconUpload" class="mb-8 d-block">Icon Placement</label>
+                                    <input type="radio" class="radio-btn" name="icon_placement" id="btnLeft" value="bottom_left"
+                                        {f:if(condition: '{gdprRecord.icon_placement} == "bottom_left"' , then: 'checked' , else: '' )}>
+                                    <label for="btnLeft" class="radio-btn-label">Button Left</label>
+                                    <input type="radio" class="radio-btn" name="icon_placement" id="btnRight" value="bottom_right"
+                                        {f:if(condition: '{gdprRecord.icon_placement} == "bottom_right"' , then: 'checked' , else: '' )}>
+                                    <label for="btnRight" class="radio-btn-label">Button Right</label>
+                                </div>
+                                <div class="position-relative">
+                                    <label for="imageUpload" class="d-block mb-10">Upload Image</label>
+                                    <div class="d-flex">
+                                        <button class="upload-btn " type="button">
+                                            Upload Icon
+                                            <f:image src="EXT:gdpr_extensions_com_cm/Resources/Public/Icons/upload.svg" />
+                                        </button>
+                                        <input type="file" id="imageUpload" name="imageUpload" accept="image/*,.svg">
+                                        <div id="imagePreviewContainer">
+                                            <div class="d-flex align-items-center">
+                                                <f:image class="preview-img"
+                                                    src="{f:if(condition: '{gdprRecord.icon_url}', then: '{gdprRecord.icon_url}', else: 'EXT:gdpr_extensions_com_cm/Resources/Public/Icons/cookie.svg')}" />
+                                                <label style="margin: 0 9px; font-size: 12px;"
+                                                    class="file-name">{gdprRecord.uploaded_file_name -> f:if(condition:
+                                                    '{gdprRecord.uploaded_file_name}', then: '{gdprRecord.uploaded_file_name}', else:
+                                                    'default.png')}</label>
+                    
+                                                <f:image class="cancel-upload"
+                                                    src="EXT:gdpr_extensions_com_cm/Resources/Public/Icons/cancel.svg" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p class="rec-size">Recommended Size 70x70px</p>
+                                </div>
+                                <div style="padding-bottom: 20px">
+                                    <p>Color</p>
+                                    <div class="d-flex">
+                                        <div class="d-flex align-items-center" style="margin-right: 20px;">
+                                            <input type="color" name="bg-color"
+                                                value="{f:if(condition: '{gdprRecord.background_color}', then: '{gdprRecord.background_color}', else: '#ffffff')}"
+                                                id="bgColor">
+                                            <label for="bgColor">Background Color</label>
+                                        </div>
+                                        <div class="d-flex align-items-center">
+                                            <input type="color" name="text-color"
+                                                value="{f:if(condition: '{gdprRecord.text_color}', then: '{gdprRecord.text_color}', else: '#000')}"
+                                                id="textColor">
+                                            <label for="textColor">Text Color</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    
+                            <button type="button" class="accordion-toggle">
+                                <f:image src="EXT:gdpr_extensions_com_cm/Resources/Public/Icons/dropdown.svg" />
+                                Update Heading
+                            </button>
+                            <div class="accordion-content text-content">
+                                <input type="hidden" id="url" name="url" value="{url}">
+                                <p>Header Title</p>
+                                <input id="title" name="title" value="{gdprRecord.header_title}" class="title" name="title">
+                                <p>Header Description</p>
+                                <textarea id="desc" class="desc" value="{gdprRecord.header_description}" name="desc"
+                                    row="5">{gdprRecord.header_description}</textarea>
+                            </div>
+                            <f:if condition="{contains2xClick} == 'TRUE'">
+                                <button type="button" class="accordion-toggle">
+                                    <f:image src="EXT:gdpr_extensions_com_cm/Resources/Public/Icons/dropdown.svg" />
+                                    <f:translate key="update.category.description.twoclick" extensionName="GdprExtensionsComCm" />
+                                </button>
+                                <div class="accordion-content text-content category-2click">
+                                    <div>
+                                        <p>GDPR 2-Click Solution</p>
+                                        <label class="d-block">Category Description</label>
+                                        <textarea name="two_click_desc" id="twoClickDesc"
+                                            value="{gdprRecord.two_click_desc}">{gdprRecord.two_click_desc}</textarea>
+                                    </div>
+                                </div>
+                            </f:if>
+                        </div>
+                        <input type="submit" class="submit-form save-category btn" value="Save">
+                    </form>
+                </f:if>
+                <f:if condition="{reportRecord.report} == 'report not created' && {contains2xClick} == 'TRUE'">
+                    <h2 class="h2">We received a report but it is empty</h2>
+                    <p>We received a report but there are no cookies, However there cookies from Our 2 Click Solution you can still customize</p>
+                    <f:image src="EXT:gdpr_extensions_com_cm/Resources/Public/Icons/empty.svg" />
+                    <form id="showForm" action="{f:uri.action(action: 'show')}" method="post" enctype="multipart/form-data">
+                        <input type="hidden" id="editStatus" name="editStatus" value="save">
+                        <input type="hidden" id="id" name="id" value="{id}">
+                        <input type="hidden" id="url" name="url" value="{url}">
+                        <div class="custom-accordion">
+                            <button type="button" class="accordion-toggle">
+                                <f:image src="EXT:gdpr_extensions_com_cm/Resources/Public/Icons/dropdown.svg" />
+                                Customize Look
+                            </button>
+                            <div class="accordion-content">
+            
+                                <div class="mb-12">
+                                    <label for="iconUpload" class="mb-8 d-block">Icon Placement</label>
+                                    <input type="radio" class="radio-btn" name="icon_placement" id="btnLeft" value="bottom_left"
+                                        {f:if(condition: '{gdprRecord.icon_placement} == "bottom_left"' , then: 'checked' , else: ''
+                                        )}>
+                                    <label for="btnLeft" class="radio-btn-label">Button Left</label>
+                                    <input type="radio" class="radio-btn" name="icon_placement" id="btnRight" value="bottom_right"
+                                        {f:if(condition: '{gdprRecord.icon_placement} == "bottom_right"' , then: 'checked' ,
+                                        else: '' )}>
+                                    <label for="btnRight" class="radio-btn-label">Button Right</label>
+                                </div>
+                                <div class="position-relative">
+                                    <label for="imageUpload" class="d-block mb-10">Upload Image</label>
+                                    <div class="d-flex">
+                                        <button class="upload-btn " type="button">
+                                            Upload Icon
+                                            <f:image src="EXT:gdpr_extensions_com_cm/Resources/Public/Icons/upload.svg" />
+                                        </button>
+                                        <input type="file" id="imageUpload" name="imageUpload" accept="image/*,.svg">
+                                        <div id="imagePreviewContainer">
+                                            <div class="d-flex align-items-center">
+                                                <f:image class="preview-img"
+                                                    src="{f:if(condition: '{gdprRecord.icon_url}', then: '{gdprRecord.icon_url}', else: 'EXT:gdpr_extensions_com_cm/Resources/Public/Icons/cookie.svg')}" />
+                                                    <label
+                                                    style="margin: 0 9px; font-size: 12px;" class="file-name">{gdprRecord.uploaded_file_name -> f:if(condition: '{gdprRecord.uploaded_file_name}', then: '{gdprRecord.uploaded_file_name}', else: 'default.png')}</label>
+
+                                                <f:image class="cancel-upload"
+                                                    src="EXT:gdpr_extensions_com_cm/Resources/Public/Icons/cancel.svg" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p class="rec-size">Recommended Size 70x70px</p>
+                                </div>
+                                <div style="padding-bottom: 20px">
+                                    <p>Color</p>
+                                    <div class="d-flex">
+                                        <div class="d-flex align-items-center" style="margin-right: 20px;">
+                                            <input type="color" name="bg-color"
+                                                value="{f:if(condition: '{gdprRecord.background_color}', then: '{gdprRecord.background_color}', else: '#ffffff')}"
+                                                id="bgColor">
+                                            <label for="bgColor">Background Color</label>
+                                        </div>
+                                        <div class="d-flex align-items-center">
+                                            <input type="color" name="text-color"
+                                                value="{f:if(condition: '{gdprRecord.text_color}', then: '{gdprRecord.text_color}', else: '#000')}"
+                                                id="textColor">
+                                            <label for="textColor">Text Color</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+            
+                            <button type="button" class="accordion-toggle">
+                                <f:image src="EXT:gdpr_extensions_com_cm/Resources/Public/Icons/dropdown.svg" />
+                                Update Heading
+                            </button>
+                            <div class="accordion-content text-content">
+                                <input type="hidden" id="url" name="url" value="{url}">
+                                <p>Header Title</p>
+                                <input id="title" name="title" value="{gdprRecord.header_title}" class="title" name="title">
+                                <p>Header Description</p>
+                                <textarea id="desc" class="desc" value="{gdprRecord.header_description}" name="desc"
+                                    row="5">{gdprRecord.header_description}</textarea>
+                            </div>
+                            <button type="button" class="accordion-toggle">
+                                <f:image src="EXT:gdpr_extensions_com_cm/Resources/Public/Icons/dropdown.svg" />
+                                <f:translate key="update.category.description.twoclick" extensionName="GdprExtensionsComCm" />
+                            </button>
+                            <div class="accordion-content text-content category-2click">
+                                <div>
+                                    <p>GDPR 2-Click Solution</p>
+                                    <label class="d-block">Category Description</label>
+                                    <textarea name="two_click_desc" id="twoClickDesc"
+                                        value="{gdprRecord.two_click_desc}">{gdprRecord.two_click_desc}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="submit" class="submit-form save-category btn" value="Save">
+                    </form>
+                </f:if>
+                <f:if condition="{reportRecord.report} == 'report not created' && {contains2xClick} != 'TRUE'">
+                    <h2 class="h2">We received a report but it is empty</h2>
+                    <p>We received a report but there are no cookies, Check out our 2-Click Solutions</p>
+                    <f:image src="EXT:gdpr_extensions_com_cm/Resources/Public/Icons/empty.svg" />
+                    <div class="d-flex align-items-center" style="margin-bottom: 46px;">
+                        <div style="margin-right: 9%; max-width: 620px;" class="empty-state">
+                            <div class="d-flex align-items-center">
+                                <f:image src="EXT:gdpr_extensions_com_cm/Resources/Public/Icons/holoexc.svg" class="mr-9"/>
+                                <p class="m-0 txt-natural">In order to manage your cookies with better control</p>
+                            </div>
+                            <h2 class="my-8">2-Click Solutions</h2>
+                            <p class="mt-0 pb-10">Effortlessly achieve GDPR compliance. Simplify consent management and ensure data protection with just two clicks. Stay
+                                compliant, stay secure!</p>
+                            <div>
+                                <a href="https://www.gdpr-extensions.com/gdpr-solutions/our-2-click-solutions" target="_blank" class="btn btn-outline">Learn More</a>
+                            </div>
+                        </div>
+                        <div>
+                            <f:image src="EXT:gdpr_extensions_com_cm/Resources/Public/Icons/product.svg"/>
+                        </div>
+                    </div>
+                    <form id="showForm" action="{f:uri.action(action: 'show')}" method="post" enctype="multipart/form-data">
+                        <input type="hidden" id="editStatus" name="editStatus" value="save">
+                        <input type="hidden" id="id" name="id" value="{id}">
+                        <input type="hidden" id="url" name="url" value="{url}">
+                        <div class="custom-accordion">
+                            <button type="button" class="accordion-toggle">
+                                <f:image src="EXT:gdpr_extensions_com_cm/Resources/Public/Icons/dropdown.svg" />
+                                Customize Look
+                            </button>
+                            <div class="accordion-content">
+            
+                                <div class="mb-12">
+                                    <label for="iconUpload" class="mb-8 d-block">Icon Placement</label>
+                                    <input type="radio" class="radio-btn" name="icon_placement" id="btnLeft" value="bottom_left"
+                                        {f:if(condition: '{gdprRecord.icon_placement} == "bottom_left"' , then: 'checked' , else: ''
+                                        )}>
+                                    <label for="btnLeft" class="radio-btn-label">Button Left</label>
+                                    <input type="radio" class="radio-btn" name="icon_placement" id="btnRight" value="bottom_right"
+                                        {f:if(condition: '{gdprRecord.icon_placement} == "bottom_right"' , then: 'checked' ,
+                                        else: '' )}>
+                                    <label for="btnRight" class="radio-btn-label">Button Right</label>
+                                </div>
+                                <div class="position-relative">
+                                    <label for="imageUpload" class="d-block mb-10">Upload Image</label>
+                                    <div class="d-flex">
+                                        <button class="upload-btn " type="button">
+                                            Upload Icon
+                                            <f:image src="EXT:gdpr_extensions_com_cm/Resources/Public/Icons/upload.svg" />
+                                        </button>
+                                        <input type="file" id="imageUpload" name="imageUpload" accept="image/*,.svg">
+                                        <div id="imagePreviewContainer">
+                                            <div class="d-flex align-items-center">
+                                                <f:image class="preview-img"
+                                                    src="{f:if(condition: '{gdprRecord.icon_url}', then: '{gdprRecord.icon_url}', else: 'EXT:gdpr_extensions_com_cm/Resources/Public/Icons/cookie.svg')}" />
+                                                    <label
+                                                    style="margin: 0 9px; font-size: 12px;" class="file-name">{gdprRecord.uploaded_file_name -> f:if(condition: '{gdprRecord.uploaded_file_name}', then: '{gdprRecord.uploaded_file_name}', else: 'default.png')}</label>
+
+                                                <f:image class="cancel-upload"
+                                                    src="EXT:gdpr_extensions_com_cm/Resources/Public/Icons/cancel.svg" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p class="rec-size">Recommended Size 70x70px</p>
+                                </div>
+                                <div style="padding-bottom: 20px">
+                                    <p>Color</p>
+                                    <div class="d-flex">
+                                        <div class="d-flex align-items-center" style="margin-right: 20px;">
+                                            <input type="color" name="bg-color"
+                                                value="{f:if(condition: '{gdprRecord.background_color}', then: '{gdprRecord.background_color}', else: '#ffffff')}"
+                                                id="bgColor">
+                                            <label for="bgColor">Background Color</label>
+                                        </div>
+                                        <div class="d-flex align-items-center">
+                                            <input type="color" name="text-color"
+                                                value="{f:if(condition: '{gdprRecord.text_color}', then: '{gdprRecord.text_color}', else: '#000')}"
+                                                id="textColor">
+                                            <label for="textColor">Text Color</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+            
+                            <button type="button" class="accordion-toggle">
+                                <f:image src="EXT:gdpr_extensions_com_cm/Resources/Public/Icons/dropdown.svg" />
+                                Update Heading
+                            </button>
+                            <div class="accordion-content text-content">
+                                <input type="hidden" id="url" name="url" value="{url}">
+                                <p>Header Title</p>
+                                <input id="title" name="title" value="{gdprRecord.header_title}" class="title" name="title">
+                                <p>Header Description</p>
+                                <textarea id="desc" class="desc" value="{gdprRecord.header_description}" name="desc"
+                                    row="5">{gdprRecord.header_description}</textarea>
+                            </div>
+                        </div>
+                        <input type="submit" class="submit-form save-category btn" value="Save">
+                    </form>
+                </f:if>
+                <f:if condition="{cookies -> f:count()} > 0">
+                    <form id="showForm" action="{f:uri.action(action: 'show')}" method="post" enctype="multipart/form-data">
+                        <input type="hidden" id="editStatus" name="editStatus" value="save">
+                        <div class="custom-accordion">
+                            <button type="button" class="accordion-toggle">
+                                <f:image src="EXT:gdpr_extensions_com_cm/Resources/Public/Icons/dropdown.svg" />
+                                Customize Look
+                            </button>
+                            <div class="accordion-content">
+            
+                                <div class="mb-12">
+                                    <label for="iconUpload" class="mb-8 d-block">Icon Placement</label>
+                                    <input type="radio" class="radio-btn" name="icon_placement" id="btnLeft" value="bottom_left"
+                                        {f:if(condition: '{gdprRecord.icon_placement} == "bottom_left"' , then: 'checked' , else: ''
+                                        )}>
+                                    <label for="btnLeft" class="radio-btn-label">Button Left</label>
+                                    <input type="radio" class="radio-btn" name="icon_placement" id="btnRight" value="bottom_right"
+                                        {f:if(condition: '{gdprRecord.icon_placement} == "bottom_right"' , then: 'checked' ,
+                                        else: '' )}>
+                                    <label for="btnRight" class="radio-btn-label">Button Right</label>
+                                </div>
+                                <div class="position-relative">
+                                    <label for="imageUpload" class="d-block mb-10">Upload Image</label>
+                                    <div class="d-flex">
+                                        <button class="upload-btn " type="button">
+                                            Upload Icon
+                                            <f:image src="EXT:gdpr_extensions_com_cm/Resources/Public/Icons/upload.svg" />
+                                        </button>
+                                        <input type="file" id="imageUpload" name="imageUpload" accept="image/*,.svg">
+                                        <div id="imagePreviewContainer">
+                                            <div class="d-flex align-items-center">
+                                                <f:image class="preview-img"
+                                                    src="{f:if(condition: '{gdprRecord.icon_url}', then: '{gdprRecord.icon_url}', else: 'EXT:gdpr_extensions_com_cm/Resources/Public/Icons/cookie.svg')}" />
+                                                <label
+                                                    style="margin: 0 9px; font-size: 12px;" class="file-name">{gdprRecord.uploaded_file_name -> f:if(condition: '{gdprRecord.uploaded_file_name}', then: '{gdprRecord.uploaded_file_name}', else: 'default.png')}</label>
+                                                <f:image class="cancel-upload"
+                                                    src="EXT:gdpr_extensions_com_cm/Resources/Public/Icons/cancel.svg" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <p class="rec-size">Recommended Size 70x70px</p>
+                                </div>
+                                <div style="padding-bottom: 20px">
+                                    <p>Color</p>
+                                    <div class="d-flex">
+                                        <div class="d-flex align-items-center" style="margin-right: 20px;">
+                                            <input type="color" name="bg-color"
+                                                value="{f:if(condition: '{gdprRecord.background_color}', then: '{gdprRecord.background_color}', else: '#ffffff')}"
+                                                id="bgColor">
+                                            <label for="bgColor">Background Color</label>
+                                        </div>
+                                        <div class="d-flex align-items-center">
+                                            <input type="color" name="text-color"
+                                                value="{f:if(condition: '{gdprRecord.text_color}', then: '{gdprRecord.text_color}', else: '#000')}"
+                                                id="textColor">
+                                            <label for="textColor">Text Color</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+            
+                            <button type="button" class="accordion-toggle">
+                                <f:image src="EXT:gdpr_extensions_com_cm/Resources/Public/Icons/dropdown.svg" />
+                                Update Heading
+                            </button>
+                            <div class="accordion-content text-content">
+                                <input type="hidden" id="url" name="url" value="{url}">
+                                <input type="hidden" id="id" name="id" value="{id}">
+                                <p>Header Title</p>
+                                <input id="title" name="title" value="{gdprRecord.header_title}" class="title" name="title">
+                                <p>Header Description</p>
+                                <textarea id="desc" class="desc" value="{gdprRecord.header_description}" name="desc"
+                                    row="5">{gdprRecord.header_description}</textarea>
+                            </div>
+                            <button type="button" class="accordion-toggle">
+                                <f:image src="EXT:gdpr_extensions_com_cm/Resources/Public/Icons/dropdown.svg" />
+                                <f:translate key="update.category.description" extensionName="GdprExtensionsComCm" />
+                            </button>
+                            <div class="accordion-content text-content category-2click">
+                                <f:if condition="{apiKey}">
+            
+                                    <f:if condition="{categories -> f:count()} == 0">
+                                        <f:for each="{cookies}" as="category">
+                                            <f:if condition="{category} == 'gdpr-extensions.com' ">
+                                                <f:then>
+                                                    <p>GDPR 2-Click Solution</p>
+                                                </f:then>
+                                                <f:else>
+                                                    <p>{category}</p>
+                                                </f:else>
+                                            </f:if>
+                                            <label class="d-block">Category Description</label>
+                                            <textarea class="category-desc" name="categorydesc[{category}]"></textarea>
+                                        </f:for>
+                                    </f:if>
+            
+                                    <f:for each="{categories}" as="category">
+                                        <f:if condition="{category.category_title} == 'gdpr-extensions.com' ">
+                                            <f:then>
+                                                <p>GDPR 2-Click Solution</p>
+                                            </f:then>
+                                            <f:else>
+                                                <p>{category.category_title}</p>
+                                            </f:else>
+                                        </f:if>
+                                        <label class="d-block">Category Description</label>
+                                        <!-- Use the category title as the name attribute for the textarea -->
+                                        <textarea class="category-desc"
+                                            name="categorydesc[{category.category_title}]">{category.category_description}</textarea>
+                                    </f:for>
+                                </f:if>
+                            <f:variable name="containsGdprExtensions" value="0" />
+                            <f:for each="{cookies}" as="cookie">
+                                <f:if condition="{cookie} == 'gdpr-extensions.com'">
+                                    <f:then>
+                                        <f:variable name="containsGdprExtensions" value="1" />
+                                    </f:then>
+                                </f:if>
+                            </f:for>
+                            <f:if condition="{containsGdprExtensions} != 1 && {contains2xClick} == 'TRUE'">
+                                <div>
+                                    <p>GDPR 2-Click Solution</p>
+                                    <label class="d-block">Category Description</label>
+                                    <textarea name="two_click_desc" id="twoClickDesc"
+                                        value="{gdprRecord.two_click_desc}">{gdprRecord.two_click_desc}</textarea>
+                                </div>
+                            </f:if>
+                            </div>
+                        </div>
+            
+                        <input type="submit" class="submit-form save-category btn" value="Save">
+                    </form>
+                </f:if>
+            
+            </div>
+
+        </div>
+    </div>
+
+    <div class="swal-msg">
+        <div class="msg success-msg d-none">
+            <div class="msg-container">
+                <f:image src="EXT:gdpr_extensions_com_cm/Resources/Public/Icons/successAuth.svg" />
+                <p>Ready to Connect</p>
+            </div>
+        </div>
+        <div class="msg failed-msg d-none">
+            <div class="msg-container">
+                <f:image src="EXT:gdpr_extensions_com_cm/Resources/Public/Icons/failedAuth.svg" />
+                <p>Failed to Connect Website</p>
+            </div>
+        </div>
+        <div class="msg d-none saved-change">
+            <div class="msg-container">
+                <f:image src="EXT:gdpr_extensions_com_cm/Resources/Public/Icons/successAuth.svg" />
+                <p>Cookie Widget Changes Saved</p>
+            </div>
+        </div>
+    </div>
+    <f:image src="EXT:gdpr_extensions_com_cm/Resources/Public/Icons/cookie.svg" class="d-none default-image" />
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const submitFormButton = document.querySelector(".submit-form");
+            const checkStatusBtn = document.querySelector(".checkStatus");
+            const inactive = document.querySelector(".inactive");
+            const active = document.querySelector(".active");
+            const loader = document.querySelector(".loader");
+            const successMsg = document.querySelector(".success-msg");
+            const failedMsg = document.querySelector(".failed-msg");
+            const editStatus = '<f:format.raw>{editStatus}</f:format.raw>';
+            const invalidErr = document.querySelector('.invalid-err');
+            const savedChange = document.querySelector('.saved-change');
+            const cancelUpload = document.querySelector('.cancel-upload');
+            var staticImageSrc = document.querySelector('.default-image')?.getAttribute('src');
+            var initialImageSrc = document.querySelector('.preview-img')?.getAttribute('src');
+            var lastUploadedImageSrc = null;
+            var validateAuthKeyUrl = '<f:format.raw>{validateAuthKeyUrl}</f:format.raw>';
+            submitFormButton?.addEventListener("click", submitFormFunction);
+            function submitForm() {
+                console.log("first")
+                // Prevent default form submission
+                event.preventDefault();
+
+                // Get the values of id, url, and apiKey
+                var idValue = document.getElementById('id').value;
+                var urlValue = document.getElementById('url').value;
+                var statusValue = document.getElementById('status').value;
+                var apiKeyValue = document.getElementById('apikey').value;
+
+
+                // Create FormData object
+                var formData = new FormData();
+                formData.append('id', idValue);
+                formData.append('url', urlValue);
+                formData.append('apiKey', apiKeyValue);
+                formData.append('status', statusValue);
+
+                // Send AJAX request
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", document.getElementById('updateForm').action, true);
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        // Handle response if needed
+                        console.log('Form submitted successfully!');
+                    }
+                };
+                xhr.send(formData);
+            }
+
+            function submitFormFunction() {
+                // var selectedValue; 
+                // document.querySelectorAll('input[name="icon_placement"]').forEach((radio) => {
+                //     radio.addEventListener('change', (event) => {
+                //         selectedValue = event.target.value;
+                //     });
+                // });
+
+
+
+                var titleValue = document.getElementById('title')?.value;
+                var idValue = document.getElementById('id')?.value;
+                var descValue = document.getElementById('desc')?.value;
+                var twoClickDesc = document.getElementById('twoClickDesc')?.value;
+                var backgroundColor = document.getElementById('bgColor')?.value;
+                var textColor = document.getElementById('textColor')?.value;
+                var urlValue = document.getElementById('url')?.value;
+                var imageFile = document.getElementById('imageUpload')?.files[0];
+
+                var selectedValue = document.querySelector('input[name="icon_placement"]:checked')?.value;
+                console.log(selectedValue)
+                // console.log(selectedValue)
+                // Create FormData object
+                var formData = new FormData();
+                formData.append('title', titleValue);
+                formData.append('id', idValue);
+                formData.append('editStatus', 'save');
+                formData.append('icon_placement', selectedValue);
+                formData.append('desc', descValue);
+                formData.append('two_click_desc', twoClickDesc);
+                formData.append('background_color', backgroundColor);
+                formData.append('text_color', textColor);
+                formData.append('url', urlValue);
+                formData.append('image', imageFile);
+                console.log(formData)
+                // Get values of category descriptions
+                var categoryDescs = document.querySelectorAll('.category-desc');
+                categoryDescs.forEach(function (textarea) {
+                    var categoryName = textarea.name; // Category name
+                    var categoryDesc = textarea.value; // Category description
+                    // Append category description to FormData object
+                    formData.append(categoryName, categoryDesc);
+                });
+
+                // Send AJAX request
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", document.getElementById('showForm').action, true);
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        // Handle response if needed
+                        console.log('Form submitted successfully!');
+                    }
+                };
+                xhr.send(formData);
+            }
+
+            const keyInput = document.querySelector('.apikey-input');
+
+            if (keyInput.value != '') {
+                checkStatus(keyInput.value);
+            }
+            function checkStatus(key) {
+                const formData = new FormData();
+                formData.append("authKeyInput", keyInput.value);
+                let options = {
+                    method: 'POST',
+                    body: formData,
+                };
+                fetch(validateAuthKeyUrl, options).then((resp) => {
+                    if (!resp.ok) {
+                        throw new Error(`Network response was not ok, status: ${resp.status}`);
+                    }
+                    return resp.json();
+                }).then((data) => {
+                    console.log(data);
+                    if (data?.connected == true) {
+                        apiKeyStatus = true;
+                        inactive.classList.add('d-none');
+                        active.classList.remove('d-none');
+                        loader.classList.add('d-none');
+                        // if (editStatus == 0) {
+                        //     successMsg.classList.remove('d-none');
+                        //     setTimeout(() => {
+                        //         successMsg.classList.add('d-none');
+                        //     }, 1500)
+                        // }
+                        if (editStatus == 'save') {
+                            savedChange.classList.remove('d-none');
+                            setTimeout(() => {
+                                savedChange.classList.add('d-none');
+                            }, 1500)
+                        }
+                    } else if(data?.connected == false) {
+                        inactive.classList.remove('d-none');
+                        active.classList.add('d-none');
+                        loader.classList.add('d-none');
+                        if (editStatus == 0) {
+                            successMsg.classList.remove('d-none');
+                            setTimeout(() => {
+                                successMsg.classList.add('d-none');
+                            }, 1500)
+                        }
+                        if (editStatus == 'save') {
+                            savedChange.classList.remove('d-none');
+                            setTimeout(() => {
+                                savedChange.classList.add('d-none');
+                            }, 1500)
+                        }
+                    }
+                     else {
+                        inactive.classList.remove('d-none');
+                        active.classList.add('d-none');
+                        loader.classList.add('d-none');
+                        if (editStatus == 0) {
+                            failedMsg.classList.remove('d-none');
+                            invalidErr.classList.remove('d-none');
+                            keyInput.classList.add('error');
+                            setTimeout(() => {
+                                failedMsg.classList.add('d-none');
+                            }, 1500)
+                        }
+                    }
+                }).catch((error) => {
+                    console.log('request error please check this error', error);
+                    inactive.classList.remove('d-none');
+                    active.classList.add('d-none');
+                    loader.classList.add('d-none');
+                    if (editStatus == 0) {
+                        failedMsg.classList.remove('d-none');
+                        invalidErr.classList.remove('d-none');
+                        keyInput.classList.add('error');
+                        setTimeout(() => {
+                            failedMsg.classList.add('d-none');
+                        }, 1500)
+                    }
+                });
+            }
+
+
+            var accToggles = document.getElementsByClassName("accordion-toggle");
+
+            function handleAccordionClick(event) {
+                var toggle = event.currentTarget;
+                var contentPanel = toggle.nextElementSibling;
+                var img = toggle.querySelector('.accordion-toggle img');
+
+                Array.from(accToggles).forEach(function (otherToggle) {
+                    if (otherToggle !== toggle) {
+                        otherToggle.classList.remove("active");
+                        var otherImg = otherToggle.querySelector('img');
+                        if (otherImg) {
+                            otherImg.style.transform = ''; // Reset rotation
+                        }
+                        otherToggle.nextElementSibling.style.maxHeight = null;
+                    }
+                });
+
+                toggle.classList.toggle("active");
+                if (img) {
+                    if (toggle.classList.contains('active')) {
+                        img.style.transform = 'rotate(90deg)';
+                    } else {
+                        img.style.transform = '';
+                    }
+                    img.style.transition = 'transform 0.3s ease-in-out';
+                }
+
+                contentPanel.style.maxHeight = toggle.classList.contains('active') ? contentPanel.scrollHeight + "px" : null;
+
+                setTimeout(function () {
+                    if (!toggle.classList.contains('active')) {
+                        return;
+                    }
+                    toggle.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 300);
+            }
+
+            Array.from(accToggles).forEach(function (toggle) {
+                toggle.addEventListener("click", handleAccordionClick);
+            });
+
+            keyInput.addEventListener('input', function (e) {
+                if (this.value != '') {
+                    checkStatusBtn.removeAttribute('disabled');
+                } else {
+                    checkStatusBtn.setAttribute('disabled', true);
+                }
+            })
+
+
+            function previewImage() {
+                var previewContainer = document.getElementById('imagePreviewContainer');
+                var files = document.getElementById('imageUpload').files;
+
+                if (files.length > 0) {
+                    var fileReader = new FileReader();
+                    fileReader.onload = function (e) {
+                        var previewImg = previewContainer.querySelector('.preview-img');
+                        if (!previewImg) {
+                            previewImg = document.createElement('img');
+                            previewImg.classList.add('preview-img');
+                            previewContainer.appendChild(previewImg);
+                        }
+                        previewImg.src = e.target.result;
+                    };
+
+                    fileReader.readAsDataURL(files[0]);
+                }
+            }
+
+            document.getElementById('imageUpload')?.addEventListener('change', previewImage);
+
+            cancelUpload?.addEventListener('click', function () {
+                var previewImgElement = document.querySelector('.preview-img');
+                var imageUploadInput = document.getElementById('imageUpload');
+                var fileNameLable = document.querySelector('.file-name');
+                fileNameLable.textContent = 'default.png';
+                previewImgElement.setAttribute('src', staticImageSrc);
+                lastUploadedImageSrc = null;
+                imageUploadInput.value = '';
+            })
+
+            function handleFileUpload(file, fileName) {
+                var previewImgElement = document.querySelector('.preview-img');
+                var fileNameLable = document.querySelector('.file-name');
+                if (previewImgElement.getAttribute('src') !== initialImageSrc) {
+                    lastUploadedImageSrc = previewImgElement.getAttribute('src');
+                }
+                if (file) {
+                    var newSrc = URL.createObjectURL(file);
+                    previewImgElement.setAttribute('src', newSrc);
+                    fileNameLable.textContent = fileName;
+                }
+            }
+
+            function previewImage(event) {
+                var files = event.target.files;
+                if (files.length > 0) {
+                    handleFileUpload(files[0], files[0].name);
+                }
+            }
+
+        });
+    </script>
+</f:section>
+
+
+</html>

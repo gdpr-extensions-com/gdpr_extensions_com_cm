@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="EXT:gdpr_extensions_com_cm/Resources/Private/Language/locallang.xlf" date="2023-09-06T06:19:04Z" product-name="gdpr_extensions_com_cm">
+		<header/>
+		<body>
+			<trans-unit id="tx_gdprextensionscomcm_domain_model_cookie" resname="tx_gdprextensionscomcm_domain_model_cookie">
+				<source>Cookie</source>
+			</trans-unit>
+			<trans-unit id="tx_gdprextensionscomcm_domain_model_cookie.category" resname="tx_gdprextensionscomcm_domain_model_cookie.category">
+				<source>Category</source>
+			</trans-unit>
+			<trans-unit id="tx_gdprextensionscomcm_domain_model_cookie.domain" resname="tx_gdprextensionscomcm_domain_model_cookie.domain">
+				<source>Domain</source>
+			</trans-unit>
+			<trans-unit id="tx_gdprextensionscomcm_domain_model_cookie.platform" resname="tx_gdprextensionscomcm_domain_model_cookie.platform">
+				<source>Platform</source>
+			</trans-unit>
+			<trans-unit id="tx_gdprextensionscomcm_domain_model_cookie.name" resname="tx_gdprextensionscomcm_domain_model_cookie.name">
+				<source>Name</source>
+			</trans-unit>
+			<trans-unit id="tx_gdprextensionscomcm_domain_model_cookie.description" resname="tx_gdprextensionscomcm_domain_model_cookie.description">
+				<source>Description</source>
+			</trans-unit>
+			<trans-unit id="tx_gdprextensionscomcm_domain_model_cookie.sequence" resname="tx_gdprextensionscomcm_domain_model_cookie.sequence">
+				<source>Sequence</source>
+			</trans-unit>
+			<trans-unit id="tx_gdprextensionscomcm_domain_model_cookie.type" resname="tx_gdprextensionscomcm_domain_model_cookie.type">
+				<source>Type</source>
+			</trans-unit>
+			<trans-unit id="tx_gdprextensionscomcm_domain_model_externalresource" resname="tx_gdprextensionscomcm_domain_model_externalresource">
+				<source>External Resource</source>
+			</trans-unit>
+			<trans-unit id="tx_gdprextensionscomcm_domain_model_externalresource.url" resname="tx_gdprextensionscomcm_domain_model_externalresource.url">
+				<source>Url</source>
+			</trans-unit>
+			<trans-unit id="Cookie_Name" resname="Cookie_Name">
+				<source>Cookie Name</source>
+			</trans-unit>
+			<trans-unit id="Domain" resname="Domain">
+				<source>Domain</source>
+			</trans-unit>
+			<trans-unit id="description" resname="description">
+				<source>Description</source>
+			</trans-unit>
+			<trans-unit id="Session" resname="Session">
+				<source>Session</source>
+			</trans-unit>
+			<trans-unit id="type" resname="type">
+				<source>Type</source>
+			</trans-unit>
+			<trans-unit id="Others" resname="Others">
+				<source>Others</source>
+			</trans-unit>
+			<trans-unit id="Marketing" resname="Marketing">
+				<source>Marketing</source>
+			</trans-unit>
+			<trans-unit id="Functional" resname="Functional">
+				<source>Functional</source>
+			</trans-unit>
+			<trans-unit id="Non_Functional" resname="Non_Functional">
+				<source>Non-Functional</source>
+			</trans-unit>
+		    <trans-unit id="Analytics" resname="Analytics">
+			   <source>Analytics</source>
+		   </trans-unit>
+		   <trans-unit id="GDPR_2_CLICK_COOKIES" resname="GDPR_2_CLICK_COOKIES">
+			   <source>GDPR 2-CLICK COOKIES</source>
+		   </trans-unit>
+		   <trans-unit id="see_more" resname="see more">
+			   <source>see more</source>
+		   </trans-unit>
+		   <trans-unit id="Confirm" resname="Confirm">
+			   <source>Confirm</source>
+		   </trans-unit>
+		    <trans-unit id="Deny_all_cookies" resname="Deny_all_cookies">
+			   <source>Deny all cookies</source>
+		   </trans-unit>
+           <trans-unit id="Manage_Consent_Preferences" resname="Manage_Consent_Preferences">
+				<source>Manage Consent Preferences</source>
+		   </trans-unit>
+		   <trans-unit id="2_CLICK_DES" resname="2_CLICK_DES">
+				<source>Third-party advertising services are used. If you agree here, personal data will betransferred to these providers.</source>
+		   </trans-unit>
+		   <trans-unit id="expire" resname="expire">
+				<source>Expire</source>
+		   </trans-unit>
+		   <trans-unit id="Found_in" resname="Found_in">
+				<source>Found in</source>
+		   </trans-unit>
+		   <trans-unit id="status" resname="status">
+				<source>Status</source>
+		   </trans-unit>
+		   <trans-unit id="Header" resname="Header">
+				<source>Header</source>
+		   </trans-unit>
+		   <trans-unit id="i_understand" resname="i_understand">
+				<source>I understand</source>
+		   </trans-unit>
+		   <trans-unit id="more_details" resname="more_details">
+				<source>More details</source>
+		   </trans-unit>
+		   <trans-unit id="fetch_cookies_schedular_title" resname="fetch_cookies_schedular_title">
+			<source>Fetch Cookies &amp; External Resources</source>
+		</trans-unit>
+		<trans-unit id="fetch_cookies_schedular_desc" resname="fetch_cookies_schedular_desc">
+			<source>Fetch &amp; sync cookies &amp; external resource report from GDPR-extensions-com dashboard</source>
+		</trans-unit>
+			<trans-unit id="list.gdpr.manager" resname="list.gdpr.manager">
+				<source>GDPR-Extension-Com Consent Manager</source>
+			</trans-unit>
+			<trans-unit id="root.pid" resname="root.pid">
+				<source>Root Page Id</source>
+			</trans-unit>
+			<trans-unit id="base.url" resname="base.url">
+				<source>Base URL</source>
+			</trans-unit>
+			<trans-unit id="actions.head" resname="actions.head">
+				<source>Actions</source>
+			</trans-unit>
+			<trans-unit id="status.head" resname="actions.head">
+				<source>Status</source>
+			</trans-unit>
+			<trans-unit id="connect.btn" resname="connect.btn">
+				<source>Connect</source>
+			</trans-unit>
+			<trans-unit id="update.btn" resname="connect.btn">
+				<source>Update</source>
+			</trans-unit>
+			<trans-unit id="back.btn" resname="back.btn">
+				<source>Back</source>
+			</trans-unit>
+			<trans-unit id="cookie_widget.btn" resname="cookie_widget.btn">
+				<source>cookie widget</source>
+			</trans-unit>
+			<trans-unit id="Connection.tab" resname="Connection.tab">
+				<source>Connection</source>
+			</trans-unit>
+			<trans-unit id="cookie.widget.tab" resname="cookie.widget.tab">
+				<source>Cookie Widget</source>
+			</trans-unit>
+			<trans-unit id="choose.file" resname="choose.file">
+				<source>choose file</source>
+			</trans-unit>
+			<trans-unit id="customize.icon" resname="customize.icon">
+				<source>Customize Icon</source>
+			</trans-unit>
+			<trans-unit id="update.heading" resname="update.heading">
+				<source>Update Heading</source>
+			</trans-unit>
+			<trans-unit id="update.category.description" resname="update.category.description">
+				<source>Update Category Description</source>
+			</trans-unit>
+			<trans-unit id="update.category.description.twoclick"
+				resname="update.category.description.twoclick">
+				<source>Update 2-Click Category Description</source>
+			</trans-unit>
+			<trans-unit id="sync.apiconnects.title" resname="sync.apiconnects.title">
+				<source>Receive dynamic data</source>
+			</trans-unit>
+			<trans-unit id="sync.update_own_status.title" resname="sync.apiconnects.title">
+				<source>Update Website Status</source>
+			</trans-unit>
+			<trans-unit id="sync.update_own_status.description"
+				resname="sync.apiconnects.description">
+				<source>Update website connections status on Gosign dashboard</source>
+			</trans-unit>
+			<trans-unit id="tx_gdprextensionscomcm_domain_model_connections"
+				resname="tx_gdprextensionscomcm_domain_model_connections">
+				<source>Connections</source>
+			</trans-unit>
+			<trans-unit id="tx_gdprextensionscomcm_domain_model_connections.apitoken"
+				resname="tx_gdprextensionscomcm_domain_model_connections.apitoken">
+				<source>API Token</source>
+			</trans-unit>
+			<trans-unit id="dash.api.key" resname="dash.api.key">
+				<source>Dashboard API Key</source>
+			</trans-unit>
+	</body>
+</file>
+</xliff>

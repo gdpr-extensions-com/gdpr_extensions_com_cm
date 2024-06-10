@@ -1,0 +1,113 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
+    data-namespace-typo3-fluid="true">
+
+    <f:layout name="Default" />
+
+    This template displays a EDIT form for the current domain object.
+
+    If you modify this template, do not forget to change the overwrite settings
+    in /Configuration/ExtensionBuilder/settings.yaml:
+    Resources:
+    Private:
+    Backend:
+    Templates:
+    GdprManager:
+    Edit.html: keep
+
+    Otherwise your changes will be overwritten the next time you save the
+    extension in the extension builder
+
+    <f:section name="content">
+
+        <h1>
+            cookie widget
+        </h1>
+
+        <f:link.action action="list">
+            <f:translate key="back.btn" extensionName="GdprExtensionsComCm" />
+        </f:link.action>
+        <table>
+                <form id="updateForm" action="{f:uri.action(action: 'show')}" method="post" enctype="multipart/form-data">
+
+            <tr class="row-data">
+                <th style="border-radius: 8px 0 0 0;">Cookie Widget
+                    Customization
+                </th>
+            </tr>
+            <tr>
+                
+                <td>
+                    <f:translate key="customize.icon"
+                        extensionName="GdprExtensionsComCm" /><br><br>
+                    <div>
+                        <label for="iconUpload">Icon Placement</label><br><br>
+                        <button onclick="setPlacement('bottom-left')">Bottom
+                            Left </button>
+                        <button onclick="setPlacement('bottom-right')">Bottom
+                            Right</button><br><br>
+                    </div>
+                    <div>
+                    <label for="imageUpload">Upload Image</label><br>
+                    <input type="file" id="imageUpload" name="imageUpload" accept="image/*,.svg"><br><br>
+
+                    </div>
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <f:translate key="update.heading"
+                        extensionName="GdprExtensionsComCm" /><br><br>
+                    <label for="iconUpload">Header Title</label><br>
+                    <input id="title" name="title" value="{title}" class="title" name="title"><br><br>
+                    <label for="iconUpload">Header Description</label><br>
+                    <textarea id="desc"  class="desc" value="{desc}" name="desc">{desc}</textarea><br><br>
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <f:translate key="update.category.description"
+                        extensionName="GdprExtensionsComCm" /><br><br>
+                </td>
+            </tr>
+            <tr>
+                <td>
+            <input type="submit"  class="submit-form" value="Save"><br><br>
+                </td>
+            </tr>
+            </form>
+        </table>
+<script>
+    const submitFormButton = document.querySelector(".submit-form");
+    submitFormButton.addEventListener("click", submitFormFunction);
+    function submitFormFunction() {
+        
+        var titleValue = document.getElementById('title').value;
+        var descValue = document.getElementById('desc').value;
+        var imageFile = document.getElementById('imageUpload').files[0];
+
+        // Create FormData object
+        var formData = new FormData();
+        formData.append('title', titleValue);
+        formData.append('desc', descValue);
+        formData.append('image', imageFile);
+        console.log(imageFile,'imageFile')
+        // Send AJAX request
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", document.getElementById('updateForm').action, true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                // Handle response if needed
+                console.log('Form submitted successfully!');
+            }
+        };
+        xhr.send(formData);
+    }
+</script>
+
+    </f:section>
+
+
+</html>
