@@ -3,6 +3,7 @@ CREATE TABLE tx_gdprextensionscomcm_domain_model_cookie (
 	domain varchar(255) NOT NULL DEFAULT '',
 	platform varchar(255) NOT NULL DEFAULT '',
 	name varchar(255) NOT NULL DEFAULT '',
+	cookie_title text NOT NULL DEFAULT '',
 	description Text NOT NULL DEFAULT '',
 	session varchar(255) NOT NULL DEFAULT '',
     root_pid int(11) NOT NULL DEFAULT '0',

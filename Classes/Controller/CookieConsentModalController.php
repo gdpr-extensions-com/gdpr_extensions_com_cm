@@ -65,14 +65,32 @@ class CookieConsentModalController extends \TYPO3\CMS\Extbase\Mvc\Controller\Act
         $cookies = $this->cookieRepository->findByRootPid($rootPid)->toArray();
         $groupedCookies = [];
         $twoClickCookies = [];
+        $twoClickCookiesTitles = [];
+        $twoClickCookiesDescriptions = [];
         foreach ($cookies as $cookie) {
+
             $category = $cookie->getCategory();
             $cookie->__set("subPagesArray", explode(',', $cookie->getPagesList()));
             if($category == 'GDPR-extensions.com'){
                 $pos = strrpos($cookie->getName(), '_');
                 if ($pos !== false) {
+                    $cookietitle = $cookie->getName();
                     $new_str = substr($cookie->getName(), 0, $pos);
+                    $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tx_gdprextensionscomcm_domain_model_cookie');
+                    $cookiesTitle = $queryBuilder
+                        ->select('*')
+                        ->from('tx_gdprextensionscomcm_domain_model_cookie')
+                        ->where(
+                            $queryBuilder->expr()->eq('name', $queryBuilder->createNamedParameter($cookietitle, \PDO::PARAM_STR))
+                        )
+                        ->setMaxResults(1)
+                        ->executeQuery()
+                        ->fetchAssociative();
+                    $twoClickCookiesTitles[$cookie->getName()] = $cookiesTitle['cookie_title'];
+                    $twoClickCookiesDescription[$cookie->getName()] = $cookiesTitle['description'];
                     $twoClickCookies[$cookie->getName()] = $new_str;
+                    $this->view->assign('twoClickCookiesTitles', $twoClickCookiesTitles);
+                    $this->view->assign('twoClickCookiesDescription', $twoClickCookiesDescription);
                 }
             }
             else{

@@ -123,9 +123,22 @@ class GetTwoClickSolutionsViewHelper extends AbstractViewHelper
                 ->fetchAll();
              
             $normalizedGdprManagers = [];
+            $pluginNames = [
+                'GDPR-Extensions-com - Google Map 2xClick Solution' => 'maps.google.com',
+                'GDPR-Extensions-com - Bing Map 2xClick Solution' => 'bing.com/maps',
+                'GDPR-Extensions.com - Youtube 2xClick Solution' => 'youtube.com',
+                'GDPR-Extensions.com - Youtube Shorts 2xClick Solution' => 'youtube.com',
+                'GDPR-Extensions-com - TikTok 2xClick Solution' => 'tiktok.com',
+                'GDPR-Extensions.com - Vimeo 2xClick Solution' => 'vimeo.com',
+                'GDPR-Extensions.com - Matomo 2xClick Solution' => 'matomo.org',
+                'GDPR-Extensions.com - Google-Tag-Manager 2xClick Solution' => 'tagmanager.google.com',
+                'GDPR-Extensions-com - Social Feed curator 2xClick Solution' => 'curator.io'
+            ];
             foreach ($gdprManagers as $gdprManager) {
                 if(array_key_exists($gdprManager['extension_key'], $extensionNames)) {
                     if(stripos($gdprManager['extension_title'], '2xClick')){
+                    $extensionTitle = $gdprManager['extension_title'];
+                    $gdprManager['cookie_title'] = $pluginNames[$extensionTitle];
                     $normalizedGdprManagers[$gdprManager['extension_key']] = $gdprManager;
                     }
                 }
