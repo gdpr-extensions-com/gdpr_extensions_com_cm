@@ -6,6 +6,8 @@ namespace GdprExtensionsCom\GdprExtensionsComCm\Controller;
 
 use GdprExtensionsCom\GdprExtensionsComCm\Domain\Repository\CookieRepository;
 use  GdprExtensionsCom\GdprExtensionsComCm\Domain\Repository\ExternalResourceRepository;
+use GdprExtensionsCom\GdprExtensionsComCm\Domain\Repository\PrivacyGeneratorRepository;
+
 /**
  * This file is part of the "gdpr_extensions_com_cm" Extension for TYPO3 CMS.
  *
@@ -21,12 +23,18 @@ use  GdprExtensionsCom\GdprExtensionsComCm\Domain\Repository\ExternalResourceRep
 class ReportController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 {
 
-   
- private $cookieRepository = null;
- private $externalResourceRepository = null;
+
+    private $privacyGeneratorRepository = null;
+    private $cookieRepository = null;
+    private $externalResourceRepository = null;
+
     public function injectCookieRepository(CookieRepository $cookieRepository)
     {
         $this->cookieRepository = $cookieRepository;
+    }
+    public function injectPrivacyGeneratorRepository(PrivacyGeneratorRepository $privacyGeneratorRepository)
+    {
+        $this->privacyGeneratorRepository = $privacyGeneratorRepository;
     }
 
     public function injectExternalResourceRepository(ExternalResourceRepository $externalResourceRepository)
@@ -72,6 +80,38 @@ class ReportController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         }
         $this->view->assign('groupedCookies', $groupedCookies);
         $this->view->assign('externalResources', $externalResources);
+        return $this->htmlResponse();
+    }
+
+    public function privacyAction(): \Psr\Http\Message\ResponseInterface
+    {
+        $rootPid = $GLOBALS['TSFE']->rootLine[0]['uid'];
+        $privacyStatement = $this->privacyGeneratorRepository->findByRootPid($rootPid)->toArray()[0];
+        // Decoding JSON for 'headerContent', 'quillContentData', 'contentBlockData'
+        if ($privacyStatement) {
+            $jsonFields = ['HeaderContent', 'QuillContentData', 'ContentBlockData'];
+
+            foreach ($jsonFields as $field) {
+                $getter = 'get' . $field;
+                $setter = 'set' . $field;
+
+                if (method_exists($privacyStatement, $getter) && method_exists($privacyStatement, $setter)) {
+                    $jsonData = $privacyStatement->$getter();
+
+                    if (!empty($jsonData)) {
+                        $decodedData = json_decode($jsonData, true);
+
+                        if (json_last_error() !== JSON_ERROR_NONE) {
+                            // Handle JSON decode error here
+                        } else {
+                            $privacyStatement->$setter($decodedData);
+                        }
+                    }
+                }
+            }
+        }
+
+        $this->view->assign('groupedCookies', $privacyStatement);
         return $this->htmlResponse();
     }
 }

@@ -1,4 +1,3 @@
-
 <f:section name="HeaderAssets">
     <script
         src="{f:uri.resource(path: 'Js/init.js', extensionName: 'gdpr_extensions_com_cm')}"></script>
@@ -11,233 +10,505 @@
     {my:getTwoClickSolutions() -> f:variable(name: 'twoClickSol')}
     <f:variable name="decodedArray"
         value="{twoClickSol -> v:format.json.decode()}" />
-    <f:if condition="{groupedCookies -> f:count()} > 0 || {twoClickSol} != '[]' ">
+        <f:variable name="decodedArrayCount" value="{decodedArray -> f:count()}" />
+    <f:if condition="{groupedCookies -> f:count()} > 0 || {decodedArray -> f:count()} > 0 ">
     <div id="gdpr-cookie-consent__icon" class="init-icon {f:if(condition: '{cookiesWidget.0.icon_placement} == bottom_left', then: 'left', else: '')}" {f:if(condition: '{cookiesWidget.0.icon_url}', then: 'style="background-image: url({cookiesWidget.0.icon_url});"', else: '')}>
     </div>
-    </f:if>
+
     <div id="gdpr-cookie-consent__model" class="modal">
-        <div class="modal-content">
+        <div class="modal-content" style="border: 0px;">
             <div class="scroll" style="background-color: {cookiesWidget.0.background_color};">
                 <div class="cookie-data">
-                    <div class="modal-header" style="color: {cookiesWidget.0.text_color};">
+                    <div class="modal-header" style="color: {cookiesWidget.0.header_text_color};">
                         {cookiesWidget.0.header_title}
                         <!-- <span id="closeModal" class="close-modal d-none">&#10005;</span> -->
                     </div>
                     <p class="model-desc" style="color: {cookiesWidget.0.text_color};">
                         {cookiesWidget.0.header_description}
                     </p>
+                    <p class="model-desc" style="color: {cookiesWidget.0.text_color}; margin:6px 0;" >
+                        {cookiesWidget.0.privacy_page}
+                        <a href="{cookiesWidget.0.privacy_link}" target="_blank" style="text-decoration: none; word-break: break-all;">
+                            {cookiesWidget.0.hyper_linked_text}
+                        </a>
+                    </p>
+
                     <div>
+                        <!-- grouped cookies -->
                         <f:for each="{groupedCookies}" as="category" key="categoryName">
                             <f:variable name="lowercaseCategoryName" value="{categoryName -> f:format.case(mode: 'lower')}"/>
                             <div class="category-container">
-                                <div class="category-header">
-                                    <span class="arrow">+</span>
-                                    {categoryName}
-                                    ({f:count(subject: category)})
+                                <div class="category-header" style="justify-content: space-between;">
+                                    <div style="color: {cookiesWidget.0.header_text_color};">
+                                        <span class="arrow">+</span>
+                                        <f:if condition="{categories.{lowercaseCategoryName}.category_name}">
+                                            <f:then>{categories.{lowercaseCategoryName}.category_name}</f:then>
+                                            <f:else>{categoryName}</f:else>
+                                        </f:if>
+                                        <!-- ({f:count(subject: category)}) -->
+                                    </div>
+                                    <div class="model-desc pointer-none" style="color: {cookiesWidget.0.btn_tag_text_color};">{cookiesWidget.0.tag_text}</div>
                                 </div>
                                 <div class="category-content hide">
                                     <div class="cookie-item">
-                                        {categories.{lowercaseCategoryName}.category_description}
-                                        <br>
-                                        <span class="more_details" data-identifier="{categoryName}"><f:translate key="more_details" /></span>
+                                       <f:if condition="{categories.{lowercaseCategoryName}.category_description}">
+                                           <p class="desc" style="color: {cookiesWidget.0.text_color};">{categories.{lowercaseCategoryName}.category_description}</p>
+                                       </f:if>
+                                        <span class="more_details" style="color: {cookiesWidget.0.btn_tag_text_color};" data-identifier="{categoryName}">
+                                            <f:if condition="{cookiesWidget.0.detail_text}">
+                                                <f:then>
+                                                    {cookiesWidget.0.detail_text}
+                                                </f:then>
+                                                <f:else>
+                                                    Detail more
+                                                </f:else>
+                                            </f:if>
+                                            </span>
                                     </div>
                                 </div>
                             </div>
                         </f:for>
-                        <f:if condition="{cookiesWidget.0.two_click_desc}">
-                            <f:then>
-                                <div class="modal-header" style="color: {cookiesWidget.0.text_color};">
-                                    GDPR 2-Click Solution
-                                </div>
-                                <p class="two-click-header" style="color: {cookiesWidget.0.text_color};">{cookiesWidget.0.two_click_desc}</p>
+                        <!-- grouped cookies -->
+                        <!-- gdpr cookies -->
+                            <f:if condition="{twoClickCookies}">
+                                <f:then>
+                                    <div class="category-container ">
+                                        <div class="" style="display: flex; justify-content: space-between; padding: 10px;">
+                                            <div style="color:{cookiesWidget.0.header_text_color};" class="header-accordion">
+                                                <span class="arrow">+</span>
+                                                <f:if condition="{categories.gdprExtensionsCom.category_name}">
+                                                    <f:then>{categories.gdprExtensionsCom.category_name}</f:then>
+                                                    <f:else>GDPR 2-Click Solution</f:else>
+                                                </f:if>
+                                            </div>
+                                            <label class="switch mb-0">
+                                                <input type="checkbox" class="toggleButton allToggle" id="gdpr2sol" data-ext-title="gdpr_2_click_solution">
+                                                <span class="slider"></span>
+                                            </label>
+                                        </div>
+                                        <div class="category-content hide">
+                                            <div class="cookie-item">
+                                                <f:if condition="{categories.gdprExtensionsCom.category_description}">
+                                                    <p class="desc" style="color: {cookiesWidget.0.text_color};">
+                                                        {categories.gdprExtensionsCom.category_description}
+                                                    </p>
+                                                </f:if>
+                                                <span class="more_details" style="color: {cookiesWidget.0.btn_tag_text_color};" data-identifier="gdprExtensionsCom" id="gdpr2ClickCookies">
+                                                <f:if condition="{cookiesWidget.0.detail_text}">
+                                                    <f:then>
+                                                        {cookiesWidget.0.detail_text}
+                                                    </f:then>
+                                                    <f:else>
+                                                        Detail more
+                                                    </f:else>
+                                                </f:if>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </f:then>
+                                <f:else>
+                                    <!-- <p class="two-click-header" style="color: {cookiesWidget.0.header_text_color};">
+                                        <f:translate key="Manage_Consent_Preferences" />
+                                    </p> -->
+                                    <f:if condition="{decodedArray}">
+                                        <f:then>
+                                            <div class="category-container">
+                                                <div class="category-header" style="justify-content: space-between;">
+                                                    <div style="color:{cookiesWidget.0.header_text_color};">
+                                                        <span class="arrow">+</span>
+                                                        <f:if condition="{categories.gdprExtensionsCom.category_name}">
+                                                            <f:then>{categories.gdprExtensionsCom.category_name}</f:then>
+                                                            <f:else>GDPR 2-Click Solution</f:else>
+                                                        </f:if>
+                                                    </div>
+                                                    <label class="switch mb-0">
+                                                        <input type="checkbox" class="toggleButton allToggle" id="gdpr2sol" data-ext-title="gdpr_2_click_solution" >
+                                                        <span class="slider"></span>
+                                                    </label>
+                                                </div>
+                                                <div class="category-content hide">
+                                                    <div class="cookie-item">
+                                                        <f:if condition="{categories.gdprExtensionsCom.category_description}">
+                                                            <p class="desc">
+                                                                {categories.gdprExtensionsCom.category_description}
+                                                            </p>
+                                                        </f:if>
 
-                            </f:then>
-                            <f:else>
-                                <!-- <p class="two-click-header" style="color: {cookiesWidget.0.text_color};">
-                                    <f:translate key="Manage_Consent_Preferences" />
-                                </p> -->
+                                                        <span class="more_details" style="color: {cookiesWidget.0.btn_tag_text_color};" data-identifier="gdprExtensionsCom" id="gdpr2ClickCookies">
+                                                            <f:if condition="{cookiesWidget.0.detail_text}">
+                                                                <f:then>
+                                                                    {cookiesWidget.0.detail_text}
+                                                                </f:then>
+                                                                <f:else>
+                                                                    Detail more
+                                                                </f:else>
+                                                            </f:if>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </f:then>
+                                    </f:if>
+                                </f:else>
+                            </f:if>
 
-                            </f:else>
 
-                        </f:if>
-                        <f:if condition="{categories.gdprExtensionsCom}">
-                            <div class="modal-header" style="color: {cookiesWidget.0.text_color};">
+
+                        <f:comment>
+                            <div class="modal-header" style="color: {cookiesWidget.0.header_text_color};">
                                 GDPR 2-Click Solution
                             </div>
-                        </f:if>
+                            <p class="two-click-header" style="color: {cookiesWidget.0.header_text_color};">{cookiesWidget.0.two_click_desc}</p>
+                            <f:if condition="{categories.gdprExtensionsCom}">
+                                <div class="modal-header" style="color: {cookiesWidget.0.header_text_color};">
+                                    GDPR 2-Click Solution
+                                </div>
+                            </f:if>
+
                         <f:if condition="{categories.gdprExtensionsCom.category_description}">
                             <f:then>
-                                <p class="two-click-header" style="color: {cookiesWidget.0.text_color};">
+                                <p class="two-click-header" style="color: {cookiesWidget.0.header_text_color};">
                                     {categories.gdprExtensionsCom.category_description}
                                 </p>
                             </f:then>
                             <f:else>
-                                <!-- <p class="two-click-header" style="color: {cookiesWidget.0.text_color};">
+                                <!-- <p class="two-click-header" style="color: {cookiesWidget.0.header_text_color};">
                                     <f:translate key="Manage_Consent_Preferences" />
                                 </p> -->
                             </f:else>
                         </f:if>
-                        <p class="two-click-header" style="color: {cookiesWidget.0.text_color};">
-                            <f:translate key="Manage_Consent_Preferences" />
-                        </p>
-                        <div class="category-container gdpr-cookies">
-                            <f:if condition="{twoClickCookies}">
-                                <f:then>
-                                    <f:for each="{twoClickCookies}" as="cookieKey" key="cookieName" iteration="i">
-                                        <div class="d-flex justify-content-btw align-items-ctr cookie-inner ">
+
+                            <p class="two-click-header" style="color: {cookiesWidget.0.header_text_color};">
+                                <f:translate key="Manage_Consent_Preferences" />
+                            </p>
+                       </f:comment>
+
+                    </div>
+                </div>
+                <!-- groupedcookies detail -->
+                <f:for each="{groupedCookies}" as="cookieCategory" key="identifier" iteration="i">
+                    <f:variable name="lowercaseCategoryName" value="{identifier -> f:format.case(mode: 'lower')}"/>
+                    <div class="main-frame more-detail-table d-none" data-identifier="{identifier}">
+                        <div class="modal-header go-back" style="color: {cookiesWidget.0.header_text_color};">
+                          <span class="pointer-none">Cookie List</span>
+                        </div>
+                        <div class="category-title pointer-none" style="justify-content: space-between; padding:10px 10px;">
+                            <div style="color: {cookiesWidget.0.header_text_color};" >
+                                <f:if condition="{categories.{lowercaseCategoryName}.category_name}">
+                                    <f:then>{categories.{lowercaseCategoryName}.category_name}</f:then>
+                                    <f:else>{identifier}</f:else>
+                                </f:if>
+                            </div>
+                            <div class="model-desc" style="color: {cookiesWidget.0.btn_tag_text_color};">{cookiesWidget.0.tag_text}</div>
+                        </div>
+
+                        <f:comment>
+                            <div class="table-border">
+                                <table class="" id="">
+                                    <tbody>
+                                        <tr class="row-head">
+                                            <th class="web-id-head w-50px">Cookie Name</th>
+                                            <th>Domain</th>
+                                            <th {f:if(condition: '{cookieData.description}', then: 'style="min-width: 300px"', else: '')}>Description</th>
+                                            <th class="">Expires</th>
+                                            <th class="">Type</th>
+                                            <th>Session</th>
+                                            <th class="">Found in</th>
+                                        </tr>
+                                        <f:for each="{cookieCategory}" as="cookieData" iteration="i">
+                                            <tr class="row-data" style="{f:if(condition: i.last, then: 'border-bottom: 0;')}">
+                                                <f:if condition="{cookieData.name}">
+                                                    <f:then>
+                                                        <td data-title="Cookie Name"><span {f:if(condition: '{cookiesWidget.0.header_text_color}', then: 'style="color: {cookiesWidget.0.header_text_color}"', else: 'style="color: #343434;"')}>{cookieData.name}</span></td>
+                                                    </f:then>
+                                                    <f:else>
+                                                        <td data-title="Cookie Name"><span {f:if(condition: '{cookiesWidget.0.header_text_color}', then: 'style="color: {cookiesWidget.0.header_text_color}"', else: 'style="color: #343434;"')}>-</span></td>
+                                                    </f:else>
+                                                </f:if>
+                                                <f:if condition="{cookieData.domain}">
+                                                    <f:then>
+                                                        <td data-title="Domain"><span {f:if(condition: '{cookiesWidget.0.header_text_color}', then: 'style="color: {cookiesWidget.0.header_text_color}"', else: 'style="color: #343434;"')}>{cookieData.domain}</span></td>
+                                                    </f:then>
+                                                    <f:else>
+                                                        <td data-title="Domain"><span {f:if(condition: '{cookiesWidget.0.header_text_color}', then: 'style="color: {cookiesWidget.0.header_text_color}"', else: 'style="color: #343434;"')}>-</span></td>
+                                                    </f:else>
+                                                </f:if>
+                                                <f:if condition="{cookieData.description}">
+                                                    <f:then>
+                                                        <td data-title="Description" class="{f:if(condition: '{cookieData.description}', then: 'desc', else: '')}" >
+                                                            <span {f:if(condition: '{cookiesWidget.0.header_text_color}', then: 'style="color: {cookiesWidget.0.header_text_color}"', else: 'style="color: #343434;"')}>{cookieData.description}</span>
+                                                        </td>
+                                                    </f:then>
+                                                    <f:else>
+                                                        <td data-title="Description"><span {f:if(condition: '{cookiesWidget.0.header_text_color}', then: 'style="color: {cookiesWidget.0.header_text_color}"', else: 'style="color: #343434;"')}>-</span></td>
+                                                    </f:else>
+                                                </f:if>
+                                                <f:if condition="{cookieData.expire}">
+                                                    <f:then>
+                                                        <td data-title="Expires"><span {f:if(condition: '{cookiesWidget.0.header_text_color}', then: 'style="color: {cookiesWidget.0.header_text_color}"', else: 'style="color: #343434;"')}>{cookieData.expire}</span></td>
+                                                    </f:then>
+                                                    <f:else>
+                                                        <td data-title="Expires"><span {f:if(condition: '{cookiesWidget.0.header_text_color}', then: 'style="color: {cookiesWidget.0.header_text_color}"', else: 'style="color: #343434;"')}>-</span></td>
+                                                    </f:else>
+                                                </f:if>
+                                                <f:if condition="{cookieData.type}">
+                                                    <f:then>
+                                                        <td data-title="Type"><span {f:if(condition: '{cookiesWidget.0.header_text_color}', then: 'style="color: {cookiesWidget.0.header_text_color}"', else: 'style="color: #343434;"')}>{cookieData.type}</span></td>
+                                                    </f:then>
+                                                    <f:else>
+                                                        <td data-title="Type"><span {f:if(condition: '{cookiesWidget.0.header_text_color}', then: 'style="color: {cookiesWidget.0.header_text_color}"', else: 'style="color: #343434;"')}>-</span></td>
+                                                    </f:else>
+                                                </f:if>
+                                                <f:if condition="{cookieData.session}">
+                                                    <f:then>
+                                                        <td data-title="Session"><span {f:if(condition: '{cookiesWidget.0.header_text_color}', then: 'style="color: {cookiesWidget.0.header_text_color}"', else: 'style="color: #343434;"')}>{cookieData.session}</span></td>
+                                                    </f:then>
+                                                    <f:else>
+                                                        <td data-title="Session"><span {f:if(condition: '{cookiesWidget.0.header_text_color}', then: 'style="color: {cookiesWidget.0.header_text_color}"', else: 'style="color: #343434;"')}>-</span></td>
+                                                    </f:else>
+                                                </f:if>
+                                                <f:if condition="{cookieData.subPagesArray}">
+                                                    <f:then>
+                                                        <td data-title="Found in" class="links-parent">
+                                                            <div class="links">
+                                                                <f:for each="{cookieData.subPagesArray}" as="list" iteration="i">
+                                                                    <a href="{list}"> {list -> f:format.crop(maxCharacters: 20,append:..)}</a><br>
+                                                                </f:for>
+                                                            </div>
+                                                        </td>
+                                                    </f:then>
+                                                    <f:else>
+                                                        <td data-title="Found in"><span {f:if(condition: '{cookiesWidget.0.header_text_color}', then: 'style="color: {cookiesWidget.0.header_text_color}"', else: 'style="color: #343434;"')}>-</span></td>
+                                                    </f:else>
+                                                </f:if>
+                                            </tr>
+                                        </f:for>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </f:comment>
+
+                        <!-- new design -->
+
+                            <div class="detailedcookie-data">
+                                <f:if condition="{ {data.{lowercaseCategoryName}}}">
+                                    <p class="model-desc" style="color: {cookiesWidget.0.text_color};">
+                                        {categories.{lowercaseCategoryName}.category_description}
+                                    </p>
+                                </f:if>
+                                <f:for each="{cookieCategory}" as="cookieData" iteration="i">
+                                <div class="detailed-data">
+                                    <div class="names">
+                                        <ul class="info-list">
+                                         <f:if condition="{cookieData.name}"><li><span class="label">Name</span> <span class="value">{cookieData.name}</span></li></f:if>
+                                          <f:if condition="{cookieData.domain}"><li> <span class="label">Domain</span> <span class="value">{cookieData.domain}</span></li></f:if>
+                                          <f:if condition="{cookieData.description}"><li> <span class="label">Description</span> <span class="value">{cookieData.description}</span></li></f:if>
+                                           <f:if condition="{cookieData.expires}"><li><span class="label">Expires</span>
+                                            <f:if condition="{cookieData.expires} == -1">
+                                                <f:then><span class="value">Session</span></f:then>
+                                                <f:else><span class="value">{cookieData.expires} days</span></f:else>
+                                            </f:if>
+                                             </li></f:if>
+                                            <f:if condition="{cookieData.type}"><li> <span class="label">Type</span> <span class="value">{cookieData.type}</span></li></f:if>
+                                            <f:if condition="{cookieData.session}"><li> <span class="label">Session</span> <span class="value">{cookieData.session}</span></li></f:if>
+                                            <li> <span class="label">Law</span> <span class="value">Art. 6 para. 1 sentence 1 lit. f GDPR</span></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                </f:for>
+                            </div>
+                       </div>
+                </f:for>
+                <!-- gdprcookies detail -->
+                 <f:if condition="{twoClickCookies}">
+                    <f:then>
+
+                        <f:variable name="lowercaseCategoryName" value="gdprExtensionsCom" />
+
+
+                        <div class="main-frame more-detail-table d-none " data-identifier="gdprExtensionsCom">
+
+                            <!-- new design -->
+                            <div class="category-container gdpr-cookies" id="gdpr-cookies">
+                                <div class="modal-header go-back" style="color: {cookiesWidget.0.header_text_color};"> <span class="pointer-none">Cookie List</span></div>
+                                <div class="gdpr-heading" style="color: {cookiesWidget.0.header_text_color};">
+                                    <f:if condition="{categories.gdprExtensionsCom.category_name}">
+                                        <f:then>{categories.gdprExtensionsCom.category_name}</f:then>
+                                        <f:else>GDPR 2-Click Solution</f:else>
+                                    </f:if>
+                                </div>
+
+
+                                <f:for each="{twoClickCookies}" as="cookieKey" key="cookieName" iteration="i">
+                                    <div class="category-container ">
+                                        <div class="" style="display:flex; justify-content: space-between; padding: 10px;">
                                             <f:for each="{twoClickCookiesTitles}" as="cookieKeyTitle" key="cookieTitle" iteration="i">
                                                 <f:if condition="{cookieName}=={cookieTitle}">
-                                                    <p class="mb-0" style="color: {cookiesWidget.0.text_color};">{cookieKeyTitle}</p>
+                                                    <div class="header-accordion mb-0" style="color: {cookiesWidget.0.header_text_color};"> <span
+                                                            class="arrow">+</span> {cookieKeyTitle}</div>
                                                 </f:if>
                                             </f:for>
                                             <label class="switch mb-0">
-                                                <input type="checkbox" class="toggleButton" id="{i.index}"
+                                                <input type="checkbox" class="toggleButton singleToggle" id="{i.index}"
                                                     data-ext-title="<f:format.raw>{cookieKey}</f:format.raw>">
                                                 <span class="slider"></span>
                                             </label>
                                         </div>
                                         <f:for each="{twoClickCookiesDescription}" as="cookieKeydesc" key="cookiedesc" iteration="i">
                                             <f:if condition="{cookieName}=={cookiedesc}">
-                                                <p>{cookieKeydesc}</p>
+                                                <div class="category-content hide">
+                                                    <div class="cookie-item">
+                                                        <f:if condition="{cookieKeydesc}">
+                                                            <p class="desc" style="color: {cookiesWidget.0.text_color};">
+                                                                {cookieKeydesc}
+                                                            </p>
+                                                        </f:if>
+                                                        <div class="detailed-data">
+
+                                                            <div class="names">
+                                                                <ul>
+                                                                    <f:if condition="{twoClickCookieDetail.{cookiedesc}.name}">
+                                                                        <li> <span class="label">Name</span>  <span class="value">{twoClickCookieDetail.{cookiedesc}.name}</span></li>
+                                                                    </f:if>
+                                                                    <f:if condition="{twoClickCookieDetail.{cookiedesc}.domain}">
+                                                                        <li> <span class="label">Domain</span> <span class="value">{twoClickCookieDetail.{cookiedesc}.domain}</span> </li>
+                                                                    </f:if>
+                                                                    <f:if condition="{twoClickCookieDetail.{cookiedesc}.description}">
+                                                                        <li> <span class="label">Description</span> <span class="value">{twoClickCookieDetail.{cookiedesc}.description}</span> </li>
+                                                                    </f:if>
+                                                                    <f:if condition="{twoClickCookieDetail.{cookiedesc}.expires}">
+                                                                        <li> <span class="label">Expires</span>
+                                                                            <f:if condition="{twoClickCookieDetail.{cookiedesc}.expires} == -1">
+                                                                                <f:then><span class="value">Session</span></f:then>
+                                                                                <f:else><span class="value">{twoClickCookieDetail.{cookiedesc}.expires} days</span></f:else>
+                                                                            </f:if>
+                                                                            </li>
+                                                                    </f:if>
+                                                                    <f:if condition="{twoClickCookieDetail.{cookiedesc}.type}">
+                                                                        <li> <span class="label">Type</span> <span class="value">{twoClickCookieDetail.{cookiedesc}.type}</span></li>
+                                                                    </f:if>
+                                                                    <f:if condition="{twoClickCookieDetail.{cookiedesc}.session}">
+                                                                        <li><span class="label">Session</span> <span class="value">{twoClickCookieDetail.{cookiedesc}.session}</span> </li>
+                                                                    </f:if>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </f:if>
                                         </f:for>
-                                    </f:for>
-                                </f:then>
-                                <f:else>
-                                    <f:for each="{decodedArray}" as="cookieKey" key="cookieName" iteration="i">
-                                                <div class="d-flex justify-content-btw align-items-ctr cookie-inner ">
-                                                    <p class="mb-0" style="color: {cookiesWidget.0.text_color};">{cookieKey.cookie_title}</p>
+                                    </div>
+
+                                </f:for>
+
+
+
+                            </div>
+                        </div>
+
+
+
+                    </f:then>
+                <f:else>
+                       <!-- for installed gdpr  -->
+
+
+                                <div class="main-frame more-detail-table d-none" data-identifier="gdprExtensionsCom">
+
+                                    <!-- new design -->
+                                    <div class="category-container gdpr-cookies" id="gdpr-cookies">
+                                        <div class="modal-header go-back"> <span class="pointer-none">Cookie List</span></div>
+                                        <div class="gdpr-heading" style="color: {cookiesWidget.0.header_text_color};">
+                                            <f:if condition="{categories.gdprExtensionsCom.category_name}">
+                                                <f:then>{categories.gdprExtensionsCom.category_name}</f:then>
+                                                <f:else>GDPR 2-Click Solution</f:else>
+                                            </f:if>
+                                        </div>
+                                        <f:for each="{decodedArray}" as="cookieKey" key="cookieName" iteration="i">
+                                            <div class="category-container">
+                                                <div style="display:flex; justify-content: space-between;padding:10px;">
+                                                    <div class="header-accordion mb-0" style="color: {cookiesWidget.0.header_text_color};"> <span class="arrow">+</span>
+                                                        {cookieKey.cookie_title}</div>
                                                     <label class="switch mb-0">
-                                                        <input type="checkbox" class="toggleButton" id="{i.index}"
+                                                        <input type="checkbox" class="toggleButton singleToggle" id="{i.index}"
                                                             data-ext-title="<f:format.raw>{cookieKey.extension_key}</f:format.raw>">
                                                         <span class="slider"></span>
                                                     </label>
                                                 </div>
-                                                <p>Cookies provided by host are managed through the {cookieName} solution developed by gdpr-extensions.com</p>
-                                    </f:for>
-                                </f:else>
-                            </f:if>
-                        </div>
+                                                <div class="category-content hide" style="max-height: 0px;">
+                                                    <p style="color: {cookiesWidget.0.text_color};" class="desc">Cookies provided by host are managed through
+                                                        the
+                                                        {cookieKey.short_title} developed by gdpr-extensions.com</p>
+                                                </div>
+                                            </div>
+                                        </f:for>
 
-                    </div>
-                </div>
-                <f:for each="{groupedCookies}" as="cookieCategory" key="identifier" iteration="i">
-                    <f:variable name="lowercaseCategoryName" value="{identifier -> f:format.case(mode: 'lower')}"/>
-                    <div class="main-frame more-detail-table d-none" data-identifier="{identifier}">
-                        <div class="modal-header go-back" style="color: {cookiesWidget.0.text_color};">
-                            {identifier}
-                        </div>
-                        <p class="model-desc" style="color: {cookiesWidget.0.text_color};">
-                            {data.{lowercaseCategoryName}}
-                        </p>
-                        <div class="table-border">
-                            <table class="" id="">
-                                <tbody>
-                                    <tr class="row-head">
-                                        <th class="web-id-head w-50px">Cookie Name</th>
-                                        <th>Domain</th>
-                                        <th {f:if(condition: '{cookieData.description}', then: 'style="min-width: 300px"', else: '')}>Description</th>
-                                        <th class="">Expires</th>
-                                        <th class="">Type</th>
-                                        <th>Session</th>
-                                        <th class="">Found in</th>
-                                    </tr>
-                                    <f:for each="{cookieCategory}" as="cookieData" iteration="i">
-                                        <tr class="row-data" style="{f:if(condition: i.last, then: 'border-bottom: 0;')}">
-                                            <f:if condition="{cookieData.name}">
-                                                <f:then>
-                                                    <td data-title="Cookie Name"><span {f:if(condition: '{cookiesWidget.0.text_color}', then: 'style="color: {cookiesWidget.0.text_color}"', else: 'style="color: #343434;"')}>{cookieData.name}</span></td>
-                                                </f:then>
-                                                <f:else>
-                                                    <td data-title="Cookie Name"><span {f:if(condition: '{cookiesWidget.0.text_color}', then: 'style="color: {cookiesWidget.0.text_color}"', else: 'style="color: #343434;"')}>-</span></td>
-                                                </f:else>
-                                            </f:if>
-                                            <f:if condition="{cookieData.domain}">
-                                                <f:then>
-                                                    <td data-title="Domain"><span {f:if(condition: '{cookiesWidget.0.text_color}', then: 'style="color: {cookiesWidget.0.text_color}"', else: 'style="color: #343434;"')}>{cookieData.domain}</span></td>
-                                                </f:then>
-                                                <f:else>
-                                                    <td data-title="Domain"><span {f:if(condition: '{cookiesWidget.0.text_color}', then: 'style="color: {cookiesWidget.0.text_color}"', else: 'style="color: #343434;"')}>-</span></td>
-                                                </f:else>
-                                            </f:if>
-                                            <f:if condition="{cookieData.description}">
-                                                <f:then>
-                                                    <td data-title="Description" class="{f:if(condition: '{cookieData.description}', then: 'desc', else: '')}" >
-                                                        <span {f:if(condition: '{cookiesWidget.0.text_color}', then: 'style="color: {cookiesWidget.0.text_color}"', else: 'style="color: #343434;"')}>{cookieData.description}</span>
-                                                    </td>
-                                                </f:then>
-                                                <f:else>
-                                                    <td data-title="Description"><span {f:if(condition: '{cookiesWidget.0.text_color}', then: 'style="color: {cookiesWidget.0.text_color}"', else: 'style="color: #343434;"')}>-</span></td>
-                                                </f:else>
-                                            </f:if>
-                                            <f:if condition="{cookieData.expire}">
-                                                <f:then>
-                                                    <td data-title="Expires"><span {f:if(condition: '{cookiesWidget.0.text_color}', then: 'style="color: {cookiesWidget.0.text_color}"', else: 'style="color: #343434;"')}>{cookieData.expire}</span></td>
-                                                </f:then>
-                                                <f:else>
-                                                    <td data-title="Expires"><span {f:if(condition: '{cookiesWidget.0.text_color}', then: 'style="color: {cookiesWidget.0.text_color}"', else: 'style="color: #343434;"')}>-</span></td>
-                                                </f:else>
-                                            </f:if>
-                                            <f:if condition="{cookieData.type}">
-                                                <f:then>
-                                                    <td data-title="Type"><span {f:if(condition: '{cookiesWidget.0.text_color}', then: 'style="color: {cookiesWidget.0.text_color}"', else: 'style="color: #343434;"')}>{cookieData.type}</span></td>
-                                                </f:then>
-                                                <f:else>
-                                                    <td data-title="Type"><span {f:if(condition: '{cookiesWidget.0.text_color}', then: 'style="color: {cookiesWidget.0.text_color}"', else: 'style="color: #343434;"')}>-</span></td>
-                                                </f:else>
-                                            </f:if>
-                                            <f:if condition="{cookieData.session}">
-                                                <f:then>
-                                                    <td data-title="Session"><span {f:if(condition: '{cookiesWidget.0.text_color}', then: 'style="color: {cookiesWidget.0.text_color}"', else: 'style="color: #343434;"')}>{cookieData.session}</span></td>
-                                                </f:then>
-                                                <f:else>
-                                                    <td data-title="Session"><span {f:if(condition: '{cookiesWidget.0.text_color}', then: 'style="color: {cookiesWidget.0.text_color}"', else: 'style="color: #343434;"')}>-</span></td>
-                                                </f:else>
-                                            </f:if>
-                                            <f:if condition="{cookieData.subPagesArray}">
-                                                <f:then>
-                                                    <td data-title="Found in" class="links-parent">
-                                                        <div class="links">
-                                                            <f:for each="{cookieData.subPagesArray}" as="list" iteration="i">
-                                                                <a href="{list}"> {list -> f:format.crop(maxCharacters: 20,append:..)}</a><br>
-                                                            </f:for>
-                                                        </div>
-                                                    </td>
-                                                </f:then>
-                                                <f:else>
-                                                    <td data-title="Found in"><span {f:if(condition: '{cookiesWidget.0.text_color}', then: 'style="color: {cookiesWidget.0.text_color}"', else: 'style="color: #343434;"')}>-</span></td>
-                                                </f:else>
-                                            </f:if>
-                                        </tr>
-                                    </f:for>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </f:for>
+                                    </div>
+                                </div>
+
+                </f:else>
+              </f:if>
+                <!-- groupedcookies detail (decodeArray) -->
                 <f:if condition="{decodedArray}">
                     <f:then>
-                        <div class="acceptance-btn" {f:if(condition: '{cookiesWidget.0.background_color}', then: 'style="background-color: {cookiesWidget.0.background_color}"', else: 'style="background-color: #fff;"')}>
-                            <button type="button"
-                                class="btn-lg accept-btn accept-btn-padding banner-confirm-gdpr"
-                                onclick="setCookies('false')">
-                                <f:translate key="Confirm" /></button>
+                        <div class="acceptance-btn" {f:if(condition: '{cookiesWidget.0.background_color}', then: 'style="background-color: {cookiesWidget.0.background_color};"', else: 'style="background-color: #fff;"')}>
+                            <div class="d-flex" style="justify-content: space-between;">
+                                <button type="button"
+                                id="decline-allbtn"
+                                    class="btn-lg accept-btn accept-btn-padding banner-confirm-gdpr"
+                                     style="color: {f:if(condition: '{cookiesWidget.0.btn_text_color}', then: '{cookiesWidget.0.btn_text_color}', else: '#fff')}; background-color: {f:if(condition: '{cookiesWidget.0.btn_background_color}', then: '{cookiesWidget.0.btn_background_color}', else: '#EE7202')};">
+                                    <f:if condition="{cookiesWidget.0.decline_btn_text}">
+                                        <f:then>{cookiesWidget.0.decline_btn_text}</f:then>
+                                        <f:else>
+                                            <f:translate key="decline" />
+                                        </f:else>
+                                    </f:if>
+                                </button>
+                                <button type="button" class="btn-lg accept-btn accept-btn-padding banner-confirm-gdpr"
+                                    style="color: {f:if(condition: '{cookiesWidget.0.btn_text_color}', then: '{cookiesWidget.0.btn_text_color}', else: '#fff')}; background-color: {f:if(condition: '{cookiesWidget.0.btn_background_color}', then: '{cookiesWidget.0.btn_background_color}', else: '#EE7202')};"
+                                    onclick="setCookies('false')">
+                                    <f:if condition="{cookiesWidget.0.btn_text}">
+                                        <f:then>{cookiesWidget.0.btn_text}</f:then>
+                                        <f:else>
+                                            <f:translate key="Confirm" />
+                                        </f:else>
+                                    </f:if>
+                                </button>
+                            </div>
+                            <div class="poweredBy" style="color: {cookiesWidget.0.btn_tag_text_color};">powered by
+                                <a href="https://www.gdpr-extensions.com/" style="color: {cookiesWidget.0.btn_tag_text_color}; text-decoration: none;"
+                                    target="_blank">gdpr-extensions.com</a>
+                            </div>
                         </div>
+
                     </f:then>
                     <f:else>
-                        <div class="acceptance-btn" {f:if(condition: '{cookiesWidget.0.background_color}', then: 'style="background-color: {cookiesWidget.0.background_color}"', else: 'style="background-color: #fff;"')}>
+                    <div class="acceptance-btn" {f:if(condition: '{cookiesWidget.0.background_color}', then: 'style="background-color: {cookiesWidget.0.background_color};"', else: 'style="background-color: #fff;"')}>
                             <button type="button"
                                 class="btn-lg accept-btn accept-btn-padding banner-confirm-gdpr"
+                                style="color: {f:if(condition: '{cookiesWidget.0.btn_text_color}', then: '{cookiesWidget.0.btn_text_color}', else: '#fff')}; background-color: {f:if(condition: '{cookiesWidget.0.btn_background_color}', then: '{cookiesWidget.0.btn_background_color}', else: '#EE7202')};"
                                 onclick="setCookies('true')">
-                                <f:translate key="i_understand" /></button>
+                                <f:if condition="{cookiesWidget.0.btn_text}">
+                                    <f:then>{cookiesWidget.0.btn_text}</f:then>
+                                    <f:else>
+                                        <f:translate key="i_understand" />
+                                    </f:else>
+                                </f:if>
+                            </button>
+                            <div class="poweredBy" style="color: {cookiesWidget.0.btn_tag_text_color};">powered by
+                                <a href="https://www.gdpr-extensions.com/" style="color: {cookiesWidget.0.btn_tag_text_color}; text-decoration: none;"
+                                    target="_blank">gdpr-extensions.com</a>
+                            </div>
                         </div>
                     </f:else>
                 </f:if>
+
             </div>
 
         </div>
     </div>
-
+    </f:if>
     <style>
         @font-face {
             font-family: 'Poppins';
@@ -262,6 +533,7 @@
             src: local('Poppins Bold'), local('Poppins-Bold'),
             url('/typo3conf/ext/gdpr_extensions_com_cm/Resources/Public/Fonts/Poppins-Bold.otf') format('opentype');
         }
+
         .d-flex {
             display: flex;
         }
@@ -271,8 +543,6 @@
         .align-items-ctr{
             align-items: center;
         }
-
-
         #gdpr-cookie-consent__icon.init-icon {
             width: 70px;
             height: 70px;
@@ -315,7 +585,7 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            max-width: 440px;
+            max-width: 540px!important;
             background-color: transparent;
             padding: 20px;
             border-radius: 7px;
@@ -417,12 +687,15 @@
 
         #gdpr-cookie-consent__model .modal-content .category-container {
             border: 1px solid #eaeaea;
-            padding: 9px 0;
+            padding: 5px 0;
             background: #fafafa;
             border-radius: 6px;
             margin-bottom: 10px;
         }
+         #gdpr-cookie-consent__model .modal-content .category-container .header-accordion {
+            cursor: pointer;
 
+        }
         #gdpr-cookie-consent__model .modal-content .category-container.gdpr-cookies {
             background-color: transparent;
             padding: 0;
@@ -441,11 +714,11 @@
             font-size: 16px;
             color: #343434;
             width: 100%;
-            margin: 0;
+            margin: 5px 0;
             padding: 0;
             padding-left: 10px;
             line-height: 22px;
-            max-width: 300px;
+            max-width: 500px;
         }
 
         #gdpr-cookie-consent__model .switch {
@@ -481,10 +754,6 @@
             /* This line makes the button inside the slider rounded */
         }
 
-        #gdpr-cookie-consent__model .modal-content input:checked+.slider {
-            background-color: #ee7202;
-        }
-
         #gdpr-cookie-consent__model .modal-content input:focus+.slider {
             box-shadow: 0 0 1px #ee7202;
         }
@@ -495,15 +764,13 @@
             transform: translateX(20px);
         }
 
-
-
-        #gdpr-cookie-consent__model .category-header {
+        #gdpr-cookie-consent__model .category-header, .category-title {
             color: #343434;
             height: 32px;
             display: flex;
             align-items: center;
             cursor: pointer;
-            padding: 0 15px;
+            padding: 0 10px;
             border-top-left-radius: 7px;
             border-top-right-radius: 7px;
             font-size: 16px;
@@ -518,8 +785,8 @@
         }
 
         #gdpr-cookie-consent__model .cookie-item {
-            padding-left: 39px;
-            padding-right: 20px;
+            padding-left: 10px;
+            padding-right: 10px;
             color: #626262;
         }
 
@@ -529,7 +796,9 @@
         }
 
         #gdpr-cookie-consent__model .cookie-item {
-            font-size: 13px;
+            font-size: 14px;
+            line-height: 21px;
+            margin:5px 0;
         }
 
         #gdpr-cookie-consent__model .modal-footer {
@@ -579,7 +848,10 @@
 
         #gdpr-cookie-consent__model .more_details {
             color: #EE7202;
-            font-size: 16px;
+            font-size: 15px;
+            font-weight: 500;
+            padding: 4px 0px;
+            line-height: 28px;
             cursor: pointer;
         }
 
@@ -820,13 +1092,126 @@
                 max-height: 450px;
             }
         }
+        /* 2 click cookie list styling */
+        .detailedcookie-data {
+            background-color: #fafafa;
+            outline: 1px solid lightgrey;
+            padding: 10px;
+            border-radius: 6px;
+        }
+        .detailed-data {
+            display: flex;
+            gap: 20px;
+            background-color: white;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            border: 1px solid #e6dede;
+        }
+        .names ul, .data ul {
+            list-style-type: none;
+            font-size: 12px;
+            color: #525252;
+            padding: 0px 10px 10px 10px;
+            padding-bottom: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .category-container#gdpr-cookies{
+           border: unset !important;
+        }
+        #gdpr-cookies .category-container{
+            border: 1px solid #eaeaea !important;
+        }
+        .modal-header.go-back {
+            width:unset!important;
+        }
+        #gdpr-cookies .gdpr-heading{
+          font-size: 16px;
+          font-weight: 500;
+          line-height: 24px;
+          color: #000;
+          text-transform: capitalize;
+          padding-bottom: 10px;
+        }
+        #gdpr-cookies p.cookieKeydesc,  .detailedcookie-data .model-desc, .desc {
+            max-width: 598px;
+            font-size: 14px !important;
+            line-height: 21px;
+            margin: 0px 0px 5px 0px;
+        }
+        #gdpr-cookies ul {
+            list-style: none;
+            background: white;
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 10px;
+        }
+        #gdpr-cookies li {
+            display: flex;
+            gap: 50px;
+            width: 100%;
+        }
+        .poweredBy{
+            font-size: 12px;
+            line-height: 18px;
+            text-align: center !important;
+            padding: 15px 0;
+            cursor: pointer;
+        }
+
+        .pointer-none{
+            cursor:auto;
+        }
+        .info-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .info-list li {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+        }
+
+        .label {
+            min-width: 120px;
+        }
+
+        .value {
+            flex: 1;
+            text-align: left;
+        }
+
+        .gdpr2click .label{
+            min-width: 70px;
+        }
+        .no-scroll {
+            overflow: hidden;
+        }
+        .scroll{
+            overflow: auto;
+        }
+
 
     </style>
+    <f:asset.css identifier="bgBtnColor">
+        #gdpr-cookie-consent__model .modal-content input:checked + .slider {
+        background-color:
+        <f:if condition="{cookiesWidget.0.btn_background_color}">
+            <f:then>{cookiesWidget.0.btn_background_color}</f:then>
+            <f:else>#EE7202</f:else>
+        </f:if>;
+        }
+    </f:asset.css>
+
 
 <f:asset.script identifier="2ClickSol">
 
 /*
-
 _2ClickIframePrivacy Class contains methods for handling user consent about cookies.
 
 It internally uses cookies to remember user choices about privacy settings.
@@ -853,7 +1238,6 @@ Properties:
 */
 
 let arr = JSON.parse('<f:format.raw>{twoClickSol}</f:format.raw>');
-console.log('arrr',arr);
 document.addEventListener('DOMContentLoaded', () => {
 if (Object.keys(arr).length !== 0) {
 _2ClickIframePrivacy.init('', arr);
@@ -877,7 +1261,93 @@ if (switchs.length !== 0) {
 document.addEventListener('DOMContentLoaded', () => {
 const popUpShownMt = localStorage.getItem('popUpShownMt');
 const popUpShownGt = localStorage.getItem('popUpShownGt');
+var toggleButtons = document.getElementsByClassName("toggleButton");
+var btnTextColor = "<f:format.raw>{cookiesWidget.0.btn_background_color}</f:format.raw>";
+const declineAllButton = document.getElementById('decline-allbtn');
 
+var getToggleButtons = document.querySelectorAll(".toggleButton.singleToggle");
+var uniqueToggleButtons = new Set(getToggleButtons);
+let allToggleBtn = document.querySelector('.allToggle');
+
+// Ensure all toggle buttons and decline button are in sync when the page loads
+initializeToggleState();
+
+// Event listener for the allToggle button
+allToggleBtn.addEventListener('change', function () {
+    let checked = this.checked;
+
+    uniqueToggleButtons.forEach((item) => {
+        if (item.checked !== checked) {
+            item.click();
+        }
+    });
+
+    updateDeclineButtonState(checked);
+});
+
+// Event listener for each individual toggle button
+uniqueToggleButtons.forEach((button) => {
+    button.addEventListener('change', function () {
+        checkAllToggleBtnState(); // Check if at least one button is on
+    });
+});
+
+// Event listener for the decline button
+declineAllButton.addEventListener('click', function () {
+    // Uncheck all unique toggle buttons
+    uniqueToggleButtons.forEach((button) => {
+        if (button.checked) {
+            button.click();
+        }
+    });
+
+    // Update the allToggleBtn state to unchecked
+    allToggleBtn.checked = false;
+    updateDeclineButtonState(false);
+});
+
+// Function to update the state of the decline button based on toggles
+function updateDeclineButtonState(checked) {
+    if (checked) {
+        // Enable the decline button
+        declineAllButton.style.backgroundColor = btnTextColor;
+        declineAllButton.style.pointerEvents = 'auto';
+        declineAllButton.style.opacity = '1';
+    } else {
+        declineAllButton.style.pointerEvents = 'none';
+        declineAllButton.style.opacity = '0.6';
+    }
+}
+
+// Function to check if all toggle buttons are in sync with allToggleBtn or if any is on
+function checkAllToggleBtnState() {
+    let allChecked = Array.from(uniqueToggleButtons).every(button => button.checked);
+    let anyChecked = Array.from(uniqueToggleButtons).some(button => button.checked);
+
+    if (allChecked) {
+        allToggleBtn.checked = true; // If all buttons are checked, set allToggleBtn to checked
+    } else {
+        allToggleBtn.checked = false; // If not all are checked, set it to unchecked
+    }
+
+    // Update the decline button state based on if any toggle is checked
+    updateDeclineButtonState(anyChecked);
+}
+
+// Function to initialize the state of all toggle buttons and sync with allToggleBtn
+function initializeToggleState() {
+    let anyChecked = Array.from(uniqueToggleButtons).some(button => button.checked);
+    if (anyChecked) {
+        // If any button is checked, the allToggleBtn should be on
+        allToggleBtn.checked = true;
+    } else {
+        // If no button is checked, allToggleBtn should be off
+        allToggleBtn.checked = false;
+    }
+
+    // Update the decline button state based on the initial toggle state
+    updateDeclineButtonState(anyChecked);
+}
 
 if (!popUpShownMt) {
 const trackModalMt = document.getElementById("gdpr-extensions-com-cookie-track-model-mt");
@@ -890,16 +1360,12 @@ localStorage.setItem('popUpShownMt', true);
 
 }
 if(!popUpShownGt){
-
 const trackModalGt = document.getElementById("gdpr-extensions-com-cookie-track-model-gt");
 
-
-if (trackModalGt) {
-
-
-trackModalGt.style.display = "block";
-localStorage.setItem('popUpShownGt', true);
-}
+    if (trackModalGt) {
+    trackModalGt.style.display = "block";
+    localStorage.setItem('popUpShownGt', true);
+    }
 }
 });
 
@@ -1035,6 +1501,7 @@ bgColor: solSetting.background_image_color,
 buttonTextColor: solSetting.button_text_color,
 btnText: solSetting.button_text,
 btnShape: solSetting.button_shape,
+headingColor: solSetting.heading_color,
 },
 {
 type: 'map',
@@ -1048,6 +1515,7 @@ bgColor: solSetting.background_image_color,
 buttonTextColor: solSetting.button_text_color,
 btnText: solSetting.button_text,
 btnShape: solSetting.button_shape,
+headingColor: solSetting.heading_color,
 },
 {
 type: 'calendar',
@@ -1057,12 +1525,12 @@ heading: 'Zum Aktivieren des Videos bitte auf den Link klicken. Durch das Aktivi
 }
 );
 
-function setConsentStatus(service, status) {
-consentStatuses[service] = status;
 
-let cookie = getConsentStatuses();
-if (cookie != {}) {
-deleteCookie(consentCookieName);
+function setConsentStatus(service, status) {
+    consentStatuses[service] = status;
+    let cookie = getConsentStatuses();
+    if (cookie != {}) {
+    deleteCookie(consentCookieName);
 }
 var d = new Date;
 d.setTime(d.getTime() + 24 * 60 * 60 * 1000 * 30);
@@ -1083,16 +1551,59 @@ function getConsentStatuses() {
 var v = document.cookie.match('(^|;) ?' + consentCookieName + '=([^;]*)(;|$)');
 return v ? JSON.parse(v[2]) : {};
 }
+function loadPinterestScript() {
+var f = document.getElementsByTagName('SCRIPT')[0],
+p = document.createElement('SCRIPT');
+p.type = 'text/javascript';
+p.async = true;
+p.src = '//assets.pinterest.com/js/pinit.js';
+f.parentNode.insertBefore(p, f);
+}
 
-// Create div-element within the respective iframe to display the defined data-security message and get consent for loading the iframe content.
+function removePinterestScript() {
+var pinterestScript = document.querySelector("script[src='//assets.pinterest.com/js/pinit.js']");
+if (pinterestScript) {
+pinterestScript.parentNode.removeChild(pinterestScript);
+}
+}
+// This function checks if the Pinterest cookie is accepted and loads or removes the script accordingly
+function checkPinterestConsent() {
+let consentStatuses = getConsentStatuses();
+if (consentStatuses['gdpr_extensions_com_pinterest_123'] === '1') {
+loadPinterestScript();
+} else {
+removePinterestScript();
+}
+}
+function dispatchLoadEvent() {
+let event = new Event('load');
+window.dispatchEvent(event);
+}
 
-function wrap(el, wrapper, type, text, heading, btnColor, textColor, imagePath, imageStatus, bgColor, buttonTextColor, btnText, btnShape) {
+document.addEventListener('DOMContentLoaded', function () {
+checkPinterestConsent();
+dispatchLoadEvent();
+});
+
+
+
+
+
+
+
+
+
+
+
+//Create div-element within the respective iframe to display the defined data-security message and get consent for loading the iframe content.
+
+function wrap(el, wrapper, type, text, heading, btnColor, textColor, imagePath, imageStatus, bgColor, buttonTextColor, btnText, btnShape, headingColor) {
 el.parentNode.insertBefore(wrapper, el);
 wrapper.className = 'privacy-msg privacy-' + type + '-msg';
 wrapper.style.width = el.clientWidth + 'px';
 wrapper.style.height = el.clientHeight + 'px';
 wrapper.innerHTML = imageStatus == 1 ? "<div class='bgComtainer-image'><img class='bg-image' src='" + window.location.origin +"/"+ imagePath + "'/><div class='overlay'></div>" : "";
-wrapper.innerHTML += '<h2 style="color:' + textColor + '">' + heading + '</h2>';
+wrapper.innerHTML += '<h2 style="color:' + headingColor + '">' + heading + '</h2>';
 wrapper.innerHTML += '<p class="description" style="color:' + textColor + '">' + text + '</p>' + '<a href="#foo" class="link-action-gdpr ' + btnShape + '" style="background-color: ' + btnColor + ';color:' + buttonTextColor + '" onclick="_2ClickIframePrivacy.EnableContent(\'' + type + '\'); return false;">' + btnText + '</a>';
 if (config.enableCookies) {
 wrapper.innerHTML = wrapper.innerHTML + '<label class="checkbox-label"  style="color:' + textColor + ';display: none"><input type="checkbox" checked style="border-color: ' + btnColor + '" name="remind-\'' + type + '\'" /> ' + config.rememberChoiceLabel + '</label>';
@@ -1106,9 +1617,11 @@ wrapper.appendChild(el);
 
 this.EnableContent = function (type) {
 var i;
-
+if(type ==='gdpr_extensions_com_pinterest'){
+    loadPinterestScript();
+}
 // Cookies globally enabled by config?
-var checkboxes = document.querySelectorAll('div.privacy-' + type + '-msg input');
+var checkboxes = document.querySelectorAll('div.privacy-' + CSS.escape(type) + '-msg input');
 
 if (config.enableCookies) {
 for (let i = 0; i < checkboxes.length; i++) {
@@ -1120,15 +1633,14 @@ setConsentStatus(service + '_<f:format.raw>{rootPid}</f:format.raw>', '1');
 }
 }
 
-
-var x = document.querySelectorAll('div.privacy-' + type + '-msg .wraper');
+var x = document.querySelectorAll('div.privacy-' + CSS.escape(type) + '-msg .wraper');
 for (i = 0; i < x.length; i++) {
 while (x[i].firstChild) {
 x[i].removeChild(x[i].firstChild);
 }
 }
 
-x = document.querySelectorAll('div.privacy-' + type + '-msg');
+x = document.querySelectorAll('div.privacy-' + CSS.escape(type) + '-msg');
 for (i = 0; i < x.length; i++) {
 var parent = x[i].parentNode;
 
@@ -1139,7 +1651,7 @@ while (x[i].firstChild) parent.insertBefore(x[i].firstChild, x[i]);
 parent.removeChild(x[i]);
 }
 
-x = document.querySelectorAll('iframe[data-2click-service="' + type + '"]');
+x = document.querySelectorAll('iframe[data-2click-service="' + type + '"],div[data-2click-service="' + type + '"]');
 
 for (i = 0; i < x.length; i++) {
 
@@ -1182,19 +1694,20 @@ window[this.types[i].callback]();
 gdprInner?.classList.remove('gdprInner');
 
 if (toggleButtons.length !== 0) {
-for (let i = 0; i < toggleButtons.length; i++) {
-let extTitle = toggleButtons[i].getAttribute('data-ext-title');
-let service = extTitle + '<f:format.raw>_{rootPid}</f:format.raw>'; // assuming that extension title always has the service name at the third position
-;
-// initially set the checkbox according to the cookie value
+  for (let i = 0; i < toggleButtons.length; i++) {
+    let extTitle = toggleButtons[i].getAttribute('data-ext-title');
 
-toggleButtons[i].checked = Boolean(Number(consentStatuses[service])); // convert string to boolean
+    // Assuming service name includes extTitle with a unique identifier
+    let service = extTitle + '<f:format.raw>_{rootPid}</f:format.raw>';
+    toggleButtons[i].checked = Boolean(Number(consentStatuses[service])); // Convert string to boolean
 
-}
-if (areAllChecked()) {
-// acceptBtn.disabled = true;
-// acceptBtn.classList.add('disabled');
-}
+    // Additional logic can go here if necessary
+    if (areAllChecked()) {
+    // acceptBtn.disabled = true;
+    // acceptBtn.classList.add('disabled');
+    }
+  }
+
 }
 
 
@@ -1213,7 +1726,7 @@ setConsentStatus(service + '<f:format.raw>_{rootPid}</f:format.raw>', '0'); // S
 }
 }
 
-var x = document.querySelectorAll('iframe[data-2click-service="' + type + '"]');
+var x = document.querySelectorAll('iframe[data-2click-service="' + type + '"],div[data-2click-service="' + type + '"]');
 
 for (i = 0; i < x.length; i++) {
 let dummy = x[i].innerHTML;
@@ -1377,7 +1890,7 @@ if (Array.isArray(Userconfig.CustomTypes)) {
 this.types = Userconfig.CustomTypes;
 }
 for (let i = 0; i < this.types.length; i++) {
-var selector = document.querySelectorAll('iframe[data-2click-type="' + this.types[i].type + '"]');
+var selector = document.querySelectorAll('iframe[data-2click-type="' + this.types[i].type + '"],div[data-2click-type="' + this.types[i].type + '"]');
 
 for (let x = 0; x < selector.length; x++) {
 
@@ -1400,6 +1913,7 @@ solSetting[service].background_image_color,
 solSetting[service].button_text_color,
 solSetting[service].button_text,
 solSetting[service].button_shape,
+solSetting[service].heading_color,
 );
 } else {
 
@@ -1467,7 +1981,6 @@ let wrapperFunctionData = this.types;
 // add event listener on checkbox change
 
 toggleButtons[i].addEventListener('change', function (e) {
-
 setConsentStatus(service, this.checked ? '1' : '0'); // convert boolean to number
 this.checked;
 
@@ -1509,7 +2022,7 @@ function wrapfunction(e, settings, key) {
 
 for (let i = 0; i < e.length; i++) {
 
-var selector = document.querySelectorAll('iframe[data-2click-type="' + e[i].type + '"]');
+var selector = document.querySelectorAll('iframe[data-2click-type="' + e[i].type + '"],div[data-2click-type="' + e[i].type + '"]');
 for (let x = 0; x < selector.length; x++) {
 let service = selector[x].getAttribute('data-2click-service'); // get service name from iframe
 if (service == key) {
@@ -1526,6 +2039,7 @@ settings[service].background_image_color,
 settings[service].button_text_color,
 settings[service].button_text,
 settings[service].button_shape,
+settings[service].heading_color,
 );
 } else {
 selector[x].src = selector[x].getAttribute("data-src");
@@ -1564,6 +2078,7 @@ return true;
 document.addEventListener("DOMContentLoaded", function () {
 
 let gdpr_categoryHeaders = document.querySelectorAll('.category-header');
+let gdpr_accordionHeaders = document.querySelectorAll('.header-accordion');
 let gdpr_moreBtn = document.querySelectorAll('.category-container .more_details');
 let gdpr_cookieDataContainer = document.querySelector('.cookie-data');
 let gdpr_goBackBtn = document.querySelectorAll('.go-back');
@@ -1573,38 +2088,83 @@ let gdpr_scroll = document.querySelector('.modal-content .scroll');
 let gdpr_icon = document.getElementById('gdpr-cookie-consent__icon');
 let gdpr_model = document.getElementById('gdpr-cookie-consent__model');
 
+
 if (gdpr_model) {
 gdpr_icon?.addEventListener('click', function () {
 gdpr_model.style.display = 'block';
+document.body.classList.add('no-scroll');
 })
 
+
 gdpr_categoryHeaders?.forEach(header => {
+    header?.addEventListener('click', function (e) {
+
+        if(e.target.closest(".switch")){
+        return;
+        }
+        let content = header.nextElementSibling;
+
+        if (content.classList.contains('show')) {
+            // First, set max-height to the scrollHeight to ensure proper calculation
+            content.style.maxHeight = content.scrollHeight + 'px';
+            // Use requestAnimationFrame instead of setTimeout for better timing control
+            requestAnimationFrame(() => {
+                content.style.maxHeight = '0';
+            });
+
+            content.classList.remove('show');
+            content.classList.add('hide');
+            header.querySelector('.arrow').textContent = '+';
+        } else {
+            // First, remove the hide class and set max-height to scrollHeight
+            content.classList.remove('hide');
+            content.classList.add('show');
+            content.style.maxHeight = content.scrollHeight + 'px';
+
+            // To trigger a transition, set max-height to 'auto' after the transition ends
+            content.addEventListener('transitionend', function () {
+                content.style.maxHeight = 'auto';
+            }, { once: true });
+
+            header.querySelector('.arrow').textContent = '-';
+        }
+    });
+});
+gdpr_accordionHeaders?.forEach(header => {
 header?.addEventListener('click', function () {
-let content = header.nextElementSibling;
+// Now we are targeting the `.category-content` inside the same `.category-container`
+let content = header.parentElement.nextElementSibling;
 
 if (content.classList.contains('show')) {
-
+// First, set max-height to the scrollHeight to ensure proper calculation
 content.style.maxHeight = content.scrollHeight + 'px';
-setTimeout(function () {
+// Use requestAnimationFrame for smoother transition
+requestAnimationFrame(() => {
 content.style.maxHeight = '0';
-}, 10);
+});
 
 content.classList.remove('show');
 content.classList.add('hide');
 header.querySelector('.arrow').textContent = '+';
 } else {
-content.style.maxHeight = content.scrollHeight + 'px';
-
+// Remove 'hide' and add 'show' class
 content.classList.remove('hide');
 content.classList.add('show');
+content.style.maxHeight = content.scrollHeight + 'px';
+
+// To trigger a transition, set max-height to 'auto' after the transition ends
+content.addEventListener('transitionend', function () {
+content.style.maxHeight = 'auto';
+}, { once: true });
+
 header.querySelector('.arrow').textContent = '-';
 }
 });
 });
 
-
 let closeModal = document.getElementById('closeModal');
 closeModal?.addEventListener('click', function () {
+document.body.classList.remove('no-scroll');
 document.getElementById('gdpr-cookie-consent__model').style.display = 'none';
 });
 
@@ -1620,7 +2180,7 @@ gdpr_model.style.display = "block";
 gdpr_moreBtn?.forEach((btn) => {
 btn?.addEventListener('click', function () {
 let btnIdentifier = this?.getAttribute('data-identifier');
-const table = document.querySelector(`.more-detail-table[data-identifier="${btnIdentifier}"]`);
+const table = document.querySelector(".more-detail-table[data-identifier="+btnIdentifier+"]");
 if (table) {
 gdpr_cookieDataContainer.classList.add('d-none');
 table.classList.remove('d-none');
@@ -1662,20 +2222,24 @@ var maxWidth = windowWidth - 20;
 
 // Check if window width is less than 1400px, if so, set max-width to windowWidth - 40px
 if (windowWidth < 1400) {
-gdpr_modalContent.style.width = maxWidth + 'px';
-scrollElement.style.maxWidth = maxWidth + 'px';
+gdpr_modalContent? gdpr_modalContent.style.width = maxWidth + 'px' : '';
+scrollElement ? scrollElement.style.maxWidth = maxWidth + 'px' : '';
 } else {
-gdpr_modalContent.style.width = 'unset';
-scrollElement.style.maxWidth = '1400px';
+gdpr_modalContent ? gdpr_modalContent.style.width = '440px' : '';
+scrollElement ? scrollElement.style.maxWidth = '440px' : '';
 }
 }
 
+
+
 function setCookies(value) {
+
 if (value === 'false') {
 window.yett.unblock()
 }
 localStorage.setItem('cookiesRejected', value);
 document.getElementById('gdpr-cookie-consent__model').style.display = 'none';
+document.body.classList.remove('no-scroll');
 }
 function gdpr_extensions_com_bmap_gdpr(iframe, type) {
 
@@ -1757,9 +2321,6 @@ htmlElement.innerHTML = htmlContent;
 
 // Append the new div element as a child of
 SfcDiv.appendChild(htmlElement);
-
-
-
 
 }
 }
@@ -2045,13 +2606,15 @@ function gdpr_extensions_com_gt_gdpr({service, track,togglebtn, fnType,state} = 
         }
     }
 
+
+    document.querySelector('.banner-confirm-gdpr').addEventListener('click', function () {
+        document.body.classList.remove('no-scroll');
+    });
 }
-
-
-
 
 
 </f:asset.script>
 
+</html>
 
-        </html>
+

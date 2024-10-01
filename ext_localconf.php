@@ -25,6 +25,19 @@ defined('TYPO3') || die();
         ],
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT
     );
+
+    \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
+        'GdprExtensionsComCm',
+        'Privacy',
+        [
+            \GdprExtensionsCom\GdprExtensionsComCm\Controller\ReportController::class => 'privacy'
+        ],
+        [
+            \GdprExtensionsCom\GdprExtensionsComCm\Controller\ReportController::class => 'privacy'
+        ],
+        \TYPO3\CMS\Extbase\Utility\ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT
+    );
+
     // Register Scheduler Task
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks'][\GdprExtensionsCom\GdprExtensionsComCm\Commands\SyncCookiesAndExternalResCommand::class] = [
         'extension' => 'gdpr_extensions_com_cm',
@@ -45,6 +58,13 @@ defined('TYPO3') || die();
         'additionalFields' => \GdprExtensionsCom\GdprExtensionsComCm\Commands\UpdateOwnStatusTask::class,
     ];
 
+    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks'][\GdprExtensionsCom\GdprExtensionsComCm\Commands\SyncPrivacyStatementTask::class] = [
+        'extension' => 'gdpr_extensions_com_cm',
+        'title' => 'LLL:EXT:gdpr_extensions_com_cm/Resources/Private/Language/locallang.xlf:sync.privacy_statement.title',
+        'description' => 'LLL:EXT:gdpr_extensions_com_cm/Resources/Private/Language/locallang.xlf:sync.privacy_statement.desc',
+        'additionalFields' => \GdprExtensionsCom\GdprExtensionsComCm\Commands\SyncPrivacyStatementTask::class,
+    ];
+
     // Register Hook here
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][] = \GdprExtensionsCom\GdprExtensionsComCm\Hooks\DataHandlerHook::class;
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processCmdmapClass'][] = \GdprExtensionsCom\GdprExtensionsComCm\Hooks\DataHandlerHook::class;
@@ -59,6 +79,24 @@ defined('TYPO3') || die();
                         description = LLL:EXT:gdpr_extensions_com_cm/Resources/Private/Language/locallang_db.xlf:tx_gdpr_extensions_com_cm_report.description
                         tt_content_defValues {
                             CType = gdprextensionscomcm_report
+                        }
+                    }
+                }
+                show = *
+            }
+        }'
+    );
+
+    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
+        'mod {
+            wizards.newContentElement.wizardItems.common {
+                elements {
+                    privacy {
+                        iconIdentifier = gdpr_extensions_com_cm-plugin-gdprextensionscomcm
+                        title = LLL:EXT:gdpr_extensions_com_cm/Resources/Private/Language/locallang_db.xlf:tx_gdpr_extensions_com_cm_privacy.name
+                        description = LLL:EXT:gdpr_extensions_com_cm/Resources/Private/Language/locallang_db.xlf:tx_gdpr_extensions_com_cm_privacy.description
+                        tt_content_defValues {
+                            CType = gdprextensionscomcm_privacy
                         }
                     }
                 }

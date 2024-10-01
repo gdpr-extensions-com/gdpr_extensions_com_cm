@@ -67,6 +67,7 @@ class CookieConsentModalController extends \TYPO3\CMS\Extbase\Mvc\Controller\Act
         $twoClickCookies = [];
         $twoClickCookiesTitles = [];
         $twoClickCookiesDescriptions = [];
+        $twoClickCookieDetail = [];
         foreach ($cookies as $cookie) {
 
             $category = $cookie->getCategory();
@@ -89,8 +90,10 @@ class CookieConsentModalController extends \TYPO3\CMS\Extbase\Mvc\Controller\Act
                     $twoClickCookiesTitles[$cookie->getName()] = $cookiesTitle['cookie_title'];
                     $twoClickCookiesDescription[$cookie->getName()] = $cookiesTitle['description'];
                     $twoClickCookies[$cookie->getName()] = $new_str;
+                    $twoClickCookieDetail[$cookie->getName()] = $cookie;
                     $this->view->assign('twoClickCookiesTitles', $twoClickCookiesTitles);
                     $this->view->assign('twoClickCookiesDescription', $twoClickCookiesDescription);
+                    $this->view->assign('twoClickCookieDetail', $twoClickCookieDetail);
                 }
             }
             else{

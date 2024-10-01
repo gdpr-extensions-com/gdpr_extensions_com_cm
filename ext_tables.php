@@ -12,7 +12,7 @@ defined('TYPO3') || die();
             'gdprManager',
             'bottom',
             [
-                \GdprExtensionsCom\GdprExtensionsComCm\Controller\GdprManagerController::class => 'list,edit,show,update,apiValidationStatus',
+                \GdprExtensionsCom\GdprExtensionsComCm\Controller\GdprManagerController::class => 'list,edit,show,update,apiValidationStatus,resetToDefault',
             ],
             [
                 'access' => 'user,group',

@@ -3,6 +3,12 @@ defined('TYPO3') || die();
 $frontendLanguageFilePrefix = 'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:';
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
     'GdprExtensionsComCm',
+    'Privacy',
+    'Privacy Statement'
+);
+
+\TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
+    'GdprExtensionsComCm',
     'CookieConsentModal',
     'Cookies Consent Manager'
 );
@@ -14,7 +20,7 @@ $fields = [
             'size' => 30,
             'eval' => 'trim',
         ]
-    ],    
+    ],
 
     'consent_header' => [
         'config' => [
@@ -68,7 +74,7 @@ $fields = [
                         'cols' => 30,
                         'rows' => 5,
                         'eval' => 'trim',
-                      
+
                     ]
     ],
     'others' => [
@@ -79,7 +85,7 @@ $fields = [
                     'rows' => 5,
                     'eval' => 'trim',
              ],
-        
+
     ]
 ];
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns('tt_content', $fields);
@@ -95,7 +101,7 @@ $GLOBALS['TCA']['tt_content']['types']['gdprextensionscomcm_cookieconsentmodal']
                  others; Others Cookies Description,
                  consent_header_title; Header Title,
                  consent_header; Header Description,
-                 
+
                 --div--;' . $frontendLanguageFilePrefix . 'tabs.appearance,
                 --palette--;' . $frontendLanguageFilePrefix . 'palette.frames;frames,
                 --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,

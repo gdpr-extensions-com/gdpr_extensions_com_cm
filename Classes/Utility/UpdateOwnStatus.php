@@ -46,7 +46,7 @@ class UpdateOwnStatus
             $sysTempQB->resetQueryParts();
 
             $constantsArray = $this->extractSecretKey($SiteConfiguration['constants']);
-            $BaseURL = $constantsArray['plugin.tx_gdprextensionscomcm_gdprextensionscomcm.settings.dashboardBaseUrl'];
+            $BaseURL = isset($constantsArray['plugin.tx_gdprextensionscomcm_gdprextensionscomcm.settings.dashboardBaseUrl']) ? $constantsArray['plugin.tx_gdprextensionscomcm_gdprextensionscomcm.settings.dashboardBaseUrl']: null ;
            if ($apiKey) {
                 if (!isset($apiKeys[$location['pages']])) {
                     $apiKeys[$location['pages']] = [];

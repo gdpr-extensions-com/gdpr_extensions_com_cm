@@ -132,6 +132,7 @@ class GetTwoClickSolutionsViewHelper extends AbstractViewHelper
                 'GDPR-Extensions.com - Vimeo 2xClick Solution' => 'vimeo.com',
                 'GDPR-Extensions.com - Matomo 2xClick Solution' => 'matomo.org',
                 'GDPR-Extensions.com - Google-Tag-Manager 2xClick Solution' => 'tagmanager.google.com',
+                'GDPR-Extensions-com - Pinterest Board 2xClick Solution' => 'pinterest.com',
                 'GDPR-Extensions-com - Social Feed curator 2xClick Solution' => 'curator.io'
             ];
             foreach ($gdprManagers as $gdprManager) {
@@ -139,6 +140,8 @@ class GetTwoClickSolutionsViewHelper extends AbstractViewHelper
                     if(stripos($gdprManager['extension_title'], '2xClick')){
                     $extensionTitle = $gdprManager['extension_title'];
                     $gdprManager['cookie_title'] = $pluginNames[$extensionTitle];
+                    $shortTitle = substr($extensionTitle, strpos($extensionTitle, ' - ') + 3);
+                    $gdprManager['short_title'] = $shortTitle;
                     $normalizedGdprManagers[$gdprManager['extension_key']] = $gdprManager;
                     }
                 }

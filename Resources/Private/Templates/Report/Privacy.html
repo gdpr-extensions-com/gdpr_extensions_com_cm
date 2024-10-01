@@ -1,0 +1,1978 @@
+<html
+	xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+	xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
+	data-namespace-typo3-fluid="true"
+>
+	<f:layout name="Default" />
+	<f:section name="content">
+		<style>
+			html {
+				scroll-behavior: smooth;
+			}
+			.main-frame.privacy {
+				overflow: hidden;
+				font-family: sans-serif;
+			}
+			.main-frame.privacy .template p {
+				color: #000;
+				font-size: 16px;
+				font-weight: 500;
+				line-height: 24px;
+				margin-top: 0;
+				text-align: left;
+			}
+			.main-frame.privacy .template a {
+				color: #487dd6;
+				text-decoration: none;
+			}
+			.main-frame.privacy .template a p {
+				color: #487dd6;
+			}
+			.main-frame.privacy .template .font-24 {
+				font-size: 24px;
+				line-height: 36px;
+			}
+			.main-frame.privacy .template .font-24 p {
+				font-size: 24px;
+				line-height: 36px;
+			}
+			.main-frame.privacy .template4 .font-24 {
+				margin-bottom: 16px;
+			}
+			.main-frame.privacy .template .header-img {
+				position: relative;
+			}
+			.main-frame.privacy .template1 .header-img {
+				padding: 64px 120px;
+				text-align: left;
+			}
+			.main-frame.privacy .template2 .header-img,
+			.main-frame.privacy .template3 .header-img {
+				max-height: 400px;
+				min-height: 300px;
+			}
+			.main-frame.privacy .template2 .header-img img,
+			.main-frame.privacy .template3 .header-img img {
+				width: 100%;
+				height: 100%;
+				max-height: 400px;
+				min-height: 300px;
+				object-fit: cover;
+			}
+			.main-frame.privacy .template1 .header-img h2 {
+				font-size: 48px;
+				line-height: 72px;
+				margin-top: 0;
+				margin-bottom: 16px;
+			}
+			.main-frame.privacy .template .header-img p {
+				margin: 0;
+			}
+			.main-frame.privacy .template .template-content {
+				padding: 0 120px;
+			}
+			.main-frame.privacy .template-content .quill-content img {
+				width: 100%;
+				height: 100%;
+				max-height: 540px;
+				margin-bottom: 24px;
+				object-fit: cover;
+			}
+			.main-frame.privacy .template4 .quill-content img {
+				border-radius: 23px;
+			}
+			.main-frame.privacy .template .template-content .header-content {
+				margin-top: 32px;
+				margin-bottom: 48px;
+			}
+			.main-frame.privacy .template .sidebar-content {
+				display: flex;
+				gap: 60px;
+			}
+			.main-frame.privacy
+				.template
+				.sidebar-content
+				.right-content
+				.contentSec {
+				margin-bottom: 48px;
+			}
+			.main-frame.privacy .template2 .sidebar-content .left-content {
+				margin-top: 24px;
+			}
+			.main-frame.privacy
+				.template2
+				.sidebar-content
+				.right-content
+				.contentSec {
+				padding-top: 24px;
+				margin-bottom: 24px;
+			}
+			.main-frame.privacy .template .sidebar-content .quill-title {
+				margin-bottom: 16px;
+			}
+			.main-frame.privacy .template .sidebar-content .left-content .links {
+				width: max-content;
+				margin-bottom: 24px;
+			}
+			.main-frame.privacy .template hr {
+				border-top: 1px solid #67748e;
+				margin: 16px 0;
+				opacity: 0.25;
+			}
+			.main-frame.privacy .template3 hr {
+				margin: 40px 0;
+			}
+			.main-frame.privacy .template4 hr {
+				margin: 40px 0;
+			}
+			.main-frame.privacy .template4 hr.temp4:last-of-type {
+				border: none;
+				margin: 25px;
+			}
+			.main-frame.privacy .template #titleHR {
+				margin: 16px 0;
+			}
+			.main-frame.privacy .template4 {
+				padding-top: 100px;
+			}
+			.main-frame.privacy .template4 .template-content {
+				margin: 0 auto;
+				max-width: 1320px;
+				padding: 0 20px;
+			}
+			.main-frame.privacy .template4 .header-img img {
+				width: 100%;
+				height: auto;
+				max-height: unset;
+				min-height: 250px;
+				border-radius: 23px;
+				object-fit: cover;
+			}
+			.main-frame.privacy .custom-accordion-header {
+				position: relative;
+				margin: 0;
+			}
+			.main-frame.privacy .custom-accordion-button {
+				width: 100%;
+				color: #000 !important;
+				background-color: transparent;
+				font-size: 20px;
+				font-weight: 700;
+				text-align: left;
+				padding: 16px 8px;
+				border: none;
+				cursor: pointer;
+				word-break: break-all;
+				transition: background-color 0.3s ease;
+				display: flex;
+				align-items: baseline;
+				gap: 12px;
+			}
+			.main-frame.privacy .accordionArrow {
+				width: 9px;
+				height: 15px;
+				display: block;
+				transform: rotate(0deg);
+				transition: transform 0.2s ease-in-out;
+			}
+			.main-frame.privacy .accordionArrow:before {
+				content: " ";
+				display: block;
+				border: 8px solid transparent;
+				border-left-color: #000;
+				border-radius: 2px;
+				position: relative;
+				z-index: 99;
+			}
+			.main-frame.privacy .accordionArrow.open {
+				transform: rotate(90deg);
+			}
+			.main-frame.privacy table {
+				border-collapse: collapse;
+				border-spacing: 0;
+				width: 100%;
+			}
+			.main-frame.privacy .custom-accordion-body {
+				background-color: #ffffff;
+				border: 1px solid #e7e6e6;
+				border-radius: 10px;
+				overflow-x: auto;
+				margin-bottom: 20px;
+			}
+			.custom-accordion-body thead th {
+				position: sticky;
+				top: 0;
+			}
+			.main-frame.privacy .custom-accordion-collapse {
+				overflow: hidden;
+				max-height: 0;
+				transition: max-height 0.4s ease, padding 0.4s ease;
+			}
+			.main-frame.privacy .custom-accordion-collapse.show {
+				max-height: 100%;
+			}
+			.main-frame.privacy table .row-head {
+				background: #e7e6e6;
+				text-align: left;
+			}
+			.main-frame.privacy table tr {
+				border-bottom: 1px solid #e7e6e6;
+			}
+			.main-frame.privacy table tr:last-of-type {
+				border-bottom: 0;
+			}
+			.main-frame.privacy table tr:last-of-type {
+				border: none;
+			}
+			.main-frame.privacy table .row-head th:first-child {
+				border-top-left-radius: 6px;
+			}
+			.main-frame.privacy table .row-head th:last-child {
+				border-top-right-radius: 6px;
+			}
+			.main-frame.privacy table tr th {
+				color: #343434;
+				font-size: 16px;
+				line-height: 24px;
+				padding: 16px;
+			}
+			.main-frame.privacy table .row-head th {
+				font-weight: 700;
+				min-width: 70px;
+			}
+			.main-frame.privacy table .row-data td {
+				font-weight: 400;
+				max-width: 200px;
+				overflow: auto;
+				padding: 16px;
+				vertical-align: middle;
+			}
+			.privacy-gen-report-links {
+				max-height: 150px;
+				overflow-x: hidden;
+				overflow-y: auto;
+			}
+			.privacy-gen-report-links a {
+				color: #487dd6;
+			}
+			.statusCircle .red,
+			.statusCircle .yellow,
+			.statusCircle .green {
+				width: 16px;
+				height: 16px;
+				border-radius: 50%;
+			}
+			.statusCircle .red {
+				background-color: #e90b0b;
+			}
+			.statusCircle .yellow {
+				background-color: #ffc61a;
+			}
+			.statusCircle .green {
+				background-color: #11aa3c;
+			}
+			.ql-font-serif {
+				font-family: serif;
+			}
+			.ql-font-monospace {
+				font-family: monospace;
+			}
+			.template-content h1,
+			.template-content h2,
+			.template-content h3,
+			.template-content h4,
+			.template-content h5,
+			.template-content h6 {
+				color: #343434;
+			}
+			.main-frame.privacy ol > li {
+				color: #343434;
+			}
+			.main-frame.privacy ol > li[data-list="bullet"] {
+				list-style: disc;
+			}
+			.main-frame.privacy blockquote {
+				color: #343434;
+				border-left: 4px solid #ccc;
+				margin-bottom: 5px;
+				margin-top: 5px;
+				padding-left: 16px;
+			}
+			.main-frame.privacy .reportStatusIndicators {
+				display: flex;
+				align-items: center;
+				gap: 24px;
+				margin: 24px 0;
+			}
+			.main-frame.privacy .reportStatusIndicators .indInner {
+				display: flex;
+				align-items: center;
+				gap: 8px;
+			}
+			.main-frame.privacy .reportStatusIndicators .indInner p {
+				margin: 0;
+			}
+			.main-frame.privacy .sidebar-content .contentsMob {
+				display: none;
+			}
+			.template.template2 .header-txt {
+				background: rgba(0, 0, 0, 0.7);
+				bottom: 0;
+				left: 120px;
+				padding: 24px;
+				position: absolute;
+				z-index: 1;
+			}
+			.main-frame.privacy .template .heading {
+				color: #000;
+				font-size: 48px;
+				font-weight: 400;
+				line-height: 72px;
+				margin: 0;
+			}
+			.template:not(.template4) .header-img:after {
+				background-color: rgba(0, 0, 0, 0.2);
+				content: "";
+				height: 99%;
+				left: 0;
+				position: absolute;
+				top: 0;
+				width: 100%;
+			}
+			.main-frame.privacy .template3 .heading-txt {
+				margin-top: 48px;
+			}
+			.main-frame.privacy .template4 .heading-txt {
+				margin-top: 24px;
+			}
+			@media (max-width: 1450px) {
+				.main-frame.privacy .template1 .header-img,
+				.main-frame.privacy .template .template-content {
+					padding-left: 100px;
+					padding-right: 100px;
+				}
+				.main-frame.privacy .sidebar-content .left-content {
+					width: 15%;
+				}
+				.main-frame.privacy .sidebar-content .right-content {
+					width: 85%;
+				}
+			}
+			@media (max-width: 1000px) {
+				.main-frame.privacy .template4 {
+					padding-top: 96px;
+				}
+				.main-frame.privacy .template1 .header-img,
+				.main-frame.privacy .template .template-content {
+					padding-left: 80px;
+					padding-right: 80px;
+				}
+			}
+			@media (max-width: 885px) {
+				.main-frame.privacy .template1 .header-img,
+				.main-frame.privacy .template .template-content {
+					padding-left: 40px;
+					padding-right: 40px;
+				}
+				.main-frame.privacy .template .sidebar-content {
+					display: block;
+				}
+				.main-frame.privacy .sidebar-content .left-content {
+					width: 100%;
+				}
+				.main-frame.privacy .sidebar-content .right-content {
+					width: 100%;
+				}
+				.main-frame.privacy .sidebar-content .contentsMob {
+					display: block;
+					margin: 0;
+					padding-bottom: 16px;
+					border-bottom: 1px solid #e7e6e6;
+				}
+				.main-frame.privacy .template .sidebar-content .left-content {
+					margin-bottom: 48px;
+				}
+				.main-frame.privacy .template .sidebar-content .left-content .links {
+					width: 100%;
+					margin: 0;
+					padding: 16px 0;
+					border-bottom: 1px solid #e7e6e6;
+				}
+				.main-frame.privacy .reportStatusIndicators {
+					flex-direction: column;
+					align-items: start;
+				}
+			}
+			@media (max-width: 700px) {
+				.main-frame.privacy .template3 .heading {
+					margin-bottom: 8px;
+				}
+				.main-frame.privacy .template4 .heading {
+					margin-bottom: 8px;
+				}
+				.main-frame.privacy .template4 {
+					padding-top: 80px;
+				}
+			}
+			@media (max-width: 600px) {
+				.main-frame.privacy .template1 .header-img h2,
+				.main-frame.privacy .template3 .heading,
+				.main-frame.privacy .template4 .heading {
+					font-size: 42px;
+					line-height: 60px;
+				}
+				.main-frame.privacy .template1 .header-img,
+				.main-frame.privacy .template .template-content {
+					padding-left: 20px;
+					padding-right: 20px;
+				}
+				.main-frame.privacy .template2 .header-img .header-txt {
+					left: 0;
+					right: 0;
+				}
+				.main-frame.privacy .template4 {
+					padding-top: 50px;
+				}
+				.main-frame.privacy .template4 hr {
+					margin: 32px 0;
+				}
+				.main-frame.privacy .custom-accordion-button {
+					font-size: 18px;
+				}
+			}
+			@media (max-width: 450px) {
+				.main-frame.privacy .template1 .header-img h2,
+				.main-frame.privacy .template3 .heading {
+					font-size: 38px;
+					line-height: 45px;
+					margin-bottom: 24px;
+				}
+				.main-frame.privacy .template4 .heading{
+					font-size: 35px;
+					line-height: 45px;
+					margin-bottom: 16px;
+				}
+			}
+		</style>
+		<div class="main-frame privacy">
+			<f:if condition="{groupedCookies.templateName} == template1">
+				<div class="template template1">
+					<div
+						class="header-img"
+						id="header-section"
+						style="color: {groupedCookies.headerContent.TxtColor}; background-color: {groupedCookies.headerContent.BgColor};"
+					>
+						<div class="header-txt">
+							<h2
+								class="heading"
+								style="color: {groupedCookies.headerContent.TxtColor};"
+							>
+								{groupedCookies.headerContent.title}
+							</h2>
+							<p
+								class="date subTitle"
+								style="color: {groupedCookies.headerContent.TxtColor};"
+							>
+								{groupedCookies.headerContent.subTitle}
+							</p>
+						</div>
+					</div>
+					<div class="template-content">
+						<div class="header-content">
+							{groupedCookies.quillContentData.quill-data-0 -> f:format.raw()}
+						</div>
+					</div>
+					<div class="template-content sidebar-content">
+						<div class="left-content">
+							<f:if condition="{groupedCookies.contentBlockData}">
+								<p class="font-24 contentsMob">Contents</p>
+							</f:if>
+							<f:for each="{groupedCookies.contentBlockData}" as="Content">
+								<f:if condition="{Content.title}">
+									<a
+										href="#{Content.title -> f:format.case(mode: 'lower') -> f:format.raw()}"
+									>
+										<p class="links">{Content.title}</p>
+									</a>
+								</f:if>
+							</f:for>
+						</div>
+						<div class="quill-content right-content">
+							<f:for
+								each="{groupedCookies.quillContentData}"
+								as="quillContent"
+								iteration="i"
+								key="key"
+							>
+								<f:if condition="{i.index} > 0">
+									<div
+										id="{groupedCookies.contentBlockData.{key}.title -> f:format.case(mode: 'lower')}"
+										class="contentSec"
+									>
+										<p class="font-24 quill-title">
+											{groupedCookies.contentBlockData.{key}.title}
+										</p>
+										<hr />
+										<p>{quillContent -> f:format.raw()}</p>
+										<f:if
+											condition="{groupedCookies.contentBlockData.{key}.reportData}"
+										>
+											<!-- Cookies Report -->
+											<f:if
+												condition="{groupedCookies.contentBlockData.{key}.reportData.cookiesData}"
+											>
+												<div class="reportStatusIndicators statusCircle">
+													<div class="indInner">
+														<div class="green"></div>
+														<p>Loaded with the user’s consent</p>
+													</div>
+													<div class="indInner">
+														<div class="red"></div>
+														<p>Loaded without the user’s consent</p>
+													</div>
+													<div class="indInner">
+														<div class="yellow"></div>
+														<p>Solvable through 2 click plugin</p>
+													</div>
+												</div>
+												<div class="custom-accordion">
+													<f:for
+														each="{groupedCookies.contentBlockData.{key}.reportData.cookiesData}"
+														as="categoryData"
+														key="category"
+													>
+														<div
+															class="custom-accordion-item"
+															id="accordion-item-{category}"
+														>
+															<h2
+																class="custom-accordion-header"
+																id="heading-{category}"
+															>
+																<button
+																	class="custom-accordion-button"
+																	type="button"
+																	data-category="{category}"
+																>
+																	<div class="accordionArrow"></div>
+																	{category} ({f:count(subject: categoryData)})
+																</button>
+															</h2>
+															<div
+																class="custom-accordion-collapse"
+																data-category="{category}"
+															>
+																<div class="custom-accordion-body">
+																	<table>
+																		<thead>
+																			<tr
+																				class="row-head"
+																				style="background-color: {groupedCookies.contentBlockData.{key}.bgColor};"
+																			>
+																				<f:for
+																					each="{groupedCookies.contentBlockData.{key}.reportData.headerTitles}"
+																					as="title"
+																				>
+																					<th
+																						style="color: {groupedCookies.contentBlockData.{key}.titleColor};"
+																					>
+																						{title}
+																					</th>
+																				</f:for>
+																			</tr>
+																		</thead>
+																		<tbody>
+																			<f:for
+																				each="{categoryData}"
+																				as="cookiesDataItem"
+																			>
+																				<tr class="row-data">
+																					<td>{cookiesDataItem.0}</td>
+																					<td>{cookiesDataItem.1}</td>
+																					<td>
+																						<f:if
+																							condition="{cookiesDataItem.2}"
+																						>
+																							<f:then>
+																								{cookiesDataItem.2}
+																							</f:then>
+																							<f:else>-</f:else>
+																						</f:if>
+																					</td>
+																					<f:if
+																						condition="{cookiesDataItem.7} == 1"
+																					>
+																						<f:then>
+																							<td>HTTP</td>
+																						</f:then>
+																						<f:else>
+																							<td>HTTPS</td>
+																						</f:else>
+																					</f:if>
+																					<td>
+																						<f:if
+																							condition="{cookiesDataItem.4} <= 0"
+																						>
+																							<f:then>Session</f:then>
+																							<f:else>
+																								{cookiesDataItem.4} Days
+																							</f:else>
+																						</f:if>
+																					</td>
+																					<td class="privacy-gen-report-links">
+																						{cookiesDataItem.5 ->
+																						f:format.raw()}
+																					</td>
+																					<td class="statusCircle">
+																						<f:if
+																							condition="{category} == 'Functional'"
+																						>
+																							<f:then>
+																								<div class="red"></div>
+																							</f:then>
+																							<f:else>
+																								<f:if
+																									condition="{cookiesDataItem.6} == 2"
+																								>
+																									<f:then>
+																										<div class="yellow"></div>
+																									</f:then>
+																									<f:else>
+																										<div class="green"></div>
+																									</f:else>
+																								</f:if>
+																							</f:else>
+																						</f:if>
+																					</td>
+																				</tr>
+																			</f:for>
+																		</tbody>
+																	</table>
+																</div>
+															</div>
+														</div>
+													</f:for>
+												</div>
+											</f:if>
+											<!-- External Resources Report -->
+											<f:if
+												condition="{groupedCookies.contentBlockData.{key}.reportData.exResourcesData}"
+											>
+												<div class="custom-accordion">
+													<f:for
+														each="{groupedCookies.contentBlockData.{key}.reportData.exResourcesData}"
+														as="exResourcesData"
+														key="resource"
+													>
+														<div
+															class="custom-accordion-item"
+															id="accordion-item-{resource}"
+														>
+															<h2
+																class="custom-accordion-header"
+																id="heading-{resource}"
+															>
+																<button
+																	class="custom-accordion-button"
+																	type="button"
+																	data-category="{resource}"
+																>
+																	<div class="accordionArrow"></div>
+																	{exResourcesData.url} ({f:count(subject:
+																	exResourcesData.externalResourceList)})
+																</button>
+															</h2>
+															<div
+																class="custom-accordion-collapse"
+																data-category="{resource}"
+															>
+																<div class="custom-accordion-body">
+																	<table>
+																		<thead>
+																			<tr
+																				class="row-head"
+																				style="background-color: {groupedCookies.contentBlockData.{key}.bgColor};"
+																			>
+																				<f:for
+																					each="{groupedCookies.contentBlockData.{key}.reportData.headerTitles}"
+																					as="title"
+																				>
+																					<th
+																						style="color: {groupedCookies.contentBlockData.{key}.titleColor};"
+																					>
+																						{title}
+																					</th>
+																				</f:for>
+																			</tr>
+																		</thead>
+																		<tbody>
+																			<f:for
+																				each="{exResourcesData.externalResourceList}"
+																				as="resourceList"
+																			>
+																				<tr class="row-data">
+																					<td>
+																						<a href="{resourceList}"
+																							>{resourceList}</a
+																						>
+																					</td>
+																				</tr>
+																			</f:for>
+																		</tbody>
+																	</table>
+																</div>
+															</div>
+														</div>
+													</f:for>
+												</div>
+											</f:if>
+											<!-- Forms Report -->
+											<f:if
+												condition="{groupedCookies.contentBlockData.{key}.reportData.formsData}"
+											>
+												<div class="custom-accordion-body">
+													<table>
+														<thead>
+															<tr
+																class="row-head"
+																style="background-color: {groupedCookies.contentBlockData.{key}.bgColor};"
+															>
+																<f:for
+																	each="{groupedCookies.contentBlockData.{key}.reportData.headerTitles}"
+																	as="title"
+																>
+																	<th
+																		style="color: {groupedCookies.contentBlockData.{key}.titleColor};"
+																	>
+																		{title}
+																	</th>
+																</f:for>
+															</tr>
+														</thead>
+														<tbody>
+															<f:for
+																each="{groupedCookies.contentBlockData.{key}.reportData.formsData}"
+																as="formsData"
+															>
+																<tr class="row-data">
+																	<f:for each="{formsData}" as="dataItem">
+																		<td>{dataItem}</td>
+																	</f:for>
+																</tr>
+															</f:for>
+														</tbody>
+													</table>
+												</div>
+											</f:if>
+											<!-- Fonts Report -->
+											<f:if
+												condition="{groupedCookies.contentBlockData.{key}.reportData.fontsData}"
+											>
+												<div class="reportStatusIndicators statusCircle">
+													<div class="indInner">
+														<div class="green"></div>
+														<p>Loaded with the user’s consent</p>
+													</div>
+													<div class="indInner">
+														<div class="red"></div>
+														<p>Loaded without the user’s consent</p>
+													</div>
+													<div class="indInner">
+														<div class="yellow"></div>
+														<p>Solvable through 2 click plugin</p>
+													</div>
+												</div>
+												<div class="custom-accordion-body">
+													<table>
+														<thead>
+															<tr
+																class="row-head"
+																style="background-color: {groupedCookies.contentBlockData.{key}.bgColor};"
+															>
+																<f:for
+																	each="{groupedCookies.contentBlockData.{key}.reportData.headerTitles}"
+																	as="title"
+																>
+																	<th
+																		style="color: {groupedCookies.contentBlockData.{key}.titleColor};"
+																	>
+																		{title}
+																	</th>
+																</f:for>
+															</tr>
+														</thead>
+														<tbody>
+															<f:for
+																each="{groupedCookies.contentBlockData.{key}.reportData.fontsData}"
+																as="fontsData"
+															>
+																<tr class="row-data">
+																	<td>{fontsData.0}</td>
+																	<td class="statusCircle">
+																		<f:if condition="{fontsData.1} == 0">
+																			<div class="red"></div>
+																		</f:if>
+																		<f:if condition="{fontsData.1} == 1">
+																			<div class="green"></div>
+																		</f:if>
+																	</td>
+																</tr>
+															</f:for>
+														</tbody>
+													</table>
+												</div>
+											</f:if>
+										</f:if>
+									</div>
+								</f:if>
+							</f:for>
+						</div>
+					</div>
+				</div>
+			</f:if>
+			<f:if condition="{groupedCookies.templateName} == template2">
+				<div class="template template2">
+					<div class="header-img" id="header-section">
+						<f:variable
+							name="decodedArray"
+							value="{groupedCookies.headerContent.headerImage -> v:format.json.decode()}"
+						/>
+						<img
+							src="data:image/jpeg;base64,{decodedArray.file_data}"
+							alt="{decodedArray.file_name}"
+						/>
+						<div class="header-txt">
+							<h2 class="heading" style="color: #fff">
+								{groupedCookies.headerContent.title}
+							</h2>
+							<p class="date subTitle" style="color: #fff">
+								{groupedCookies.headerContent.subTitle}
+							</p>
+						</div>
+					</div>
+					<div class="template-content sidebar-content">
+						<div class="left-content">
+							<f:if condition="{groupedCookies.contentBlockData}">
+								<p class="font-24 contentsMob">Contents</p>
+							</f:if>
+							<f:for each="{groupedCookies.contentBlockData}" as="Content">
+								<f:if condition="{Content.title}">
+									<a href="#{Content.title -> f:format.case(mode: 'lower')}">
+										<p class="links">{Content.title}</p>
+									</a>
+								</f:if>
+							</f:for>
+						</div>
+						<div class="quill-content right-content">
+							<f:for
+								each="{groupedCookies.quillContentData}"
+								as="quillContent"
+								iteration="i"
+								key="key"
+							>
+								<f:if condition="{i.index} > 0">
+									<div
+										id="{groupedCookies.contentBlockData.{key}.title -> f:format.case(mode: 'lower')}"
+										class="contentSec"
+									>
+										<p class="font-24 quill-title">
+											{groupedCookies.contentBlockData.{key}.title}
+										</p>
+										<hr />
+										<p>{quillContent -> f:format.raw()}</p>
+										<f:if
+											condition="{groupedCookies.contentBlockData.{key}.reportData}"
+										>
+											<!-- Cookies Report -->
+											<f:if
+												condition="{groupedCookies.contentBlockData.{key}.reportData.cookiesData}"
+											>
+												<div class="reportStatusIndicators statusCircle">
+													<div class="indInner">
+														<div class="green"></div>
+														<p>Loaded with the user’s consent</p>
+													</div>
+													<div class="indInner">
+														<div class="red"></div>
+														<p>Loaded without the user’s consent</p>
+													</div>
+													<div class="indInner">
+														<div class="yellow"></div>
+														<p>Solvable through 2 click plugin</p>
+													</div>
+												</div>
+												<div class="custom-accordion">
+													<f:for
+														each="{groupedCookies.contentBlockData.{key}.reportData.cookiesData}"
+														as="categoryData"
+														key="category"
+													>
+														<div
+															class="custom-accordion-item"
+															id="accordion-item-{category}"
+														>
+															<h2
+																class="custom-accordion-header"
+																id="heading-{category}"
+															>
+																<button
+																	class="custom-accordion-button"
+																	type="button"
+																	data-category="{category}"
+																>
+																	<div class="accordionArrow"></div>
+																	{category} ({f:count(subject: categoryData)})
+																</button>
+															</h2>
+															<div
+																class="custom-accordion-collapse"
+																data-category="{category}"
+															>
+																<div class="custom-accordion-body">
+																	<table>
+																		<thead>
+																			<tr
+																				class="row-head"
+																				style="background-color: {groupedCookies.contentBlockData.{key}.bgColor};"
+																			>
+																				<f:for
+																					each="{groupedCookies.contentBlockData.{key}.reportData.headerTitles}"
+																					as="title"
+																				>
+																					<th
+																						style="color: {groupedCookies.contentBlockData.{key}.titleColor};"
+																					>
+																						{title}
+																					</th>
+																				</f:for>
+																			</tr>
+																		</thead>
+																		<tbody>
+																			<f:for
+																				each="{categoryData}"
+																				as="cookiesDataItem"
+																			>
+																				<tr class="row-data">
+																					<td>{cookiesDataItem.0}</td>
+																					<td>{cookiesDataItem.1}</td>
+																					<td>
+																						<f:if
+																							condition="{cookiesDataItem.2}"
+																						>
+																							<f:then>
+																								{cookiesDataItem.2}
+																							</f:then>
+																							<f:else>-</f:else>
+																						</f:if>
+																					</td>
+																					<f:if
+																						condition="{cookiesDataItem.7} == 1"
+																					>
+																						<f:then>
+																							<td>HTTP</td>
+																						</f:then>
+																						<f:else>
+																							<td>HTTPS</td>
+																						</f:else>
+																					</f:if>
+																					<td>
+																						<f:if
+																							condition="{cookiesDataItem.4} <= 0"
+																						>
+																							<f:then>Session</f:then>
+																							<f:else>
+																								{cookiesDataItem.4} Days
+																							</f:else>
+																						</f:if>
+																					</td>
+																					<td class="privacy-gen-report-links">
+																						{cookiesDataItem.5 ->
+																						f:format.raw()}
+																					</td>
+																					<td class="statusCircle">
+																						<f:if
+																							condition="{category} == 'Functional'"
+																						>
+																							<f:then>
+																								<div class="red"></div>
+																							</f:then>
+																							<f:else>
+																								<f:if
+																									condition="{cookiesDataItem.6} == 2"
+																								>
+																									<f:then>
+																										<div class="yellow"></div>
+																									</f:then>
+																									<f:else>
+																										<div class="green"></div>
+																									</f:else>
+																								</f:if>
+																							</f:else>
+																						</f:if>
+																					</td>
+																				</tr>
+																			</f:for>
+																		</tbody>
+																	</table>
+																</div>
+															</div>
+														</div>
+													</f:for>
+												</div>
+											</f:if>
+											<!-- External Resources Report -->
+											<f:if
+												condition="{groupedCookies.contentBlockData.{key}.reportData.exResourcesData}"
+											>
+												<div class="custom-accordion">
+													<f:for
+														each="{groupedCookies.contentBlockData.{key}.reportData.exResourcesData}"
+														as="exResourcesData"
+														key="resource"
+													>
+														<div
+															class="custom-accordion-item"
+															id="accordion-item-{resource}"
+														>
+															<h2
+																class="custom-accordion-header"
+																id="heading-{resource}"
+															>
+																<button
+																	class="custom-accordion-button"
+																	type="button"
+																	data-category="{resource}"
+																>
+																	<div class="accordionArrow"></div>
+																	{exResourcesData.url} ({f:count(subject:
+																	exResourcesData.externalResourceList)})
+																</button>
+															</h2>
+															<div
+																class="custom-accordion-collapse"
+																data-category="{resource}"
+															>
+																<div class="custom-accordion-body">
+																	<table>
+																		<thead>
+																			<tr
+																				class="row-head"
+																				style="background-color: {groupedCookies.contentBlockData.{key}.bgColor};"
+																			>
+																				<f:for
+																					each="{groupedCookies.contentBlockData.{key}.reportData.headerTitles}"
+																					as="title"
+																				>
+																					<th
+																						style="color: {groupedCookies.contentBlockData.{key}.titleColor};"
+																					>
+																						{title}
+																					</th>
+																				</f:for>
+																			</tr>
+																		</thead>
+																		<tbody>
+																			<f:for
+																				each="{exResourcesData.externalResourceList}"
+																				as="resourceList"
+																			>
+																				<tr class="row-data">
+																					<td>
+																						<a href="{resourceList}"
+																							>{resourceList}</a
+																						>
+																					</td>
+																				</tr>
+																			</f:for>
+																		</tbody>
+																	</table>
+																</div>
+															</div>
+														</div>
+													</f:for>
+												</div>
+											</f:if>
+											<!-- Forms Report -->
+											<f:if
+												condition="{groupedCookies.contentBlockData.{key}.reportData.formsData}"
+											>
+												<div class="custom-accordion-body">
+													<table>
+														<thead>
+															<tr
+																class="row-head"
+																style="background-color: {groupedCookies.contentBlockData.{key}.bgColor};"
+															>
+																<f:for
+																	each="{groupedCookies.contentBlockData.{key}.reportData.headerTitles}"
+																	as="title"
+																>
+																	<th
+																		style="color: {groupedCookies.contentBlockData.{key}.titleColor};"
+																	>
+																		{title}
+																	</th>
+																</f:for>
+															</tr>
+														</thead>
+														<tbody>
+															<f:for
+																each="{groupedCookies.contentBlockData.{key}.reportData.formsData}"
+																as="formsData"
+															>
+																<tr class="row-data">
+																	<f:for each="{formsData}" as="dataItem">
+																		<td>{dataItem}</td>
+																	</f:for>
+																</tr>
+															</f:for>
+														</tbody>
+													</table>
+												</div>
+											</f:if>
+											<!-- Fonts Report -->
+											<f:if
+												condition="{groupedCookies.contentBlockData.{key}.reportData.fontsData}"
+											>
+												<div class="reportStatusIndicators statusCircle">
+													<div class="indInner">
+														<div class="green"></div>
+														<p>Loaded with the user’s consent</p>
+													</div>
+													<div class="indInner">
+														<div class="red"></div>
+														<p>Loaded without the user’s consent</p>
+													</div>
+													<div class="indInner">
+														<div class="yellow"></div>
+														<p>Solvable through 2 click plugin</p>
+													</div>
+												</div>
+												<div class="custom-accordion-body">
+													<table>
+														<thead>
+															<tr
+																class="row-head"
+																style="background-color: {groupedCookies.contentBlockData.{key}.bgColor};"
+															>
+																<f:for
+																	each="{groupedCookies.contentBlockData.{key}.reportData.headerTitles}"
+																	as="title"
+																>
+																	<th
+																		style="color: {groupedCookies.contentBlockData.{key}.titleColor};"
+																	>
+																		{title}
+																	</th>
+																</f:for>
+															</tr>
+														</thead>
+														<tbody>
+															<f:for
+																each="{groupedCookies.contentBlockData.{key}.reportData.fontsData}"
+																as="fontsData"
+															>
+																<tr class="row-data">
+																	<tr class="row-data">
+																		<td>{fontsData.0}</td>
+																		<td class="statusCircle">
+																			<f:if condition="{fontsData.1} == 0">
+																				<div class="red"></div>
+																			</f:if>
+																			<f:if condition="{fontsData.1} == 1">
+																				<div class="green"></div>
+																			</f:if>
+																		</td>
+																	</tr>
+																</tr>
+															</f:for>
+														</tbody>
+													</table>
+												</div>
+											</f:if>
+										</f:if>
+									</div>
+								</f:if>
+							</f:for>
+						</div>
+					</div>
+				</div>
+			</f:if>
+			<f:if condition="{groupedCookies.templateName} == template3">
+				<div class="template template3">
+					<div class="header-img" id="header-section">
+						<f:variable
+							name="decodedArray"
+							value="{groupedCookies.headerContent.headerImage -> v:format.json.decode()}"
+						/>
+						<img
+							src="data:image/jpeg;base64,{decodedArray.file_data}"
+							alt="{decodedArray.file_name}"
+						/>
+					</div>
+					<div class="template-content">
+						<div class="heading-txt">
+							<h2 class="heading">{groupedCookies.headerContent.title}</h2>
+							<p class="date subTitle">
+								{groupedCookies.headerContent.subTitle}
+							</p>
+						</div>
+						<div class="font-24 header-content">
+							{groupedCookies.quillContentData.quill-data-0 -> f:format.raw()}
+						</div>
+					</div>
+					<hr />
+					<f:for
+						each="{groupedCookies.quillContentData}"
+						as="quillContent"
+						iteration="i"
+						key="key"
+					>
+						<f:if condition="{i.index} > 0">
+							<div class="template-content {i.index}">
+								<div class="quill-content">
+									<div
+										id="{groupedCookies.contentBlockData.{key}.title -> f:format.case(mode: 'lower')}"
+										class="contentSec"
+									>
+										<f:if
+											condition="{groupedCookies.contentBlockData.{key}.headerImage}"
+										>
+											<img
+												src="data:image/jpeg;base64,{groupedCookies.contentBlockData.{key}.headerImage.file_data}"
+												alt="{groupedCookies.contentBlockData.{key}.headerImage.file_name}"
+											/>
+										</f:if>
+										<p class="font-24 quill-title">
+											{groupedCookies.contentBlockData.{key}.title}
+										</p>
+										<p>{quillContent -> f:format.raw()}</p>
+										<f:if
+											condition="{groupedCookies.contentBlockData.{key}.reportData}"
+										>
+											<!-- Cookies Report -->
+											<f:if
+												condition="{groupedCookies.contentBlockData.{key}.reportData.cookiesData}"
+											>
+												<div class="reportStatusIndicators statusCircle">
+													<div class="indInner">
+														<div class="green"></div>
+														<p>Loaded with the user’s consent</p>
+													</div>
+													<div class="indInner">
+														<div class="red"></div>
+														<p>Loaded without the user’s consent</p>
+													</div>
+													<div class="indInner">
+														<div class="yellow"></div>
+														<p>Solvable through 2 click plugin</p>
+													</div>
+												</div>
+												<div class="custom-accordion">
+													<f:for
+														each="{groupedCookies.contentBlockData.{key}.reportData.cookiesData}"
+														as="categoryData"
+														key="category"
+													>
+														<div
+															class="custom-accordion-item"
+															id="accordion-item-{category}"
+														>
+															<h2
+																class="custom-accordion-header"
+																id="heading-{category}"
+															>
+																<button
+																	class="custom-accordion-button"
+																	type="button"
+																	data-category="{category}"
+																>
+																	<div class="accordionArrow"></div>
+																	{category} ({f:count(subject: categoryData)})
+																</button>
+															</h2>
+															<div
+																class="custom-accordion-collapse"
+																data-category="{category}"
+															>
+																<div class="custom-accordion-body">
+																	<table>
+																		<thead>
+																			<tr
+																				class="row-head"
+																				style="background-color: {groupedCookies.contentBlockData.{key}.bgColor};"
+																			>
+																				<f:for
+																					each="{groupedCookies.contentBlockData.{key}.reportData.headerTitles}"
+																					as="title"
+																				>
+																					<th
+																						style="color: {groupedCookies.contentBlockData.{key}.titleColor};"
+																					>
+																						{title}
+																					</th>
+																				</f:for>
+																			</tr>
+																		</thead>
+																		<tbody>
+																			<f:for
+																				each="{categoryData}"
+																				as="cookiesDataItem"
+																			>
+																				<tr class="row-data">
+																					<td>{cookiesDataItem.0}</td>
+																					<td>{cookiesDataItem.1}</td>
+																					<td>
+																						<f:if
+																							condition="{cookiesDataItem.2}"
+																						>
+																							<f:then>
+																								{cookiesDataItem.2}
+																							</f:then>
+																							<f:else>-</f:else>
+																						</f:if>
+																					</td>
+																					<f:if
+																						condition="{cookiesDataItem.7} == 1"
+																					>
+																						<f:then>
+																							<td>HTTP</td>
+																						</f:then>
+																						<f:else>
+																							<td>HTTPS</td>
+																						</f:else>
+																					</f:if>
+																					<td>
+																						<f:if
+																							condition="{cookiesDataItem.4} <= 0"
+																						>
+																							<f:then>Session</f:then>
+																							<f:else>
+																								{cookiesDataItem.4} Days
+																							</f:else>
+																						</f:if>
+																					</td>
+																					<td class="privacy-gen-report-links">
+																						{cookiesDataItem.5 ->
+																						f:format.raw()}
+																					</td>
+																					<td class="statusCircle">
+																						<f:if
+																							condition="{category} == 'Functional'"
+																						>
+																							<f:then>
+																								<div class="red"></div>
+																							</f:then>
+																							<f:else>
+																								<f:if
+																									condition="{cookiesDataItem.6} == 2"
+																								>
+																									<f:then>
+																										<div class="yellow"></div>
+																									</f:then>
+																									<f:else>
+																										<div class="green"></div>
+																									</f:else>
+																								</f:if>
+																							</f:else>
+																						</f:if>
+																					</td>
+																				</tr>
+																			</f:for>
+																		</tbody>
+																	</table>
+																</div>
+															</div>
+														</div>
+													</f:for>
+												</div>
+											</f:if>
+											<!-- External Resources Report -->
+											<f:if
+												condition="{groupedCookies.contentBlockData.{key}.reportData.exResourcesData}"
+											>
+												<div class="custom-accordion">
+													<f:for
+														each="{groupedCookies.contentBlockData.{key}.reportData.exResourcesData}"
+														as="exResourcesData"
+														key="resource"
+													>
+														<div
+															class="custom-accordion-item"
+															id="accordion-item-{resource}"
+														>
+															<h2
+																class="custom-accordion-header"
+																id="heading-{resource}"
+															>
+																<button
+																	class="custom-accordion-button"
+																	type="button"
+																	data-category="{resource}"
+																>
+																	<div class="accordionArrow"></div>
+																	{exResourcesData.url} ({f:count(subject:
+																	exResourcesData.externalResourceList)})
+																</button>
+															</h2>
+															<div
+																class="custom-accordion-collapse"
+																data-category="{resource}"
+															>
+																<div class="custom-accordion-body">
+																	<table>
+																		<thead>
+																			<tr
+																				class="row-head"
+																				style="background-color: {groupedCookies.contentBlockData.{key}.bgColor};"
+																			>
+																				<f:for
+																					each="{groupedCookies.contentBlockData.{key}.reportData.headerTitles}"
+																					as="title"
+																				>
+																					<th
+																						style="color: {groupedCookies.contentBlockData.{key}.titleColor};"
+																					>
+																						{title}
+																					</th>
+																				</f:for>
+																			</tr>
+																		</thead>
+																		<tbody>
+																			<f:for
+																				each="{exResourcesData.externalResourceList}"
+																				as="resourceList"
+																			>
+																				<tr class="row-data">
+																					<td>
+																						<a href="{resourceList}"
+																							>{resourceList}</a
+																						>
+																					</td>
+																				</tr>
+																			</f:for>
+																		</tbody>
+																	</table>
+																</div>
+															</div>
+														</div>
+													</f:for>
+												</div>
+											</f:if>
+											<!-- Forms Report -->
+											<f:if
+												condition="{groupedCookies.contentBlockData.{key}.reportData.formsData}"
+											>
+												<div class="custom-accordion-body">
+													<table>
+														<thead>
+															<tr
+																class="row-head"
+																style="background-color: {groupedCookies.contentBlockData.{key}.bgColor};"
+															>
+																<f:for
+																	each="{groupedCookies.contentBlockData.{key}.reportData.headerTitles}"
+																	as="title"
+																>
+																	<th
+																		style="color: {groupedCookies.contentBlockData.{key}.titleColor};"
+																	>
+																		{title}
+																	</th>
+																</f:for>
+															</tr>
+														</thead>
+														<tbody>
+															<f:for
+																each="{groupedCookies.contentBlockData.{key}.reportData.formsData}"
+																as="formsData"
+															>
+																<tr class="row-data">
+																	<f:for each="{formsData}" as="dataItem">
+																		<td>{dataItem}</td>
+																	</f:for>
+																</tr>
+															</f:for>
+														</tbody>
+													</table>
+												</div>
+											</f:if>
+											<!-- Fonts Report -->
+											<f:if
+												condition="{groupedCookies.contentBlockData.{key}.reportData.fontsData}"
+											>
+												<div class="reportStatusIndicators statusCircle">
+													<div class="indInner">
+														<div class="green"></div>
+														<p>Loaded with the user’s consent</p>
+													</div>
+													<div class="indInner">
+														<div class="red"></div>
+														<p>Loaded without the user’s consent</p>
+													</div>
+													<div class="indInner">
+														<div class="yellow"></div>
+														<p>Solvable through 2 click plugin</p>
+													</div>
+												</div>
+												<div class="custom-accordion-body">
+													<table>
+														<thead>
+															<tr
+																class="row-head"
+																style="background-color: {groupedCookies.contentBlockData.{key}.bgColor};"
+															>
+																<f:for
+																	each="{groupedCookies.contentBlockData.{key}.reportData.headerTitles}"
+																	as="title"
+																>
+																	<th
+																		style="color: {groupedCookies.contentBlockData.{key}.titleColor};"
+																	>
+																		{title}
+																	</th>
+																</f:for>
+															</tr>
+														</thead>
+														<tbody>
+															<f:for
+																each="{groupedCookies.contentBlockData.{key}.reportData.fontsData}"
+																as="fontsData"
+															>
+																<tr class="row-data">
+																	<tr class="row-data">
+																		<td>{fontsData.0}</td>
+																		<td class="statusCircle">
+																			<f:if condition="{fontsData.1} == 0">
+																				<div class="red"></div>
+																			</f:if>
+																			<f:if condition="{fontsData.1} == 1">
+																				<div class="green"></div>
+																			</f:if>
+																		</td>
+																	</tr>
+																</tr>
+															</f:for>
+														</tbody>
+													</table>
+												</div>
+											</f:if>
+										</f:if>
+									</div>
+								</div>
+							</div>
+							<hr />
+						</f:if>
+					</f:for>
+				</div>
+			</f:if>
+			<f:if condition="{groupedCookies.templateName} == template4">
+				<div class="template template4">
+					<div class="header-img template-content" id="header-section">
+						<f:variable
+							name="decodedArray"
+							value="{groupedCookies.headerContent.headerImage -> v:format.json.decode()}"
+						/>
+						<img
+							src="data:image/jpeg;base64,{decodedArray.file_data}"
+							alt="{decodedArray.file_name}"
+						/>
+					</div>
+					<div class="template-content">
+						<div class="heading-txt">
+							<h2 class="heading">{groupedCookies.headerContent.title}</h2>
+							<p class="date subTitle">
+								{groupedCookies.headerContent.subTitle}
+							</p>
+						</div>
+					</div>
+					<f:for
+						each="{groupedCookies.quillContentData}"
+						as="quillContent"
+						iteration="i"
+						key="key"
+					>
+						<div class="template-content">
+							<div class="quill-content">
+								<f:if condition="{i.index} > 0">
+									<div
+										id="{groupedCookies.contentBlockData.{key}.title -> f:format.case(mode: 'lower')}"
+										class="contentSec"
+									>
+										<f:if
+											condition="{groupedCookies.contentBlockData.{key}.headerImage}"
+										>
+											<img
+												src="data:image/jpeg;base64,{groupedCookies.contentBlockData.{key}.headerImage.file_data}"
+												alt="{groupedCookies.contentBlockData.{key}.headerImage.file_name}"
+											/>
+										</f:if>
+										<p class="font-24 quill-title">
+											{groupedCookies.contentBlockData.{key}.title}
+										</p>
+										<p>{quillContent -> f:format.raw()}</p>
+										<f:if
+											condition="{groupedCookies.contentBlockData.{key}.reportData}"
+										>
+											<!-- Cookies Report -->
+											<f:if
+												condition="{groupedCookies.contentBlockData.{key}.reportData.cookiesData}"
+											>
+												<div class="reportStatusIndicators statusCircle">
+													<div class="indInner">
+														<div class="green"></div>
+														<p>Loaded with the user’s consent</p>
+													</div>
+													<div class="indInner">
+														<div class="red"></div>
+														<p>Loaded without the user’s consent</p>
+													</div>
+													<div class="indInner">
+														<div class="yellow"></div>
+														<p>Solvable through 2 click plugin</p>
+													</div>
+												</div>
+												<div class="custom-accordion">
+													<f:for
+														each="{groupedCookies.contentBlockData.{key}.reportData.cookiesData}"
+														as="categoryData"
+														key="category"
+													>
+														<div
+															class="custom-accordion-item"
+															id="accordion-item-{category}"
+														>
+															<h2
+																class="custom-accordion-header"
+																id="heading-{category}"
+															>
+																<button
+																	class="custom-accordion-button"
+																	type="button"
+																	data-category="{category}"
+																>
+																	<div class="accordionArrow"></div>
+																	{category} ({f:count(subject: categoryData)})
+																</button>
+															</h2>
+															<div
+																class="custom-accordion-collapse"
+																data-category="{category}"
+															>
+																<div class="custom-accordion-body">
+																	<table>
+																		<thead>
+																			<tr
+																				class="row-head"
+																				style="background-color: {groupedCookies.contentBlockData.{key}.bgColor};"
+																			>
+																				<f:for
+																					each="{groupedCookies.contentBlockData.{key}.reportData.headerTitles}"
+																					as="title"
+																				>
+																					<th
+																						style="color: {groupedCookies.contentBlockData.{key}.titleColor};"
+																					>
+																						{title}
+																					</th>
+																				</f:for>
+																			</tr>
+																		</thead>
+																		<tbody>
+																			<f:for
+																				each="{categoryData}"
+																				as="cookiesDataItem"
+																			>
+																				<tr class="row-data">
+																					<td>{cookiesDataItem.0}</td>
+																					<td>{cookiesDataItem.1}</td>
+																					<td>
+																						<f:if
+																							condition="{cookiesDataItem.2}"
+																						>
+																							<f:then>
+																								{cookiesDataItem.2}
+																							</f:then>
+																							<f:else>-</f:else>
+																						</f:if>
+																					</td>
+																					<f:if
+																						condition="{cookiesDataItem.7} == 1"
+																					>
+																						<f:then>
+																							<td>HTTP</td>
+																						</f:then>
+																						<f:else>
+																							<td>HTTPS</td>
+																						</f:else>
+																					</f:if>
+																					<td>
+																						<f:if
+																							condition="{cookiesDataItem.4} <= 0"
+																						>
+																							<f:then>Session</f:then>
+																							<f:else>
+																								{cookiesDataItem.4} Days
+																							</f:else>
+																						</f:if>
+																					</td>
+																					<td class="privacy-gen-report-links">
+																						{cookiesDataItem.5 ->
+																						f:format.raw()}
+																					</td>
+																					<td class="statusCircle">
+																						<f:if
+																							condition="{category} == 'Functional'"
+																						>
+																							<f:then>
+																								<div class="red"></div>
+																							</f:then>
+																							<f:else>
+																								<f:if
+																									condition="{cookiesDataItem.6} == 2"
+																								>
+																									<f:then>
+																										<div class="yellow"></div>
+																									</f:then>
+																									<f:else>
+																										<div class="green"></div>
+																									</f:else>
+																								</f:if>
+																							</f:else>
+																						</f:if>
+																					</td>
+																				</tr>
+																			</f:for>
+																		</tbody>
+																	</table>
+																</div>
+															</div>
+														</div>
+													</f:for>
+												</div>
+											</f:if>
+											<!-- External Resources Report -->
+											<f:if
+												condition="{groupedCookies.contentBlockData.{key}.reportData.exResourcesData}"
+											>
+												<div class="custom-accordion">
+													<f:for
+														each="{groupedCookies.contentBlockData.{key}.reportData.exResourcesData}"
+														as="exResourcesData"
+														key="resource"
+													>
+														<div
+															class="custom-accordion-item"
+															id="accordion-item-{resource}"
+														>
+															<h2
+																class="custom-accordion-header"
+																id="heading-{resource}"
+															>
+																<button
+																	class="custom-accordion-button"
+																	type="button"
+																	data-category="{resource}"
+																>
+																	<div class="accordionArrow"></div>
+																	{exResourcesData.url} ({f:count(subject:
+																	exResourcesData.externalResourceList)})
+																</button>
+															</h2>
+															<div
+																class="custom-accordion-collapse"
+																data-category="{resource}"
+															>
+																<div class="custom-accordion-body">
+																	<table>
+																		<thead>
+																			<tr
+																				class="row-head"
+																				style="background-color: {groupedCookies.contentBlockData.{key}.bgColor};"
+																			>
+																				<f:for
+																					each="{groupedCookies.contentBlockData.{key}.reportData.headerTitles}"
+																					as="title"
+																				>
+																					<th
+																						style="color: {groupedCookies.contentBlockData.{key}.titleColor};"
+																					>
+																						{title}
+																					</th>
+																				</f:for>
+																			</tr>
+																		</thead>
+																		<tbody>
+																			<f:for
+																				each="{exResourcesData.externalResourceList}"
+																				as="resourceList"
+																			>
+																				<tr class="row-data">
+																					<td>
+																						<a href="{resourceList}"
+																							>{resourceList}</a
+																						>
+																					</td>
+																				</tr>
+																			</f:for>
+																		</tbody>
+																	</table>
+																</div>
+															</div>
+														</div>
+													</f:for>
+												</div>
+											</f:if>
+											<!-- Forms Report -->
+											<f:if
+												condition="{groupedCookies.contentBlockData.{key}.reportData.formsData}"
+											>
+												<div class="custom-accordion-body">
+													<table>
+														<thead>
+															<tr
+																class="row-head"
+																style="background-color: {groupedCookies.contentBlockData.{key}.bgColor};"
+															>
+																<f:for
+																	each="{groupedCookies.contentBlockData.{key}.reportData.headerTitles}"
+																	as="title"
+																>
+																	<th
+																		style="color: {groupedCookies.contentBlockData.{key}.titleColor};"
+																	>
+																		{title}
+																	</th>
+																</f:for>
+															</tr>
+														</thead>
+														<tbody>
+															<f:for
+																each="{groupedCookies.contentBlockData.{key}.reportData.formsData}"
+																as="formsData"
+															>
+																<tr class="row-data">
+																	<f:for each="{formsData}" as="dataItem">
+																		<td>{dataItem}</td>
+																	</f:for>
+																</tr>
+															</f:for>
+														</tbody>
+													</table>
+												</div>
+											</f:if>
+											<!-- Fonts Report -->
+											<f:if
+												condition="{groupedCookies.contentBlockData.{key}.reportData.fontsData}"
+											>
+												<div class="reportStatusIndicators statusCircle">
+													<div class="indInner">
+														<div class="green"></div>
+														<p>Loaded with the user’s consent</p>
+													</div>
+													<div class="indInner">
+														<div class="red"></div>
+														<p>Loaded without the user’s consent</p>
+													</div>
+													<div class="indInner">
+														<div class="yellow"></div>
+														<p>Solvable through 2 click plugin</p>
+													</div>
+												</div>
+												<div class="custom-accordion-body">
+													<table>
+														<thead>
+															<tr
+																class="row-head"
+																style="background-color: {groupedCookies.contentBlockData.{key}.bgColor};"
+															>
+																<f:for
+																	each="{groupedCookies.contentBlockData.{key}.reportData.headerTitles}"
+																	as="title"
+																>
+																	<th
+																		style="color: {groupedCookies.contentBlockData.{key}.titleColor};"
+																	>
+																		{title}
+																	</th>
+																</f:for>
+															</tr>
+														</thead>
+														<tbody>
+															<f:for
+																each="{groupedCookies.contentBlockData.{key}.reportData.fontsData}"
+																as="fontsData"
+															>
+																<tr class="row-data">
+																	<tr class="row-data">
+																		<td>{fontsData.0}</td>
+																		<td class="statusCircle">
+																			<f:if condition="{fontsData.1} == 0">
+																				<div class="red"></div>
+																			</f:if>
+																			<f:if condition="{fontsData.1} == 1">
+																				<div class="green"></div>
+																			</f:if>
+																		</td>
+																	</tr>
+																</tr>
+															</f:for>
+														</tbody>
+													</table>
+												</div>
+											</f:if>
+										</f:if>
+									</div>
+								</f:if>
+							</div>
+						</div>
+						<hr class="temp4" />
+					</f:for>
+				</div>
+			</f:if>
+		</div>
+		<script>
+			document.addEventListener("DOMContentLoaded", function () {
+				const accordionItems = document.querySelectorAll(
+					".custom-accordion-item"
+				);
+				if (accordionItems.length === 0) {
+					return;
+				}
+				accordionItems.forEach(function (item) {
+					// Randomize class names and IDs
+					const randomId = Math.random().toString(36).substring(2, 8);
+					const category = item
+						.querySelector(".custom-accordion-button")
+						.getAttribute("data-category");
+
+					const headerId = "heading-" + category + "-" + randomId;
+					const collapseId = "collapse-" + category + "-" + randomId;
+
+					item.querySelector(".custom-accordion-header").id = headerId;
+					const button = item.querySelector(".custom-accordion-button");
+					const accordionArrow = button.querySelector(".accordionArrow");
+					button.setAttribute("data-target", "#" + collapseId);
+
+					const collapseDiv = item.querySelector(".custom-accordion-collapse");
+					collapseDiv.id = collapseId;
+					collapseDiv.setAttribute("aria-labelledby", headerId);
+
+					// Accordion toggle functionality without using display:none/block
+					button.addEventListener("click", function () {
+						const collapseElement = document.getElementById(collapseId);
+						if (collapseElement.classList.contains("show")) {
+							collapseElement.classList.remove("show");
+							accordionArrow.classList.remove("open");
+							collapseElement.style.maxHeight = null;
+						} else {
+							collapseElement.classList.add("show");
+							accordionArrow.classList.add("open");
+							collapseElement.style.maxHeight = collapseElement.scrollHeight + "px";
+						}
+					});
+				});
+			});
+		</script>
+	</f:section>
+</html>

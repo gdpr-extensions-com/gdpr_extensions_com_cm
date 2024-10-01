@@ -110,12 +110,64 @@ class GdprManagerController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCont
     }
 
     /**
+     * action resetToDefault
+     *
+     * @param int $id
+     * @param string $url
+     * @param string $categoryTitle
+     * @param string $editStatus
+     */
+    public function resetToDefaultAction(int $id, string $url, string $categoryTitle, string $editStatus): \Psr\Http\Message\ResponseInterface
+    {
+        
+        if($categoryTitle=='More detail'){
+            $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('gdpr_cookie_consent');
+            $queryBuilder
+                ->update('gdpr_cookie_consent')
+                ->Where(
+                    $queryBuilder->expr()->eq('location_page_id', $queryBuilder->createNamedParameter($id, \PDO::PARAM_INT))
+                )
+                ->set('detail_text', $categoryTitle)
+                ->execute();
+        return $this->redirect('edit', null, null, ['id' => $id, 'url' => $url, 'editStatus' => $editStatus, 'tabvalue' => 'Consent Manager']);
+
+        }
+        if($categoryTitle=='Always active'){
+            $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('gdpr_cookie_consent');
+            $queryBuilder
+                ->update('gdpr_cookie_consent')
+                ->Where(
+                    $queryBuilder->expr()->eq('location_page_id', $queryBuilder->createNamedParameter($id, \PDO::PARAM_INT))
+                )
+                ->set('tag_text', $categoryTitle)
+                ->execute();
+        return $this->redirect('edit', null, null, ['id' => $id, 'url' => $url, 'editStatus' => $editStatus, 'tabvalue' => 'Consent Manager']);
+
+        }
+        if($categoryTitle!='Always active' && $categoryTitle!='More detail'){
+           $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('gdpr_cookie_categories');
+            $queryBuilder
+                ->update('gdpr_cookie_categories')
+                ->where(
+                $queryBuilder->expr()->eq('category_title', $queryBuilder->createNamedParameter($categoryTitle))
+                )
+                ->andWhere(
+                    $queryBuilder->expr()->eq('location_page_id', $queryBuilder->createNamedParameter($id, \PDO::PARAM_INT))
+                )
+                ->set('category_name', $categoryTitle)
+                ->execute();
+        return $this->redirect('edit', null, null, ['id' => $id, 'url' => $url, 'editStatus' => $editStatus, 'tabvalue' => 'Consent Manager']);
+        }
+        
+
+    }
+    /**
      * action edit
      *
      * @param int $id
      * @param string $url
      */
-    public function editAction(int $id, string $url, string $apiKeys= '', string $editStatus = ''): \Psr\Http\Message\ResponseInterface
+    public function editAction(int $id, string $url, string $apiKeys= '', string $editStatus = '', string $tabvalue=''): \Psr\Http\Message\ResponseInterface
     {
         if($editStatus=='Invalid key')
 
@@ -240,6 +292,7 @@ class GdprManagerController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCont
 
         }
         $this->view->assign('reportRecord', $reportRecord);
+        $this->view->assign('tabvalue', $tabvalue);
         $this->view->assign('contains2xClick',$contains2xClick);
         $this->view->assign('validateAuthKeyUrl',$validateAuthKeyUrl);
         return $this->htmlResponse();
@@ -277,10 +330,22 @@ class GdprManagerController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCont
 
          }
         $headerTitle = $_POST['title'] ?? '';
+        $declinebtnText = $_POST['declinebtnText'] ?? '';
+        $privacyPage = $_POST['privacyPage'] ?? '';
+        $privacyLink = $_POST['privacyLink'] ?? '';
+        $hyperLinkedText = $_POST['hyperLinkedText'] ?? '';
+        $btnText = $_POST['btnText'] ?? '';
+        $btntagtextColor = $_POST['btn-tag-text-color'] ?? '';
+        $tagText = $_POST['tagText'] ?? '';
+        $detailtagText = $_POST['detailtagText'] ?? '';
+        $btnbgColor = $_POST['btn-bg-color'] ?? '';
+        $btntextColor = $_POST['btn-text-color'] ?? '';
         $headerDescription = $_POST['desc'] ?? '';
         $icon_placement = $_POST['icon_placement'] ?? '';
         $background_color = $_POST['bg-color'] ?? '';
         $text_color = $_POST['text-color'] ?? '';
+        $header_text_color = $_POST['header-text-color'] ?? '';
+        
         $two_click_desc = $_POST['two_click_desc'] ?? '';
         $uploaded_file_name = $fileName ?? '';
          $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('gdpr_cookie_consent');
@@ -298,6 +363,12 @@ class GdprManagerController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCont
              $imageUrl = $existingRow['icon_url'];
              $uploaded_file_name = $existingRow['uploaded_file_name'];
         }
+         if ($_POST['cancelUpload'] == 1) {
+            // User canceled the upload, set the image URL to a default or empty value
+            $imageUrl = ''; 
+            $uploaded_file_name = '';
+
+        }
         if ($existingRow) {
             // If the ID exists, update the row with the new values
             $queryBuilder
@@ -308,10 +379,21 @@ class GdprManagerController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCont
 
                 ->set('icon_url', $imageUrl)
                 ->set('header_title', $headerTitle)
+                ->set('privacy_page', $privacyPage)
+                ->set('privacy_link', $privacyLink)
+                ->set('hyper_linked_text', $hyperLinkedText)
+                ->set('btn_text', $btnText)
+                ->set('decline_btn_text', $declinebtnText)
+                ->set('tag_text', $tagText)
+                ->set('detail_text', $detailtagText)
+                ->set('btn_tag_text_color', $btntagtextColor)
+                ->set('btn_background_color', $btnbgColor)
+                ->set('btn_text_color', $btntextColor)
                 ->set('icon_placement', $icon_placement)
                 ->set('header_description', $headerDescription)
                 ->set('background_color', $background_color)
                 ->set('text_color', $text_color)
+                ->set('header_text_color', $header_text_color)
                 ->set('two_click_desc', $two_click_desc)
                 ->set('uploaded_file_name', $uploaded_file_name)
                 ->execute();
@@ -323,10 +405,21 @@ class GdprManagerController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCont
                     'location_page_id' => $locationPageId,
                     'icon_url' => $imageUrl,
                     'header_title' => $headerTitle,
+                    'privacy_page' => $privacyPage,
+                    'privacy_link' => $privacyLink,
+                    'hyper_linked_text' => $hyperLinkedText,
+                    'btn_text' => $btnText,
+                    'decline_btn_text' => $declinebtnText,
+                    'tag_text' => $tagText,
+                    'detail_text' => $detailtagText,
+                    'btn_tag_text_color' => $btntagtextColor,
+                    'btn_background_color' => $btnbgColor,
+                    'btn_text_color' => $btntextColor,
                     'icon_placement' => $icon_placement,
                     'header_description' => $headerDescription,
                     'background_color' => $background_color,
                     'text_color' => $text_color,
+                    'header_text_color' => $header_text_color,
                     'two_click_desc' => $two_click_desc,
                     'uploaded_file_name' => $uploaded_file_name
                 ])
@@ -334,6 +427,7 @@ class GdprManagerController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCont
         }
           // Retrieve data from the POST request
             $categoryDesc = $_POST['categorydesc'] ?? [];
+            $categoryNames = $_POST['categoryname'] ?? [];
 
             // Prepare database query
             $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('gdpr_cookie_categories');
@@ -361,12 +455,13 @@ class GdprManagerController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCont
                         $queryBuilder
                             ->update('gdpr_cookie_categories')
                             ->where(
-                                $queryBuilder->expr()->eq('category_title', $queryBuilder->createNamedParameter($categoryTitle))
+                          $queryBuilder->expr()->eq('category_title', $queryBuilder->createNamedParameter($categoryTitle))
                             )
                             ->andWhere(
                                 $queryBuilder->expr()->eq('location_page_id', $queryBuilder->createNamedParameter($locationPageId, \PDO::PARAM_INT))
                             )
                             ->set('category_description', $categoryDescription)
+                            ->set('category_name', $categoryNames[$categoryTitle])
                             ->execute();
                     } else {
                         // Insert new row if category title does not exist
@@ -376,6 +471,7 @@ class GdprManagerController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCont
                                 'category_title' => $categoryTitle,
                                 'location_page_id' => $locationPageId,
                                 'category_description' => $categoryDescription,
+                                'category_name' => $categoryNames[$categoryTitle],
                             ])
                             ->execute();
                     }
@@ -426,6 +522,12 @@ class GdprManagerController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCont
                 $this->sendStatusUpdate($olddashboard_api_key,$id);
                 $cookiesQB = $connectionPool->getQueryBuilderForTable('gdpr_cookie_consent');
                     $cookiesQB->delete('gdpr_cookie_consent')
+                        ->where(
+                            $cookiesQB->expr()->eq('location_page_id', $cookiesQB->createNamedParameter($id))
+                        )
+                        ->execute();
+                $cookiesQB = $connectionPool->getQueryBuilderForTable('gdpr_cookie_categories');
+                    $cookiesQB->delete('gdpr_cookie_categories')
                         ->where(
                             $cookiesQB->expr()->eq('location_page_id', $cookiesQB->createNamedParameter($id))
                         )
@@ -518,6 +620,12 @@ class GdprManagerController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCont
             }
 
         } else {
+            $cookiesQB = $connectionPool->getQueryBuilderForTable('gdpr_cookie_categories');
+                    $cookiesQB->delete('gdpr_cookie_categories')
+                        ->where(
+                            $cookiesQB->expr()->eq('location_page_id', $cookiesQB->createNamedParameter($id))
+                        )
+                        ->execute();
             // If $id does not exist, insert a new record
             $queryBuilder
                 ->insert('multilocations')

@@ -24,6 +24,7 @@ if ((int)\TYPO3\CMS\Core\Utility\VersionNumberUtility::getCurrentTypo3Version() 
                     'new',
                     'create',
                     'edit',
+                    'resetToDefault',
                     'update',
                     'delete',
                     'uploadImage',

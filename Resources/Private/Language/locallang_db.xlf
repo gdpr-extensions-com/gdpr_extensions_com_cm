@@ -45,7 +45,12 @@
             <trans-unit id="tx_gdpr_extensions_com_cm_report.description" resname="tx_gdpr_extensions_com_cm_report.description">
             		<source></source>
             </trans-unit>
-
+			<trans-unit id="tx_gdpr_extensions_com_cm_privacy.name" resname="tx_gdpr_extensions_com_cm_privacy.name">
+				<source>Privacy Statement</source>
+			</trans-unit>
+			<trans-unit id="tx_gdpr_extensions_com_cm_privacy.description" resname="tx_gdpr_extensions_com_cm_privacy.description">
+					<source></source>
+			</trans-unit>
 			<trans-unit id="tx_gdprextensionscomcm_domain_model_externalresource.scheduler_title" resname="tx_gdprextensionscomcm_domain_model_externalresource.scheduler_title">
             				<source>Sync websites cookies and external resources</source>
             			</trans-unit>

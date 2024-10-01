@@ -72,6 +72,9 @@
 		   <trans-unit id="Confirm" resname="Confirm">
 			   <source>Confirm</source>
 		   </trans-unit>
+		   <trans-unit id="decline" resname="decline">
+			   <source>Decline</source>
+		   </trans-unit>
 		    <trans-unit id="Deny_all_cookies" resname="Deny_all_cookies">
 			   <source>Deny all cookies</source>
 		   </trans-unit>
@@ -138,6 +141,9 @@
 			<trans-unit id="cookie.widget.tab" resname="cookie.widget.tab">
 				<source>Cookie Widget</source>
 			</trans-unit>
+			<trans-unit id="consent.manager.tab" resname="consent.manager.tab">
+				<source>Consent Manager</source>
+			</trans-unit>
 			<trans-unit id="choose.file" resname="choose.file">
 				<source>choose file</source>
 			</trans-unit>
@@ -159,6 +165,12 @@
 			</trans-unit>
 			<trans-unit id="sync.update_own_status.title" resname="sync.apiconnects.title">
 				<source>Update Website Status</source>
+			</trans-unit>
+			<trans-unit id="sync.update_own_status.desc" resname="sync.update_own_status.desc">
+				<source>Update Website Status</source>
+			</trans-unit>
+			<trans-unit id="sync.privacy_statement.title" resname="sync.privacy_statement.title">
+				<source>Sync Privacy Statement</source>
 			</trans-unit>
 			<trans-unit id="sync.update_own_status.description"
 				resname="sync.apiconnects.description">
