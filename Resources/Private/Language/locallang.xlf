@@ -103,7 +103,7 @@
 				<source>More details</source>
 		   </trans-unit>
 		   <trans-unit id="fetch_cookies_schedular_title" resname="fetch_cookies_schedular_title">
-			<source>Fetch Cookies &amp; External Resources</source>
+			<source>Sync GDPR Report</source>
 		</trans-unit>
 		<trans-unit id="fetch_cookies_schedular_desc" resname="fetch_cookies_schedular_desc">
 			<source>Fetch &amp; sync cookies &amp; external resource report from GDPR-extensions-com dashboard</source>

@@ -133,6 +133,8 @@ class GetTwoClickSolutionsViewHelper extends AbstractViewHelper
                 'GDPR-Extensions.com - Matomo 2xClick Solution' => 'matomo.org',
                 'GDPR-Extensions.com - Google-Tag-Manager 2xClick Solution' => 'tagmanager.google.com',
                 'GDPR-Extensions-com - Pinterest Board 2xClick Solution' => 'pinterest.com',
+                'GDPR-Extensions-com - Pinterest Pin 2xClick Solution' => 'pinterest.com',
+                'GDPR-Extensions-com - Pinterest Profile 2xClick Solution' => 'pinterest.com',
                 'GDPR-Extensions-com - Social Feed curator 2xClick Solution' => 'curator.io'
             ];
             foreach ($gdprManagers as $gdprManager) {
