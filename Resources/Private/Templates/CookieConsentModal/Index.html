@@ -14,14 +14,15 @@
     <f:if condition="{groupedCookies -> f:count()} > 0 || {decodedArray -> f:count()} > 0 ">
     <div id="gdpr-cookie-consent__icon" class="init-icon {f:if(condition: '{cookiesWidget.0.icon_placement} == bottom_left', then: 'left', else: '')}" {f:if(condition: '{cookiesWidget.0.icon_url}', then: 'style="background-image: url({cookiesWidget.0.icon_url});"', else: '')}>
     </div>
-
     <div id="gdpr-cookie-consent__model" class="modal">
         <div class="modal-content" style="border: 0px;">
             <div class="scroll" style="background-color: {cookiesWidget.0.background_color};">
                 <div class="cookie-data">
                     <div class="modal-header" style="color: {cookiesWidget.0.header_text_color};">
                         {cookiesWidget.0.header_title}
-                        <!-- <span id="closeModal" class="close-modal d-none">&#10005;</span> -->
+                        <f:comment> 
+                          <!-- <span id="closeModal" class="close-modal d-none">&#10005;</span> -->
+                        </f:comment>
                     </div>
                     <p class="model-desc" style="color: {cookiesWidget.0.text_color};">
                         {cookiesWidget.0.header_description}
@@ -34,16 +35,16 @@
                     </p>
 
                     <div>
-                        <!-- grouped cookies -->
-                        <f:for each="{groupedCookies}" as="category" key="categoryName">
-                            <f:variable name="lowercaseCategoryName" value="{categoryName -> f:format.case(mode: 'lower')}"/>
+                        <!-- grouped funcionl , others cookies -->
+                        <f:for each="{groupedCookies}" as="category" key="identifier" iteration="i">
+                            <f:variable name="lowercaseCategoryName" value="{identifier -> f:format.case(mode: 'lower')}"/>
                             <div class="category-container">
                                 <div class="category-header" style="justify-content: space-between;">
-                                    <div style="color: {cookiesWidget.0.header_text_color};">
+                                    <div style="color: {cookiesWidget.0.header_text_color}; font-weight:400;">
                                         <span class="arrow">+</span>
                                         <f:if condition="{categories.{lowercaseCategoryName}.category_name}">
                                             <f:then>{categories.{lowercaseCategoryName}.category_name}</f:then>
-                                            <f:else>{categoryName}</f:else>
+                                            <f:else>{identifier}</f:else>
                                         </f:if>
                                         <!-- ({f:count(subject: category)}) -->
                                     </div>
@@ -54,25 +55,226 @@
                                        <f:if condition="{categories.{lowercaseCategoryName}.category_description}">
                                            <p class="desc" style="color: {cookiesWidget.0.text_color};">{categories.{lowercaseCategoryName}.category_description}</p>
                                        </f:if>
-                                        <span class="more_details" style="color: {cookiesWidget.0.btn_tag_text_color};" data-identifier="{categoryName}">
-                                            <f:if condition="{cookiesWidget.0.detail_text}">
-                                                <f:then>
-                                                    {cookiesWidget.0.detail_text}
-                                                </f:then>
-                                                <f:else>
-                                                    Detail more
-                                                </f:else>
-                                            </f:if>
-                                            </span>
+                                       <f:comment>
+                                           <span class="more_details" style="color: {cookiesWidget.0.btn_tag_text_color};" data-identifier="{categoryName}">
+                                               <f:if condition="{cookiesWidget.0.detail_text}">
+                                                   <f:then>
+                                                       {cookiesWidget.0.detail_text}
+                                                   </f:then>
+                                                   <f:else>
+                                                       Detail more
+                                                   </f:else>
+                                               </f:if>
+                                               </span>
+
+                                       </f:comment>
+                                        <!-- groupedcookies detail -->
+                                        
+                                        <f:variable name="lowercaseCategoryName" value="{identifier -> f:format.case(mode: 'lower')}" />
+                                        <div class="main-frame more-detail-table" data-identifier="{identifier}">
+                                            <f:comment>
+                                                <div class="modal-header go-back" style="color: {cookiesWidget.0.header_text_color};">
+                                                    <span class="pointer-none">Cookie List</span>
+                                                </div>
+                                                <f:if condition="{cookiesWidget.0.tag_text}">
+                                                    <div class="category-title pointer-none" style="justify-content: space-between; padding:10px 10px;">
+                                                        <div class="model-desc" style="color: {cookiesWidget.0.btn_tag_text_color};">{cookiesWidget.0.tag_text}
+                                                        </div>
+                                                    </div>
+                                                </f:if>
+                                                <div style="color: {cookiesWidget.0.header_text_color};">
+                                                    <f:if condition="{categories.{lowercaseCategoryName}.category_name}">
+                                                        <f:then>{categories.{lowercaseCategoryName}.category_name}</f:then>
+                                                        <f:else>{identifier}</f:else>
+                                                    </f:if>
+                                                </div>
+                                            </f:comment>
+                                    
+                                            <f:comment>
+                                                <div class="table-border">
+                                                    <table class="" id="">
+                                                        <tbody>
+                                                            <tr class="row-head">
+                                                                <th class="web-id-head w-50px">Cookie Name</th>
+                                                                <th>Domain</th>
+                                                                <th {f:if(condition: '{cookieData.description}' , then: 'style="min-width: 300px"' ,
+                                                                    else: '' )}>Description</th>
+                                                                <th class="">Expires</th>
+                                                                <th class="">Type</th>
+                                                                <th>Session</th>
+                                                                <th class="">Found in</th>
+                                                            </tr>
+                                                            <f:for each="{cookieCategory}" as="cookieData" iteration="i">
+                                                                <tr class="row-data" style="{f:if(condition: i.last, then: 'border-bottom: 0;')}">
+                                                                    <f:if condition="{cookieData.name}">
+                                                                        <f:then>
+                                                                            <td data-title="Cookie Name"><span
+                                                                                    {f:if(condition: '{cookiesWidget.0.header_text_color}' ,
+                                                                                    then: 'style="color: {cookiesWidget.0.header_text_color}"' ,
+                                                                                    else: 'style="color: #343434;"' )}>{cookieData.name}</span></td>
+                                                                        </f:then>
+                                                                        <f:else>
+                                                                            <td data-title="Cookie Name"><span
+                                                                                    {f:if(condition: '{cookiesWidget.0.header_text_color}' ,
+                                                                                    then: 'style="color: {cookiesWidget.0.header_text_color}"' ,
+                                                                                    else: 'style="color: #343434;"' )}>-</span></td>
+                                                                        </f:else>
+                                                                    </f:if>
+                                                                    <f:if condition="{cookieData.domain}">
+                                                                        <f:then>
+                                                                            <td data-title="Domain"><span
+                                                                                    {f:if(condition: '{cookiesWidget.0.header_text_color}' ,
+                                                                                    then: 'style="color: {cookiesWidget.0.header_text_color}"' ,
+                                                                                    else: 'style="color: #343434;"' )}>{cookieData.domain}</span></td>
+                                                                        </f:then>
+                                                                        <f:else>
+                                                                            <td data-title="Domain"><span
+                                                                                    {f:if(condition: '{cookiesWidget.0.header_text_color}' ,
+                                                                                    then: 'style="color: {cookiesWidget.0.header_text_color}"' ,
+                                                                                    else: 'style="color: #343434;"' )}>-</span></td>
+                                                                        </f:else>
+                                                                    </f:if>
+                                                                    <f:if condition="{cookieData.description}">
+                                                                        <f:then>
+                                                                            <td data-title="Description"
+                                                                                class="{f:if(condition: '{cookieData.description}', then: 'desc', else: '')}">
+                                                                                <span {f:if(condition: '{cookiesWidget.0.header_text_color}' ,
+                                                                                    then: 'style="color: {cookiesWidget.0.header_text_color}"' ,
+                                                                                    else: 'style="color: #343434;"' )}>{cookieData.description}</span>
+                                                                            </td>
+                                                                        </f:then>
+                                                                        <f:else>
+                                                                            <td data-title="Description"><span
+                                                                                    {f:if(condition: '{cookiesWidget.0.header_text_color}' ,
+                                                                                    then: 'style="color: {cookiesWidget.0.header_text_color}"' ,
+                                                                                    else: 'style="color: #343434;"' )}>-</span></td>
+                                                                        </f:else>
+                                                                    </f:if>
+                                                                    <f:if condition="{cookieData.expire}">
+                                                                        <f:then>
+                                                                            <td data-title="Expires"><span
+                                                                                    {f:if(condition: '{cookiesWidget.0.header_text_color}' ,
+                                                                                    then: 'style="color: {cookiesWidget.0.header_text_color}"' ,
+                                                                                    else: 'style="color: #343434;"' )}>{cookieData.expire}</span></td>
+                                                                        </f:then>
+                                                                        <f:else>
+                                                                            <td data-title="Expires"><span
+                                                                                    {f:if(condition: '{cookiesWidget.0.header_text_color}' ,
+                                                                                    then: 'style="color: {cookiesWidget.0.header_text_color}"' ,
+                                                                                    else: 'style="color: #343434;"' )}>-</span></td>
+                                                                        </f:else>
+                                                                    </f:if>
+                                                                    <f:if condition="{cookieData.type}">
+                                                                        <f:then>
+                                                                            <td data-title="Type"><span
+                                                                                    {f:if(condition: '{cookiesWidget.0.header_text_color}' ,
+                                                                                    then: 'style="color: {cookiesWidget.0.header_text_color}"' ,
+                                                                                    else: 'style="color: #343434;"' )}>{cookieData.type}</span></td>
+                                                                        </f:then>
+                                                                        <f:else>
+                                                                            <td data-title="Type"><span
+                                                                                    {f:if(condition: '{cookiesWidget.0.header_text_color}' ,
+                                                                                    then: 'style="color: {cookiesWidget.0.header_text_color}"' ,
+                                                                                    else: 'style="color: #343434;"' )}>-</span></td>
+                                                                        </f:else>
+                                                                    </f:if>
+                                                                    <f:if condition="{cookieData.session}">
+                                                                        <f:then>
+                                                                            <td data-title="Session"><span
+                                                                                    {f:if(condition: '{cookiesWidget.0.header_text_color}' ,
+                                                                                    then: 'style="color: {cookiesWidget.0.header_text_color}"' ,
+                                                                                    else: 'style="color: #343434;"' )}>{cookieData.session}</span></td>
+                                                                        </f:then>
+                                                                        <f:else>
+                                                                            <td data-title="Session"><span
+                                                                                    {f:if(condition: '{cookiesWidget.0.header_text_color}' ,
+                                                                                    then: 'style="color: {cookiesWidget.0.header_text_color}"' ,
+                                                                                    else: 'style="color: #343434;"' )}>-</span></td>
+                                                                        </f:else>
+                                                                    </f:if>
+                                                                    <f:if condition="{cookieData.subPagesArray}">
+                                                                        <f:then>
+                                                                            <td data-title="Found in" class="links-parent">
+                                                                                <div class="links">
+                                                                                    <f:for each="{cookieData.subPagesArray}" as="list" iteration="i">
+                                                                                        <a href="{list}"> {list -> f:format.crop(maxCharacters:
+                                                                                            20,append:..)}</a><br>
+                                                                                    </f:for>
+                                                                                </div>
+                                                                            </td>
+                                                                        </f:then>
+                                                                        <f:else>
+                                                                            <td data-title="Found in"><span
+                                                                                    {f:if(condition: '{cookiesWidget.0.header_text_color}' ,
+                                                                                    then: 'style="color: {cookiesWidget.0.header_text_color}"' ,
+                                                                                    else: 'style="color: #343434;"' )}>-</span></td>
+                                                                        </f:else>
+                                                                    </f:if>
+                                                                </tr>
+                                                            </f:for>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </f:comment>
+                                    
+                                            <!-- new design -->                                      
+                                            <div class="detailedcookie-data main-cookies">
+                                                <f:if condition="{categories.{lowercaseCategoryName}.category_description}">
+                                                    <p class="model-desc" style="color: {cookiesWidget.0.text_color};">
+                                                        {categories.{lowercaseCategoryName}.category_description}
+                                                    </p>
+                                                </f:if>
+                                                <f:for each="{category}" as="cookieData" iteration="i">
+                                                    <div class="detailed-data">
+                                                        <div class="names">
+                                                            <ul class="info-list">
+                                                                <f:if condition="{cookieData.name}">
+                                                                    <li><span class="label">Name</span> <span class="value">{cookieData.name}</span></li>
+                                                                </f:if>
+                                                                <f:if condition="{cookieData.domain}">
+                                                                    <li> <span class="label">Domain</span> <span class="value">{cookieData.domain}</span>
+                                                                    </li>
+                                                                </f:if>
+                                                                <f:if condition="{cookieData.description}">
+                                                                    <li> <span class="label">Description</span> <span
+                                                                            class="value">{cookieData.description}</span></li>
+                                                                </f:if>
+                                                                <f:if condition="{cookieData.expires}">
+                                                                    <li><span class="label">Expires</span>
+                                                                        <f:if condition="{cookieData.expires} < 0 || {cookieData.expires} > 30">
+                                                                            <f:then><span class="value">Cookie expiry is determined by the provider</span></f:then>
+                                                                            <f:else><span class="value">{cookieData.expires} days</span></f:else>
+                                                                        </f:if>
+                                                                    </li>
+                                                                </f:if>
+                                                                <f:if condition="{cookieData.type}">
+                                                                    <li> <span class="label">Type</span> <span class="value">{cookieData.type}</span></li>
+                                                                </f:if>
+                                                                <f:if condition="{cookieData.session}">
+                                                                    <li> <span class="label">Session</span> <span class="value">{cookieData.session}</span>
+                                                                    </li>
+                                                                </f:if>
+                                                                <li> <span class="label">Law</span> <span class="value">Art. 6 para. 1 sentence 1 lit. A
+                                                                        GDPR</span></li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </f:for>
+                                            </div>
+                                        </div>
+                                            <f:comment>
+                                                <f:for each="{groupedCookies}" as="cookieCategory" key="identifier" iteration="i">
+                                                </f:for>
+                                            </f:comment>
                                     </div>
                                 </div>
                             </div>
                         </f:for>
                         <!-- grouped cookies -->
-                        <!-- gdpr cookies -->
+                        <!-- gdpr installed cookies -->
                             <f:if condition="{twoClickCookies}">
                                 <f:then>
-                                    <div class="category-container ">
+                                    <div class="category-container ww">
                                         <div class="" style="display: flex; justify-content: space-between; padding: 10px;">
                                             <div style="color:{cookiesWidget.0.header_text_color};" class="header-accordion">
                                                 <span class="arrow">+</span>
@@ -81,70 +283,227 @@
                                                     <f:else>GDPR 2-Click Solution</f:else>
                                                 </f:if>
                                             </div>
-                                            <label class="switch mb-0">
+                                            <label class="switch mb-0" style="display: block!important;">
                                                 <input type="checkbox" class="allToggle" id="gdpr2sol" >
                                                 <span class="slider"></span>
                                             </label>
                                         </div>
-                                        <div class="category-content hide">
+                                        <div class="category-content parent-gdpr hide">
                                             <div class="cookie-item">
                                                 <f:if condition="{categories.gdprExtensionsCom.category_description}">
                                                     <p class="desc" style="color: {cookiesWidget.0.text_color};">
                                                         {categories.gdprExtensionsCom.category_description}
                                                     </p>
                                                 </f:if>
-                                                <span class="more_details" style="color: {cookiesWidget.0.btn_tag_text_color};" data-identifier="gdprExtensionsCom" id="gdpr2ClickCookies">
-                                                <f:if condition="{cookiesWidget.0.detail_text}">
-                                                    <f:then>
-                                                        {cookiesWidget.0.detail_text}
-                                                    </f:then>
-                                                    <f:else>
-                                                        Detail more
-                                                    </f:else>
-                                                </f:if>
-                                                </span>
-                                            </div>
+                                               
+                                               
+                                                    <!-- gdprcookies detail -->
+                                                    <f:if condition="{twoClickCookies}">
+                                                        <f:then>
+                                                    
+                                                            <f:variable name="lowercaseCategoryName" value="gdprExtensionsCom" />
+                                                    
+                                                    
+                                                            <div class="main-frame more-detail-table" data-identifier="gdprExtensionsCom">
+                                                    
+                                                                <!-- new design -->
+                                                                <div class="category-container gdpr-cookies" id="gdpr-cookies">
+                                                                  
+                                                                   
+                                                    
+                                                    
+                                                                    <f:for each="{twoClickCookies}" as="cookieKey" key="cookieName" iteration="i">
+                                                                        <div class="category-container ">
+                                                                            <div class="" style="display:flex; justify-content: space-between; padding: 10px;">
+                                                                                <f:for each="{twoClickCookiesTitles}" as="cookieKeyTitle" key="cookieTitle" iteration="i">
+                                                                                    <f:if condition="{cookieName}=={cookieTitle}">
+                                                                                        <div class="header-accordion mb-0"
+                                                                                            style="color: {cookiesWidget.0.header_text_color};"> <span
+                                                                                                class="arrow">+</span> {cookieKeyTitle}</div>
+                                                                                    </f:if>
+                                                                                </f:for>
+                                                                                <label class="switch mb-0">
+                                                                                    <input type="checkbox" class="toggleButton singleToggle" id="{i.index}"
+                                                                                        data-ext-title="<f:format.raw>{cookieKey}</f:format.raw>">
+                                                                                    <span class="slider"></span>
+                                                                                </label>
+                                                                            </div>
+                                                                            <f:for each="{twoClickCookiesDescription}" as="cookieKeydesc" key="cookiedesc" iteration="i">
+                                                                                <f:if condition="{cookieName}=={cookiedesc}">
+                                                                                    <div class="category-content hide">
+                                                                                        <div class="cookie-item">
+                                                                                            <f:if condition="{cookieKeydesc}">
+                                                                                                <p class="desc" style="color: {cookiesWidget.0.text_color};">
+                                                                                                    {cookieKeydesc}
+                                                                                                </p>
+                                                                                            </f:if>
+                                                                                            <div class="detailed-data">
+                                                    
+                                                                                                <div class="names">
+                                                                                                    <ul>
+                                                                                                        <f:if condition="{twoClickCookieDetail.{cookiedesc}.name}">
+                                                                                                            <li> <span class="label">Name</span> <span
+                                                                                                                    class="value">{twoClickCookieDetail.{cookiedesc}.name}</span>
+                                                                                                            </li>
+                                                                                                        </f:if>
+                                                                                                        <f:if condition="{twoClickCookieDetail.{cookiedesc}.domain}">
+                                                                                                            <li> <span class="label">Domain</span> <span
+                                                                                                                    class="value">{twoClickCookieDetail.{cookiedesc}.domain}</span>
+                                                                                                            </li>
+                                                                                                        </f:if>
+                                                                                                        <f:if condition="{twoClickCookieDetail.{cookiedesc}.description}">
+                                                                                                            <li> <span class="label">Description</span> <span
+                                                                                                                    class="value">{twoClickCookieDetail.{cookiedesc}.description}</span>
+                                                                                                            </li>
+                                                                                                        </f:if>
+                                                                                                        <f:if condition="{twoClickCookieDetail.{cookiedesc}.expires}">
+                                                                                                            <li> <span class="label">Expires</span>
+                                                                                                                <f:if
+                                                                                                                    condition="{twoClickCookieDetail.{cookiedesc}.expires} == -1">
+                                                                                                                    <f:then><span class="value">Session</span></f:then>
+                                                                                                                    <f:else><span
+                                                                                                                            class="value">{twoClickCookieDetail.{cookiedesc}.expires}
+                                                                                                                            days</span></f:else>
+                                                                                                                </f:if>
+                                                                                                            </li>
+                                                                                                        </f:if>
+                                                                                                        <f:if condition="{twoClickCookieDetail.{cookiedesc}.type}">
+                                                                                                            <li> <span class="label">Type</span> <span
+                                                                                                                    class="value">{twoClickCookieDetail.{cookiedesc}.type}</span>
+                                                                                                            </li>
+                                                                                                        </f:if>
+                                                                                                        <f:if condition="{twoClickCookieDetail.{cookiedesc}.session}">
+                                                                                                            <li><span class="label">Session</span> <span
+                                                                                                                    class="value">{twoClickCookieDetail.{cookiedesc}.session}</span>
+                                                                                                            </li>
+                                                                                                        </f:if>
+                                                                                                    </ul>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </f:if>
+                                                                            </f:for>
+                                                                        </div>
+                                                    
+                                                                    </f:for>
+                                                    
+                                                    
+                                                    
+                                                                </div>
+                                                            </div>
+                                                    
+                                                    
+                                                    
+                                                        </f:then>
+                                                        <f:else>
+                                                            <!-- for installed gdpr  -->
+                                                    
+                                                    
+                                                            <div class="main-frame more-detail-table d-none" data-identifier="gdprExtensionsCom">
+                                                    
+                                                                <!-- new design -->
+                                                                <div class="category-container gdpr-cookies" id="gdpr-cookies">
+                                                                    <div class="modal-header go-back"> <span class="pointer-none">Cookie List</span></div>
+                                                                    <div class="gdpr-heading" style="color: {cookiesWidget.0.header_text_color};">
+                                                                        <f:if condition="{categories.gdprExtensionsCom.category_name}">
+                                                                            <f:then>{categories.gdprExtensionsCom.category_name}</f:then>
+                                                                            <f:else>GDPR 2-Click Solution</f:else>
+                                                                        </f:if>
+                                                                    </div>
+                                                                    <f:for each="{decodedArray}" as="cookieKey" key="cookieName" iteration="i">
+                                                                        <div class="category-container">
+                                                                            <div style="display:flex; justify-content: space-between;padding:10px;">
+                                                                                <div class="header-accordion mb-0" style="color: {cookiesWidget.0.header_text_color};">
+                                                                                    <span class="arrow">+</span>
+                                                                                    {cookieKey.cookie_title}</div>
+                                                                                <label class="switch mb-0" style="display: block!important;">
+                                                                                    <input type="checkbox" class="toggleButton singleToggle" id="{i.index}"
+                                                                                        data-ext-title="<f:format.raw>{cookieKey.extension_key}</f:format.raw>">
+                                                                                    <span class="slider"></span>
+                                                                                </label>
+                                                                            </div>
+                                                                            <div class="category-content parent-gdpr hide" style="max-height: 0px;">
+                                                                                <p style="color: {cookiesWidget.0.text_color};" class="desc">Cookies provided by host are
+                                                                                    managed through
+                                                                                    the
+                                                                                    {cookieKey.short_title} developed by gdpr-extensions.com</p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </f:for>
+                                                    
+                                                                </div>
+                                                            </div>
+                                                    
+                                                        </f:else>
+                                                    </f:if>
+                                             </div>
                                         </div>
                                     </div>
                                 </f:then>
                                 <f:else>
-                                    <!-- <p class="two-click-header" style="color: {cookiesWidget.0.header_text_color};">
-                                        <f:translate key="Manage_Consent_Preferences" />
-                                    </p> -->
+                                    <f:comment>
+                                        <!-- <p class="two-click-header" style="color: {cookiesWidget.0.header_text_color};">
+                                            <f:translate key="Manage_Consent_Preferences" />
+                                        </p> -->
+                                    </f:comment>
                                     <f:if condition="{decodedArray}">
                                         <f:then>
                                             <div class="category-container">
-                                                <div class="category-header" style="justify-content: space-between;">
-                                                    <div style="color:{cookiesWidget.0.header_text_color};">
+                                                <div style="display: flex; justify-content: space-between; padding: 10px;">
+                                                    <div style="color:{cookiesWidget.0.header_text_color};font-weight: 400;" class="header-accordion">
                                                         <span class="arrow">+</span>
                                                         <f:if condition="{categories.gdprExtensionsCom.category_name}">
                                                             <f:then>{categories.gdprExtensionsCom.category_name}</f:then>
                                                             <f:else>GDPR 2-Click Solution</f:else>
                                                         </f:if>
                                                     </div>
-                                                    <label class="switch mb-0">
+                                                    <label class="switch mb-0" style="display: block!important;">
                                                         <input type="checkbox" class="allToggle" id="gdpr2sol" >
                                                         <span class="slider"></span>
                                                     </label>
                                                 </div>
-                                                <div class="category-content hide">
+                                                <div class="category-content parent-gdpr">
                                                     <div class="cookie-item">
                                                         <f:if condition="{categories.gdprExtensionsCom.category_description}">
                                                             <p class="desc">
                                                                 {categories.gdprExtensionsCom.category_description}
                                                             </p>
                                                         </f:if>
+                                                        
+                                                        <!-- for installed gdpr  -->
+                                                        <div class="main-frame more-detail-table" data-identifier="gdprExtensionsCom">
+                                                        
+                                                            <!-- new design -->
+                                                            <div class="category-container gdpr-cookies" id="gdpr-cookies">
+                                                                <!-- for nested gdpr accordion -->
+                                                                <f:for each="{decodedArray}" as="cookieKey" key="cookieName" iteration="i">
+                                                                    <div class="category-container">
+                                                                        <div style="display:flex; justify-content: space-between;padding:10px;">
+                                                                            <div class="header-accordion mb-0" style="color: {cookiesWidget.0.header_text_color};">
+                                                                                <span class="arrow">+</span>
+                                                                                {cookieKey.cookie_title}
+                                                                            </div>
+                                                                            <label class="switch mb-0">
+                                                                                <input type="checkbox" class="toggleButton singleToggle" id="{i.index}"
+                                                                                    data-ext-title="<f:format.raw>{cookieKey.extension_key}</f:format.raw>">
+                                                                                <span class="slider"></span>
+                                                                            </label>
+                                                                        </div>
+                                                                        <div class="category-content hide" style="max-height: 0px;">
+                                                                            <div class="cookie-item">
+                                                                                <p style="color: {cookiesWidget.0.text_color};" class="desc">Cookies provided by host are
+                                                                                    managed through
+                                                                                    the
+                                                                                    {cookieKey.short_title} developed by gdpr-extensions.com</p>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </f:for>
+                                                        
+                                                            </div>
+                                                        </div>
 
-                                                        <span class="more_details" style="color: {cookiesWidget.0.btn_tag_text_color};" data-identifier="gdprExtensionsCom" id="gdpr2ClickCookies">
-                                                            <f:if condition="{cookiesWidget.0.detail_text}">
-                                                                <f:then>
-                                                                    {cookiesWidget.0.detail_text}
-                                                                </f:then>
-                                                                <f:else>
-                                                                    Detail more
-                                                                </f:else>
-                                                            </f:if>
-                                                        </span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -152,312 +511,46 @@
                                     </f:if>
                                 </f:else>
                             </f:if>
-
-
-
-                        <f:comment>
-                            <div class="modal-header" style="color: {cookiesWidget.0.header_text_color};">
-                                GDPR 2-Click Solution
-                            </div>
-                            <p class="two-click-header" style="color: {cookiesWidget.0.header_text_color};">{cookiesWidget.0.two_click_desc}</p>
-                            <f:if condition="{categories.gdprExtensionsCom}">
+                            <f:comment>
                                 <div class="modal-header" style="color: {cookiesWidget.0.header_text_color};">
                                     GDPR 2-Click Solution
                                 </div>
+                                <p class="two-click-header" style="color: {cookiesWidget.0.header_text_color};">{cookiesWidget.0.two_click_desc}</p>
+                                <f:if condition="{categories.gdprExtensionsCom}">
+                                    <div class="modal-header" style="color: {cookiesWidget.0.header_text_color};">
+                                        GDPR 2-Click Solution
+                                    </div>
+                                </f:if>
+
+                            <f:if condition="{categories.gdprExtensionsCom.category_description}">
+                                <f:then>
+                                    <p class="two-click-header" style="color: {cookiesWidget.0.header_text_color};">
+                                        {categories.gdprExtensionsCom.category_description}
+                                    </p>
+                                </f:then>
+                                <f:else>
+                                    <!-- <p class="two-click-header" style="color: {cookiesWidget.0.header_text_color};">
+                                        <f:translate key="Manage_Consent_Preferences" />
+                                    </p> -->
+                                </f:else>
                             </f:if>
 
-                        <f:if condition="{categories.gdprExtensionsCom.category_description}">
-                            <f:then>
                                 <p class="two-click-header" style="color: {cookiesWidget.0.header_text_color};">
-                                    {categories.gdprExtensionsCom.category_description}
-                                </p>
-                            </f:then>
-                            <f:else>
-                                <!-- <p class="two-click-header" style="color: {cookiesWidget.0.header_text_color};">
                                     <f:translate key="Manage_Consent_Preferences" />
-                                </p> -->
-                            </f:else>
-                        </f:if>
-
-                            <p class="two-click-header" style="color: {cookiesWidget.0.header_text_color};">
-                                <f:translate key="Manage_Consent_Preferences" />
-                            </p>
-                       </f:comment>
-
+                                </p>
+                            </f:comment>
                     </div>
                 </div>
-                <!-- groupedcookies detail -->
-                <f:for each="{groupedCookies}" as="cookieCategory" key="identifier" iteration="i">
-                    <f:variable name="lowercaseCategoryName" value="{identifier -> f:format.case(mode: 'lower')}"/>
-                    <div class="main-frame more-detail-table d-none" data-identifier="{identifier}">
-                        <div class="modal-header go-back" style="color: {cookiesWidget.0.header_text_color};">
-                          <span class="pointer-none">Cookie List</span>
-                        </div>
-                        <div class="category-title pointer-none" style="justify-content: space-between; padding:10px 10px;">
-                            <div style="color: {cookiesWidget.0.header_text_color};" >
-                                <f:if condition="{categories.{lowercaseCategoryName}.category_name}">
-                                    <f:then>{categories.{lowercaseCategoryName}.category_name}</f:then>
-                                    <f:else>{identifier}</f:else>
-                                </f:if>
-                            </div>
-                            <div class="model-desc" style="color: {cookiesWidget.0.btn_tag_text_color};">{cookiesWidget.0.tag_text}</div>
-                        </div>
-
-                        <f:comment>
-                            <div class="table-border">
-                                <table class="" id="">
-                                    <tbody>
-                                        <tr class="row-head">
-                                            <th class="web-id-head w-50px">Cookie Name</th>
-                                            <th>Domain</th>
-                                            <th {f:if(condition: '{cookieData.description}', then: 'style="min-width: 300px"', else: '')}>Description</th>
-                                            <th class="">Expires</th>
-                                            <th class="">Type</th>
-                                            <th>Session</th>
-                                            <th class="">Found in</th>
-                                        </tr>
-                                        <f:for each="{cookieCategory}" as="cookieData" iteration="i">
-                                            <tr class="row-data" style="{f:if(condition: i.last, then: 'border-bottom: 0;')}">
-                                                <f:if condition="{cookieData.name}">
-                                                    <f:then>
-                                                        <td data-title="Cookie Name"><span {f:if(condition: '{cookiesWidget.0.header_text_color}', then: 'style="color: {cookiesWidget.0.header_text_color}"', else: 'style="color: #343434;"')}>{cookieData.name}</span></td>
-                                                    </f:then>
-                                                    <f:else>
-                                                        <td data-title="Cookie Name"><span {f:if(condition: '{cookiesWidget.0.header_text_color}', then: 'style="color: {cookiesWidget.0.header_text_color}"', else: 'style="color: #343434;"')}>-</span></td>
-                                                    </f:else>
-                                                </f:if>
-                                                <f:if condition="{cookieData.domain}">
-                                                    <f:then>
-                                                        <td data-title="Domain"><span {f:if(condition: '{cookiesWidget.0.header_text_color}', then: 'style="color: {cookiesWidget.0.header_text_color}"', else: 'style="color: #343434;"')}>{cookieData.domain}</span></td>
-                                                    </f:then>
-                                                    <f:else>
-                                                        <td data-title="Domain"><span {f:if(condition: '{cookiesWidget.0.header_text_color}', then: 'style="color: {cookiesWidget.0.header_text_color}"', else: 'style="color: #343434;"')}>-</span></td>
-                                                    </f:else>
-                                                </f:if>
-                                                <f:if condition="{cookieData.description}">
-                                                    <f:then>
-                                                        <td data-title="Description" class="{f:if(condition: '{cookieData.description}', then: 'desc', else: '')}" >
-                                                            <span {f:if(condition: '{cookiesWidget.0.header_text_color}', then: 'style="color: {cookiesWidget.0.header_text_color}"', else: 'style="color: #343434;"')}>{cookieData.description}</span>
-                                                        </td>
-                                                    </f:then>
-                                                    <f:else>
-                                                        <td data-title="Description"><span {f:if(condition: '{cookiesWidget.0.header_text_color}', then: 'style="color: {cookiesWidget.0.header_text_color}"', else: 'style="color: #343434;"')}>-</span></td>
-                                                    </f:else>
-                                                </f:if>
-                                                <f:if condition="{cookieData.expire}">
-                                                    <f:then>
-                                                        <td data-title="Expires"><span {f:if(condition: '{cookiesWidget.0.header_text_color}', then: 'style="color: {cookiesWidget.0.header_text_color}"', else: 'style="color: #343434;"')}>{cookieData.expire}</span></td>
-                                                    </f:then>
-                                                    <f:else>
-                                                        <td data-title="Expires"><span {f:if(condition: '{cookiesWidget.0.header_text_color}', then: 'style="color: {cookiesWidget.0.header_text_color}"', else: 'style="color: #343434;"')}>-</span></td>
-                                                    </f:else>
-                                                </f:if>
-                                                <f:if condition="{cookieData.type}">
-                                                    <f:then>
-                                                        <td data-title="Type"><span {f:if(condition: '{cookiesWidget.0.header_text_color}', then: 'style="color: {cookiesWidget.0.header_text_color}"', else: 'style="color: #343434;"')}>{cookieData.type}</span></td>
-                                                    </f:then>
-                                                    <f:else>
-                                                        <td data-title="Type"><span {f:if(condition: '{cookiesWidget.0.header_text_color}', then: 'style="color: {cookiesWidget.0.header_text_color}"', else: 'style="color: #343434;"')}>-</span></td>
-                                                    </f:else>
-                                                </f:if>
-                                                <f:if condition="{cookieData.session}">
-                                                    <f:then>
-                                                        <td data-title="Session"><span {f:if(condition: '{cookiesWidget.0.header_text_color}', then: 'style="color: {cookiesWidget.0.header_text_color}"', else: 'style="color: #343434;"')}>{cookieData.session}</span></td>
-                                                    </f:then>
-                                                    <f:else>
-                                                        <td data-title="Session"><span {f:if(condition: '{cookiesWidget.0.header_text_color}', then: 'style="color: {cookiesWidget.0.header_text_color}"', else: 'style="color: #343434;"')}>-</span></td>
-                                                    </f:else>
-                                                </f:if>
-                                                <f:if condition="{cookieData.subPagesArray}">
-                                                    <f:then>
-                                                        <td data-title="Found in" class="links-parent">
-                                                            <div class="links">
-                                                                <f:for each="{cookieData.subPagesArray}" as="list" iteration="i">
-                                                                    <a href="{list}"> {list -> f:format.crop(maxCharacters: 20,append:..)}</a><br>
-                                                                </f:for>
-                                                            </div>
-                                                        </td>
-                                                    </f:then>
-                                                    <f:else>
-                                                        <td data-title="Found in"><span {f:if(condition: '{cookiesWidget.0.header_text_color}', then: 'style="color: {cookiesWidget.0.header_text_color}"', else: 'style="color: #343434;"')}>-</span></td>
-                                                    </f:else>
-                                                </f:if>
-                                            </tr>
-                                        </f:for>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </f:comment>
-
-                        <!-- new design -->
-
-                            <div class="detailedcookie-data">
-                                <f:if condition="{ {data.{lowercaseCategoryName}}}">
-                                    <p class="model-desc" style="color: {cookiesWidget.0.text_color};">
-                                        {categories.{lowercaseCategoryName}.category_description}
-                                    </p>
-                                </f:if>
-                                <f:for each="{cookieCategory}" as="cookieData" iteration="i">
-                                <div class="detailed-data">
-                                    <div class="names">
-                                        <ul class="info-list">
-                                         <f:if condition="{cookieData.name}"><li><span class="label">Name</span> <span class="value">{cookieData.name}</span></li></f:if>
-                                          <f:if condition="{cookieData.domain}"><li> <span class="label">Domain</span> <span class="value">{cookieData.domain}</span></li></f:if>
-                                          <f:if condition="{cookieData.description}"><li> <span class="label">Description</span> <span class="value">{cookieData.description}</span></li></f:if>
-                                           <f:if condition="{cookieData.expires}"><li><span class="label">Expires</span>
-                                            <f:if condition="{cookieData.expires} == -1">
-                                                <f:then><span class="value">Session</span></f:then>
-                                                <f:else><span class="value">{cookieData.expires} days</span></f:else>
-                                            </f:if>
-                                             </li></f:if>
-                                            <f:if condition="{cookieData.type}"><li> <span class="label">Type</span> <span class="value">{cookieData.type}</span></li></f:if>
-                                            <f:if condition="{cookieData.session}"><li> <span class="label">Session</span> <span class="value">{cookieData.session}</span></li></f:if>
-                                            <li> <span class="label">Law</span> <span class="value">Art. 6 para. 1 sentence 1 lit. f GDPR</span></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                </f:for>
-                            </div>
-                       </div>
-                </f:for>
-                <!-- gdprcookies detail -->
-                 <f:if condition="{twoClickCookies}">
-                    <f:then>
-
-                        <f:variable name="lowercaseCategoryName" value="gdprExtensionsCom" />
-
-
-                        <div class="main-frame more-detail-table d-none " data-identifier="gdprExtensionsCom">
-
-                            <!-- new design -->
-                            <div class="category-container gdpr-cookies" id="gdpr-cookies">
-                                <div class="modal-header go-back" style="color: {cookiesWidget.0.header_text_color};"> <span class="pointer-none">Cookie List</span></div>
-                                <div class="gdpr-heading" style="color: {cookiesWidget.0.header_text_color};">
-                                    <f:if condition="{categories.gdprExtensionsCom.category_name}">
-                                        <f:then>{categories.gdprExtensionsCom.category_name}</f:then>
-                                        <f:else>GDPR 2-Click Solution</f:else>
-                                    </f:if>
-                                </div>
-
-
-                                <f:for each="{twoClickCookies}" as="cookieKey" key="cookieName" iteration="i">
-                                    <div class="category-container ">
-                                        <div class="" style="display:flex; justify-content: space-between; padding: 10px;">
-                                            <f:for each="{twoClickCookiesTitles}" as="cookieKeyTitle" key="cookieTitle" iteration="i">
-                                                <f:if condition="{cookieName}=={cookieTitle}">
-                                                    <div class="header-accordion mb-0" style="color: {cookiesWidget.0.header_text_color};"> <span
-                                                            class="arrow">+</span> {cookieKeyTitle}</div>
-                                                </f:if>
-                                            </f:for>
-                                            <label class="switch mb-0">
-                                                <input type="checkbox" class="toggleButton singleToggle" id="{i.index}"
-                                                    data-ext-title="<f:format.raw>{cookieKey}</f:format.raw>">
-                                                <span class="slider"></span>
-                                            </label>
-                                        </div>
-                                        <f:for each="{twoClickCookiesDescription}" as="cookieKeydesc" key="cookiedesc" iteration="i">
-                                            <f:if condition="{cookieName}=={cookiedesc}">
-                                                <div class="category-content hide">
-                                                    <div class="cookie-item">
-                                                        <f:if condition="{cookieKeydesc}">
-                                                            <p class="desc" style="color: {cookiesWidget.0.text_color};">
-                                                                {cookieKeydesc}
-                                                            </p>
-                                                        </f:if>
-                                                        <div class="detailed-data">
-
-                                                            <div class="names">
-                                                                <ul>
-                                                                    <f:if condition="{twoClickCookieDetail.{cookiedesc}.name}">
-                                                                        <li> <span class="label">Name</span>  <span class="value">{twoClickCookieDetail.{cookiedesc}.name}</span></li>
-                                                                    </f:if>
-                                                                    <f:if condition="{twoClickCookieDetail.{cookiedesc}.domain}">
-                                                                        <li> <span class="label">Domain</span> <span class="value">{twoClickCookieDetail.{cookiedesc}.domain}</span> </li>
-                                                                    </f:if>
-                                                                    <f:if condition="{twoClickCookieDetail.{cookiedesc}.description}">
-                                                                        <li> <span class="label">Description</span> <span class="value">{twoClickCookieDetail.{cookiedesc}.description}</span> </li>
-                                                                    </f:if>
-                                                                    <f:if condition="{twoClickCookieDetail.{cookiedesc}.expires}">
-                                                                        <li> <span class="label">Expires</span>
-                                                                            <f:if condition="{twoClickCookieDetail.{cookiedesc}.expires} == -1">
-                                                                                <f:then><span class="value">Session</span></f:then>
-                                                                                <f:else><span class="value">{twoClickCookieDetail.{cookiedesc}.expires} days</span></f:else>
-                                                                            </f:if>
-                                                                            </li>
-                                                                    </f:if>
-                                                                    <f:if condition="{twoClickCookieDetail.{cookiedesc}.type}">
-                                                                        <li> <span class="label">Type</span> <span class="value">{twoClickCookieDetail.{cookiedesc}.type}</span></li>
-                                                                    </f:if>
-                                                                    <f:if condition="{twoClickCookieDetail.{cookiedesc}.session}">
-                                                                        <li><span class="label">Session</span> <span class="value">{twoClickCookieDetail.{cookiedesc}.session}</span> </li>
-                                                                    </f:if>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </f:if>
-                                        </f:for>
-                                    </div>
-
-                                </f:for>
-
-
-
-                            </div>
-                        </div>
-
-
-
-                    </f:then>
-                <f:else>
-                       <!-- for installed gdpr  -->
-
-
-                                <div class="main-frame more-detail-table d-none" data-identifier="gdprExtensionsCom">
-
-                                    <!-- new design -->
-                                    <div class="category-container gdpr-cookies" id="gdpr-cookies">
-                                        <div class="modal-header go-back"> <span class="pointer-none">Cookie List</span></div>
-                                        <div class="gdpr-heading" style="color: {cookiesWidget.0.header_text_color};">
-                                            <f:if condition="{categories.gdprExtensionsCom.category_name}">
-                                                <f:then>{categories.gdprExtensionsCom.category_name}</f:then>
-                                                <f:else>GDPR 2-Click Solution</f:else>
-                                            </f:if>
-                                        </div>
-                                        <f:for each="{decodedArray}" as="cookieKey" key="cookieName" iteration="i">
-                                            <div class="category-container">
-                                                <div style="display:flex; justify-content: space-between;padding:10px;">
-                                                    <div class="header-accordion mb-0" style="color: {cookiesWidget.0.header_text_color};"> <span class="arrow">+</span>
-                                                        {cookieKey.cookie_title}</div>
-                                                    <label class="switch mb-0">
-                                                        <input type="checkbox" class="toggleButton singleToggle" id="{i.index}"
-                                                            data-ext-title="<f:format.raw>{cookieKey.extension_key}</f:format.raw>">
-                                                        <span class="slider"></span>
-                                                    </label>
-                                                </div>
-                                                <div class="category-content hide" style="max-height: 0px;">
-                                                    <p style="color: {cookiesWidget.0.text_color};" class="desc">Cookies provided by host are managed through
-                                                        the
-                                                        {cookieKey.short_title} developed by gdpr-extensions.com</p>
-                                                </div>
-                                            </div>
-                                        </f:for>
-
-                                    </div>
-                                </div>
-
-                </f:else>
-              </f:if>
+             
                 <!-- groupedcookies detail (decodeArray) -->
                 <f:if condition="{decodedArray}">
                     <f:then>
-                        <div class="acceptance-btn" {f:if(condition: '{cookiesWidget.0.background_color}', then: 'style="background-color: {cookiesWidget.0.background_color};"', else: 'style="background-color: #fff;"')}>
+                        <div class="acceptance-btn" {f:if(condition: '{cookiesWidget.0.background_color}', then: 'style="background-color: {cookiesWidget.0.background_color}; outline:1px solid {cookiesWidget.0.background_color}; border:1px solid {cookiesWidget.0.background_color};"', else: 'style="background-color: #fff; outline:1px solid #fff; border:1px solid #fff;"')}>
                             <div class="d-flex" style="justify-content: space-between;">
                                 <button type="button"
                                 id="decline-allbtn"
                                     class="btn-lg accept-btn accept-btn-padding banner-confirm-gdpr"
-                                     style="color: {f:if(condition: '{cookiesWidget.0.btn_text_color}', then: '{cookiesWidget.0.btn_text_color}', else: '#fff')}; background-color: {f:if(condition: '{cookiesWidget.0.btn_background_color}', then: '{cookiesWidget.0.btn_background_color}', else: '#EE7202')};">
+                                     style="color: {f:if(condition: '{cookiesWidget.0.btn_background_color}', then: '{cookiesWidget.0.btn_background_color}', else: '#000')}; border: 2px solid {f:if(condition: '{cookiesWidget.0.btn_background_color}', then: '{cookiesWidget.0.btn_background_color}', else: '#EE7202')};">
                                     <f:if condition="{cookiesWidget.0.decline_btn_text}">
                                         <f:then>{cookiesWidget.0.decline_btn_text}</f:then>
                                         <f:else>
@@ -650,6 +743,7 @@
             border-radius: 7px;
             padding: 20px;
             position: relative;
+             -webkit-overflow-scrolling: touch;
         }
 
         #gdpr-cookie-consent__model .scroll::-webkit-scrollbar-track {
@@ -713,7 +807,7 @@
         #gdpr-cookie-consent__model .modal-content .category-container.gdpr-cookies p {
             font-size: 16px;
             color: #343434;
-            width: 100%;
+            /* width: 100%; */
             margin: 5px 0;
             padding: 0;
             padding-left: 10px;
@@ -832,18 +926,10 @@
             color: #EE7202;
             border: 1px solid #EE7202;
         }
-
-        #gdpr-cookie-consent__model .category-content.hide {
-            overflow: hidden;
-            max-height: 0;
-            transition: max-height 0.3s ease-in-out;
-        }
-
-
-        #gdpr-cookie-consent__model .category-content.show {
-            overflow: hidden;
-
-            transition: max-height 0.3s ease-in-out;
+         
+        #gdpr-cookie-consent__model .category-content, .parent-gdpr .category-content  {
+            display: none; 
+            transition: 0.4s ease-in-out;
         }
 
         #gdpr-cookie-consent__model .more_details {
@@ -1097,16 +1183,26 @@
             background-color: #fafafa;
             outline: 1px solid lightgrey;
             padding: 10px;
-            border-radius: 6px;
+            border-bottom-left-radius: 6px; 
+            border-bottom-right-radius: 6px; 
         }
-        .detailed-data {
+        .detailedcookie-data.main-cookies {
+           border-radius: 6px;
+        }
+        .detailedcookie-data  .detailed-data {
             display: flex;
-            gap: 20px;
+            /* gap: 20px; */
             background-color: white;
             border-radius: 4px;
-            margin-bottom: 20px;
-            border: 1px solid #e6dede;
+            /* margin-bottom: 20px; */
+            border: 0.5px solid #E7E6E6;
         }
+        .detailedcookie-data .detailed-data:nth-child(odd) {
+            background-color: #FAFAFA; 
+            border-radius: 0px;
+        }
+
+       
         .names ul, .data ul {
             list-style-type: none;
             font-size: 12px;
@@ -1184,6 +1280,7 @@
         .value {
             flex: 1;
             text-align: left;
+            word-break: break-word;
         }
 
         .gdpr2click .label{
@@ -1193,9 +1290,18 @@
             overflow: hidden;
         }
         .scroll{
-            overflow: auto;
+            overflow-y: auto;
         }
-
+        #decline-allbtn{
+           background-color: #fff!important;
+        }
+        .parent-gdpr .category-content{
+            overflow: hidden;
+            transition: max-height 0.1s ease-in-out!important;
+        }
+        .gdpr-cookies .header-accordion{
+            font-size: 16px;
+        }
 
     </style>
     <f:asset.css identifier="bgBtnColor">
@@ -1265,9 +1371,9 @@
         const popUpShownMp = localStorage.getItem('popUpShownMp');
 
         var toggleButtons = document.getElementsByClassName("toggleButton");
-        var btnTextColor = "<f:format.raw>{cookiesWidget.0.btn_background_color}</f:format.raw>";
+        var btnTextColor = "<f:format.raw>{cookiesWidget.0.btn_text_color}</f:format.raw>";
         const declineAllButton = document.getElementById('decline-allbtn');
-
+        
         var getToggleButtons = document.querySelectorAll(".toggleButton.singleToggle");
         var uniqueToggleButtons = new Set(getToggleButtons);
         let allToggleBtn = document.querySelector('.allToggle');
@@ -1312,13 +1418,13 @@
         function updateDeclineButtonState(checked) {
         if (checked) {
         // Enable the decline button
-        declineAllButton.style.backgroundColor = btnTextColor;
+        declineAllButton.style.Color = btnTextColor;
         declineAllButton.style.pointerEvents = 'auto';
         declineAllButton.style.opacity = '1';
         allToggleBtn.checked = true;
         } else {
         declineAllButton.style.pointerEvents = 'none';
-        declineAllButton.style.opacity = '0.6';
+        declineAllButton.style.opacity = '0.4';
         allToggleBtn.checked = false;
         }
         }
@@ -1623,15 +1729,6 @@
         });
 
 
-
-
-
-
-
-
-
-
-
         //Create div-element within the respective iframe to display the defined data-security message and get consent for loading the iframe content.
 
         function wrap(el, wrapper, type, text, heading, btnColor, textColor, imagePath, imageStatus, bgColor, buttonTextColor, btnText, btnShape, headingColor) {
@@ -1717,7 +1814,7 @@
         gdpr_extensions_com_sfc_gdpr(x[i],'add');
         }
 
-        if (serviceType === 'gdpr_extensions_com_pinterest' || serviceType === 'gdpr_extensions_com_pinterest_profile' || serviceType === 'gdpr_extensions_com_pinterest_pin') {
+        if (serviceType === 'gdpr_extensions_com_pint_board' || serviceType === 'gdpr_extensions_com_pint_prof' || serviceType === 'gdpr_extensions_com_pint_pin') {
         loadPinterestScript();
 
         }
@@ -2149,78 +2246,48 @@
 
 
         if (gdpr_model) {
-        gdpr_icon?.addEventListener('click', function () {
-        gdpr_model.style.display = 'block';
-        document.body.classList.add('no-scroll');
+            gdpr_icon?.addEventListener('click', function () {
+            gdpr_model.style.display = 'block';
+           document.body.classList.add('no-scroll');
+           gdpr_model.querySelector('.scroll').addEventListener('wheel', function (event) {
+                event.stopPropagation(); // Stop event from propagating to the body
+            });
         })
 
 
+        // Handle accordion headers
+        document.querySelectorAll('.header-accordion').forEach(header => {
+            header.addEventListener('click', function () {
+                const content = this.closest('.category-container')?.querySelector('.category-content');
+                if (content) {
+                    if (content.style.display === 'none' || !content.style.display) {
+                        content.style.display = 'block';
+                        this.querySelector('.arrow').textContent = '-';
+                    } else {
+                        content.style.display = 'none';
+                        this.querySelector('.arrow').textContent = '+';
+                    }
+                }
+            });
+        });
+
+        // Category headers toggle
         gdpr_categoryHeaders?.forEach(header => {
-        header?.addEventListener('click', function (e) {
+            header?.addEventListener('click', function (e) {
+                if (e.target.closest(".switch")) return;
 
-        if(e.target.closest(".switch")){
-        return;
-        }
-        let content = header.nextElementSibling;
+                let content = header.nextElementSibling;
 
-        if (content.classList.contains('show')) {
-        // First, set max-height to the scrollHeight to ensure proper calculation
-        content.style.maxHeight = content.scrollHeight + 'px';
-        // Use requestAnimationFrame instead of setTimeout for better timing control
-        requestAnimationFrame(() => {
-        content.style.maxHeight = '0';
+                if (content.style.display === 'none' || !content.style.display) {
+                    content.style.display = 'block';
+                    header.querySelector('.arrow').textContent = '-';
+                } else {
+                    content.style.display = 'none';
+                    header.querySelector('.arrow').textContent = '+';
+                }
+            });
         });
-
-        content.classList.remove('show');
-        content.classList.add('hide');
-        header.querySelector('.arrow').textContent = '+';
-        } else {
-        // First, remove the hide class and set max-height to scrollHeight
-        content.classList.remove('hide');
-        content.classList.add('show');
-        content.style.maxHeight = content.scrollHeight + 'px';
-
-        // To trigger a transition, set max-height to 'auto' after the transition ends
-        content.addEventListener('transitionend', function () {
-        content.style.maxHeight = 'auto';
-        }, { once: true });
-
-        header.querySelector('.arrow').textContent = '-';
-        }
-        });
-        });
-        gdpr_accordionHeaders?.forEach(header => {
-        header?.addEventListener('click', function () {
-        // Now we are targeting the `.category-content` inside the same `.category-container`
-        let content = header.parentElement.nextElementSibling;
-
-        if (content.classList.contains('show')) {
-        // First, set max-height to the scrollHeight to ensure proper calculation
-        content.style.maxHeight = content.scrollHeight + 'px';
-        // Use requestAnimationFrame for smoother transition
-        requestAnimationFrame(() => {
-        content.style.maxHeight = '0';
-        });
-
-        content.classList.remove('show');
-        content.classList.add('hide');
-        header.querySelector('.arrow').textContent = '+';
-        } else {
-        // Remove 'hide' and add 'show' class
-        content.classList.remove('hide');
-        content.classList.add('show');
-        content.style.maxHeight = content.scrollHeight + 'px';
-
-        // To trigger a transition, set max-height to 'auto' after the transition ends
-        content.addEventListener('transitionend', function () {
-        content.style.maxHeight = 'auto';
-        }, { once: true });
-
-        header.querySelector('.arrow').textContent = '-';
-        }
-        });
-        });
-
+ 
         let closeModal = document.getElementById('closeModal');
         closeModal?.addEventListener('click', function () {
         document.body.classList.remove('no-scroll');
@@ -2886,10 +2953,10 @@
 
                                 headScript.id = 'gtm-script';
                                 headScript.innerHTML = `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','${gtmCode}');`;
+                                        new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+                                        j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+                                        'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+                                        })(window,document,'script','dataLayer','${gtmCode}');`;
 
                                 // Append the GTM script to the head
                                 document.head.appendChild(headScript);

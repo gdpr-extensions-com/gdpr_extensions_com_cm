@@ -128,6 +128,7 @@ class GetTwoClickSolutionsViewHelper extends AbstractViewHelper
                 'GDPR-Extensions-com - Bing Map 2xClick Solution' => 'bing.com/maps',
                 'GDPR-Extensions.com - Youtube 2xClick Solution' => 'youtube.com',
                 'GDPR-Extensions.com - Youtube Shorts 2xClick Solution' => 'youtube.com',
+                'GDPR-Extensions.com - Pipedrive Form 2xClick Solution' => 'pipedrive.com',
                 'GDPR-Extensions-com - TikTok 2xClick Solution' => 'tiktok.com',
                 'GDPR-Extensions.com - Vimeo 2xClick Solution' => 'vimeo.com',
                 'GDPR-Extensions.com - Matomo 2xClick Solution' => 'matomo.org',
@@ -135,6 +136,7 @@ class GetTwoClickSolutionsViewHelper extends AbstractViewHelper
                 'GDPR-Extensions-com - Pinterest Board 2xClick Solution' => 'pinterest.com',
                 'GDPR-Extensions-com - Pinterest Pin 2xClick Solution' => 'pinterest.com',
                 'GDPR-Extensions-com - Pinterest Profile 2xClick Solution' => 'pinterest.com',
+                'GDPR-Extensions.com - Meta Pixel 2xClick Solution'=>'facebook.com',
                 'GDPR-Extensions-com - Social Feed curator 2xClick Solution' => 'curator.io'
             ];
             foreach ($gdprManagers as $gdprManager) {
