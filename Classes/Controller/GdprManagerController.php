@@ -511,12 +511,13 @@ class GdprManagerController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCont
             ->setMaxResults(1)
             ->execute()
             ->fetch();
+        $olddashboard_api_key = null;    
          if ($existingRecord !== false) {
             $olddashboard_api_key = $existingRecord['dashboard_api_key'];
         }
          // Call the apiValidation function
         $isValid =  $this->apiValidation($apiKey);
-        if($isValid=='Invalid key')
+        if($isValid=='Invalid key' && $olddashboard_api_key != null)
         {
             if ($olddashboard_api_key != $apiKey) {
                 $this->sendStatusUpdate($olddashboard_api_key,$id);
